@@ -1,0 +1,15 @@
+{
+    "projectName": "MyDsl",
+    "languages": [{
+        "id": "my-dsl",
+        "grammar": "src/language/my-dsl.langium",
+        "fileExtensions": [".rbtdsl"],
+        "textMate": {
+            "out": "syntaxes/my-dsl.tmLanguage.json"
+        },
+        "monarch": {
+            "out": "syntaxes/my-dsl.monarch.ts"
+        }
+    }],
+    "out": "src/language/generated"
+}
