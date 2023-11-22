@@ -4,5 +4,3 @@
 !.vscode/tasks.json
 node_modules/
 out/
-syntaxes/
-src/language/generated/
