@@ -1,0 +1,71 @@
+{
+  "name": "my-dsl",
+  "scopeName": "source.my-dsl",
+  "fileTypes": [
+    ".rbtdsl"
+  ],
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "name": "keyword.control.my-dsl",
+      "match": "\\b(Hello|person)\\b"
+    },
+    {
+      "name": "string.quoted.double.my-dsl",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single.my-dsl",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "include": "#string-character-escape"
+        }
+      ]
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.block.my-dsl",
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.my-dsl"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.my-dsl"
+            }
+          }
+        },
+        {
+          "begin": "//",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.my-dsl"
+            }
+          },
+          "end": "(?=$)",
+          "name": "comment.line.my-dsl"
+        }
+      ]
+    },
+    "string-character-escape": {
+      "name": "constant.character.escape.my-dsl",
+      "match": "\\\\(x[0-9A-Fa-f]{2}|u[0-9A-Fa-f]{4}|u\\{[0-9A-Fa-f]+\\}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
+    }
+  }
+}
