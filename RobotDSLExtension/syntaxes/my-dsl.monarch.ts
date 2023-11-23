@@ -1,7 +1,7 @@
 // Monarch syntax highlighting for the my-dsl language.
 export default {
     keywords: [
-        'Body','Boolean','CM','Condition','Elsez','Forward','Ifz','KM','MM','Number','Rotate','Void','and','false','not','or','return','true','while('
+        'Boolean','CM','Forward','KM','MM','Number','Rotate','Void','and','else','false','if(','not','or','return','true','while('
     ],
     operators: [
         '*','+',',','-','/',';','<','=','==','>'

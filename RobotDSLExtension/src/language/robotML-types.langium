@@ -6,6 +6,7 @@ interface Program {
 interface Function_ {
 	Body: StatementBlock
 	FunctionName: string
+	
 	^type: Type
 	functiondefinitionparameters: FunctionDefinitionParameters
 }
@@ -27,7 +28,7 @@ interface FunctionDefinitionParameters {
 interface VariableDefinition extends Statment {
 	^type: Type
 	left?: Expr
-	variable: Variable[]
+	variable: Variable
 }
 
 interface Expr extends Statment {
@@ -94,7 +95,7 @@ interface Rotate extends RobotInstruction {
 
 interface Affectation extends Statment {
 	Right: Expr
-	variable: Variable[]
+	variable: Variable
 }
 
 interface Variable extends Expr {
@@ -103,7 +104,7 @@ interface Variable extends Expr {
 
 interface FunctionCall extends Expr {
 	functionparameters: FunctionCallParameters
-	function: @Function_
+	functionName: string
 }
 
 interface FunctionCallParameters {

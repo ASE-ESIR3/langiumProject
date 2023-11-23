@@ -18,13 +18,11 @@ Expr returns Expr:
     And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
 ;
 
+
 Unit returns Unit:
     MM | CM | KM 
 ;
 
-Function_ returns Function_:
-    ^type=Type FunctionName=EString '('  functiondefinitionparameters=FunctionDefinitionParameters ')' Body=StatementBlock  
-;
 
 StatementBlock returns StatementBlock:
     '{' ( statments+=Statment  )*  '}'  
@@ -51,7 +49,7 @@ Multiplication returns Multiplication:
 ;
 
 Addition returns Addition:
-    'add(' Left=Expr  '+' Right=Expr ')'
+    '(' Left=Expr  '+' Right=Expr ')'
 ;
 
 Division returns Division:
@@ -84,15 +82,19 @@ Rotate returns Rotate:
 ;
 
 Affectation returns Affectation:
-    (variable+=Variable  )+ '=' Right=Expr   
+    variable=Variable '=' Right=Expr   
 ;
 
 VariableDefinition returns VariableDefinition:
-    ^type=Type (variable+=Variable  )* ('='( left=Expr  ))?  
+    ^type=Type variable = Variable ('='( left=Expr  ))?  
+;
+
+Function_ returns Function_:
+    ^type=Type FunctionName=EString '('  functiondefinitionparameters=FunctionDefinitionParameters ')' Body=StatementBlock  
 ;
 
 FunctionCall returns FunctionCall:
-    function=[Function_:EString] '(' functionparameters=FunctionCallParameters  ')'  
+    functionName=EString '(' functionparameters=FunctionCallParameters  ')'  
 ;
 
 LessThan returns LessThan:
@@ -112,7 +114,7 @@ RbLoop returns RbLoop:
 ;
 
 Ifz returns Ifz:
-    'Ifz' '{' 'Body' Body=StatementBlock  'Condition' Condition=Expr  ('Elsez' '{' Elsez+=StatementBlock  ("," Elsez+=StatementBlock  )* '}' )? '}'  
+    'if(' Condition=Expr ')' Body=StatementBlock ('else' ( Elsez+=StatementBlock  )* )?
 ;
 
 Rbreturn returns Rbreturn:

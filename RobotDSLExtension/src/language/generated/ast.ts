@@ -4,7 +4,7 @@
  ******************************************************************************/
 
 /* eslint-disable */
-import type { AstNode, Reference, ReferenceInfo, TypeMetaData } from 'langium';
+import type { AstNode, ReferenceInfo, TypeMetaData } from 'langium';
 import { AbstractAstReflection } from 'langium';
 
 export const MyDslTerminals = {
@@ -117,7 +117,7 @@ export function isUnit(item: unknown): item is Unit {
 export interface Affectation extends Statment {
     readonly $type: 'Affectation';
     Right: Expr
-    variable: Array<Variable>
+    variable: Variable
 }
 
 export const Affectation = 'Affectation';
@@ -186,7 +186,7 @@ export interface VariableDefinition extends Statment {
     readonly $type: 'VariableDefinition';
     left?: Expr
     type: Type
-    variable: Array<Variable>
+    variable: Variable
 }
 
 export const VariableDefinition = 'VariableDefinition';
@@ -300,7 +300,7 @@ export function isConstantExpr(item: unknown): item is ConstantExpr {
 
 export interface FunctionCall extends Expr {
     readonly $type: 'FunctionCall';
-    function: Reference<Function_>
+    functionName: string
     functionparameters: FunctionCallParameters
 }
 
@@ -605,9 +605,6 @@ export class MyDslAstReflection extends AbstractAstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
-            case 'FunctionCall:function': {
-                return Function_;
-            }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
             }
@@ -640,27 +637,11 @@ export class MyDslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'Affectation': {
-                return {
-                    name: 'Affectation',
-                    mandatory: [
-                        { name: 'variable', type: 'array' }
-                    ]
-                };
-            }
             case 'StatementBlock': {
                 return {
                     name: 'StatementBlock',
                     mandatory: [
                         { name: 'statments', type: 'array' }
-                    ]
-                };
-            }
-            case 'VariableDefinition': {
-                return {
-                    name: 'VariableDefinition',
-                    mandatory: [
-                        { name: 'variable', type: 'array' }
                     ]
                 };
             }
