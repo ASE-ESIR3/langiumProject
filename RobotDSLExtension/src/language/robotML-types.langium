@@ -1,13 +1,17 @@
 
-interface Addition extends BinaryExpr {
+interface Program {
+	function: Function_[]
 }
 
-interface BinaryExpr extends Expr {
-	Left: Expr
-	Right: Expr
+interface Function_ {
+	Body: StatementBlock
+	FunctionName: string
+	^type: Type
+	functiondefinitionparameters: FunctionDefinitionParameters
 }
 
-interface Expr extends Statment {
+interface StatementBlock extends Statment {
+	statments: Statment[]
 }
 
 interface Statment {
@@ -16,16 +20,37 @@ interface Statment {
 interface Type {
 }
 
+interface FunctionDefinitionParameters {
+	variabledefinition: VariableDefinition[]
+}
+
+interface VariableDefinition extends Statment {
+	^type: Type
+	left?: Expr
+	variable: Variable[]
+}
+
+interface Expr extends Statment {
+}
+
 interface Unit {
 }
 
 interface And extends BinaryExpr {
 }
 
+interface BinaryExpr extends Expr {
+	Left: Expr
+	Right: Expr
+}
+
 interface Or extends BinaryExpr {
 }
 
 interface Multiplication extends BinaryExpr {
+}
+
+interface Addition extends BinaryExpr {
 }
 
 interface Division extends BinaryExpr {
@@ -55,46 +80,6 @@ interface ConstBoolean extends ConstantExpr {
 	Value: boolean
 }
 
-interface FunctionCall extends Expr {
-	functionparameters: FunctionCallParameters
-	FunctionName: string
-	function?: @Function_
-}
-
-interface FunctionCallParameters {
-	expr: Expr[]
-}
-
-interface Function_ {
-	Body: StatementBlock
-	FunctionName: string
-	^type: Type
-	functiondefinitionparameters: FunctionDefinitionParameters
-}
-
-interface StatementBlock extends Statment {
-	statments: Statment[]
-}
-
-interface FunctionDefinitionParameters {
-	variabledefinition: VariableDefinition[]
-}
-
-interface VariableDefinition extends Statment {
-	^type: Type
-	left?: Expr
-	VariableName: string
-}
-
-interface LessThan extends BinaryExpr {
-}
-
-interface Equals extends BinaryExpr {
-}
-
-interface MoreThan extends BinaryExpr {
-}
-
 interface Forward extends RobotInstruction {
 	Value: Expr
 	unit: Unit
@@ -109,7 +94,29 @@ interface Rotate extends RobotInstruction {
 
 interface Affectation extends Statment {
 	Right: Expr
-	VariableName: string
+	variable: Variable[]
+}
+
+interface Variable extends Expr {
+	Name: string
+}
+
+interface FunctionCall extends Expr {
+	functionparameters: FunctionCallParameters
+	function: @Function_
+}
+
+interface FunctionCallParameters {
+	expr: Expr[]
+}
+
+interface LessThan extends BinaryExpr {
+}
+
+interface Equals extends BinaryExpr {
+}
+
+interface MoreThan extends BinaryExpr {
 }
 
 interface RbLoop extends ConditionnalStructure {

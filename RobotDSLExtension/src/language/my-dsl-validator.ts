@@ -1,5 +1,5 @@
 import type { ValidationAcceptor, ValidationChecks } from 'langium';
-import type { MyDslAstType, Person } from './generated/ast.js';
+import type { Function_, MyDslAstType } from './generated/ast.js';
 import type { MyDslServices } from './my-dsl-module.js';
 
 /**
@@ -9,7 +9,7 @@ export function registerValidationChecks(services: MyDslServices) {
     const registry = services.validation.ValidationRegistry;
     const validator = services.validation.MyDslValidator;
     const checks: ValidationChecks<MyDslAstType> = {
-        Person: validator.checkPersonStartsWithCapital
+        Function_: validator.printFunName
     };
     registry.register(checks, validator);
 }
@@ -19,13 +19,9 @@ export function registerValidationChecks(services: MyDslServices) {
  */
 export class MyDslValidator {
 
-    checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
-        if (person.name) {
-            const firstChar = person.name.substring(0, 1);
-            if (firstChar.toUpperCase() !== firstChar) {
-                accept('warning', 'Person name should start with a capital.', { node: person, property: 'name' });
-            }
-        }
+    printFunName(fun: Function_, accept: ValidationAcceptor): void {
+        accept('warning', 'congrats, your name is : ' + fun.FunctionName + '.', { node: fun, property: 'FunctionName' });
+         
     }
 
 }

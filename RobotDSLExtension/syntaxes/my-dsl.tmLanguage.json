@@ -10,21 +10,11 @@
     },
     {
       "name": "keyword.control.my-dsl",
-      "match": "\\b(Hello|person)\\b"
+      "match": "\\b(Body|Boolean|CM|Condition|Elsez|Forward|Ifz|KM|MM|Number|Rotate|Void|and|false|not|or|return|true)\\b|\\b(while\\()\\B"
     },
     {
       "name": "string.quoted.double.my-dsl",
       "begin": "\"",
-      "end": "\"",
-      "patterns": [
-        {
-          "include": "#string-character-escape"
-        }
-      ]
-    },
-    {
-      "name": "string.quoted.single.my-dsl",
-      "begin": "'",
       "end": "'",
       "patterns": [
         {
@@ -52,7 +42,7 @@
           }
         },
         {
-          "begin": "//",
+          "begin": "//\n\r",
           "beginCaptures": {
             "1": {
               "name": "punctuation.whitespace.comment.leading.my-dsl"

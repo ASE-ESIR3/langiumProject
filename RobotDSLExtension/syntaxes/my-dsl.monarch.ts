@@ -1,25 +1,26 @@
 // Monarch syntax highlighting for the my-dsl language.
 export default {
     keywords: [
-        'Hello','person'
+        'Body','Boolean','CM','Condition','Elsez','Forward','Ifz','KM','MM','Number','Rotate','Void','and','false','not','or','return','true','while('
     ],
     operators: [
-        '!'
+        '*','+',',','-','/',';','<','=','==','>'
     ],
-    symbols: /!/,
+    symbols: /\(|\)|\*|\+|,|-|\/|;|<|=|==|>|\{|\}/,
 
     tokenizer: {
         initial: [
-            { regex: /[_a-zA-Z][\w_]*/, action: { cases: { '@keywords': {"token":"keyword"}, '@default': {"token":"ID"} }} },
+            { regex: /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/, action: { cases: { '@keywords': {"token":"keyword"}, '@default': {"token":"string"} }} },
             { regex: /[0-9]+/, action: {"token":"number"} },
-            { regex: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/, action: {"token":"string"} },
+            { regex: /(("((\\([\s\S]))|((?!(\\|"))[\s\S]*?))*")|('((\\([\s\S]))|((?!(\\|'))[\s\S]*?))*'))/, action: {"token":"string"} },
             { include: '@whitespace' },
             { regex: /@symbols/, action: { cases: { '@operators': {"token":"operator"}, '@default': {"token":""} }} },
         ],
         whitespace: [
-            { regex: /\s+/, action: {"token":"white"} },
             { regex: /\/\*/, action: {"token":"comment","next":"@comment"} },
-            { regex: /\/\/[^\n\r]*/, action: {"token":"comment"} },
+            { regex: /(\/\/((?!(\n|\r))[\s\S]*?)(\r?\n)?)/, action: {"token":"comment"} },
+            { regex: /((( |	)|\r)|\n)+/, action: {"token":"white"} },
+            { regex: /([\s\S])/, action: {"token":"white"} },
         ],
         comment: [
             { regex: /[^/\*]+/, action: {"token":"comment"} },

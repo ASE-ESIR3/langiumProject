@@ -8,62 +8,594 @@ import type { AstNode, Reference, ReferenceInfo, TypeMetaData } from 'langium';
 import { AbstractAstReflection } from 'langium';
 
 export const MyDslTerminals = {
-    WS: /\s+/,
-    ID: /[_a-zA-Z][\w_]*/,
-    ML_COMMENT: /\/\*[\s\S]*?\*\//,
-    SL_COMMENT: /\/\/[^\n\r]*/,
+    ID: /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/,
+    INT: /[0-9]+/,
+    STRING: /(("((\\([\s\S]))|((?!(\\|"))[\s\S]*?))*")|('((\\([\s\S]))|((?!(\\|'))[\s\S]*?))*'))/,
+    ML_COMMENT: /(\/\*([\s\S]*?\*\/))/,
+    SL_COMMENT: /(\/\/((?!(\n|\r))[\s\S]*?)(\r?\n)?)/,
+    WS: /((( |	)|\r)|\n)+/,
 };
 
-export interface Greeting extends AstNode {
-    readonly $container: Model;
-    readonly $type: 'Greeting';
-    person: Reference<Person>
+export type EBoolean = boolean;
+
+export function isEBoolean(item: unknown): item is EBoolean {
+    return typeof item === 'boolean';
 }
 
-export const Greeting = 'Greeting';
+export type EInt = number;
 
-export function isGreeting(item: unknown): item is Greeting {
-    return reflection.isInstance(item, Greeting);
+export function isEInt(item: unknown): item is EInt {
+    return typeof item === 'number';
 }
 
-export interface Model extends AstNode {
-    readonly $type: 'Model';
-    greetings: Array<Greeting>
-    persons: Array<Person>
+export type EString = string;
+
+export function isEString(item: unknown): item is EString {
+    return (typeof item === 'string' && (/(("((\\([\s\S]))|((?!(\\|"))[\s\S]*?))*")|('((\\([\s\S]))|((?!(\\|'))[\s\S]*?))*'))/.test(item) || /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/.test(item)));
 }
 
-export const Model = 'Model';
-
-export function isModel(item: unknown): item is Model {
-    return reflection.isInstance(item, Model);
+export interface Function_ extends AstNode {
+    readonly $container: Program;
+    readonly $type: 'Function_';
+    Body: StatementBlock
+    functiondefinitionparameters: FunctionDefinitionParameters
+    FunctionName: string
+    type: Type
 }
 
-export interface Person extends AstNode {
-    readonly $container: Model;
-    readonly $type: 'Person';
-    name: string
+export const Function_ = 'Function_';
+
+export function isFunction_(item: unknown): item is Function_ {
+    return reflection.isInstance(item, Function_);
 }
 
-export const Person = 'Person';
+export interface FunctionCallParameters extends AstNode {
+    readonly $container: FunctionCall;
+    readonly $type: 'FunctionCallParameters';
+    expr: Array<Expr>
+}
 
-export function isPerson(item: unknown): item is Person {
-    return reflection.isInstance(item, Person);
+export const FunctionCallParameters = 'FunctionCallParameters';
+
+export function isFunctionCallParameters(item: unknown): item is FunctionCallParameters {
+    return reflection.isInstance(item, FunctionCallParameters);
+}
+
+export interface FunctionDefinitionParameters extends AstNode {
+    readonly $container: Function_;
+    readonly $type: 'FunctionDefinitionParameters';
+    variabledefinition: Array<VariableDefinition>
+}
+
+export const FunctionDefinitionParameters = 'FunctionDefinitionParameters';
+
+export function isFunctionDefinitionParameters(item: unknown): item is FunctionDefinitionParameters {
+    return reflection.isInstance(item, FunctionDefinitionParameters);
+}
+
+export interface Program extends AstNode {
+    readonly $type: 'Program';
+    function: Array<Function_>
+}
+
+export const Program = 'Program';
+
+export function isProgram(item: unknown): item is Program {
+    return reflection.isInstance(item, Program);
+}
+
+export interface Statment extends AstNode {
+    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
+}
+
+export const Statment = 'Statment';
+
+export function isStatment(item: unknown): item is Statment {
+    return reflection.isInstance(item, Statment);
+}
+
+export interface Type extends AstNode {
+    readonly $type: 'Boolean' | 'Number_' | 'Type' | 'Void';
+}
+
+export const Type = 'Type';
+
+export function isType(item: unknown): item is Type {
+    return reflection.isInstance(item, Type);
+}
+
+export interface Unit extends AstNode {
+    readonly $type: 'CM' | 'KM' | 'MM' | 'Unit';
+}
+
+export const Unit = 'Unit';
+
+export function isUnit(item: unknown): item is Unit {
+    return reflection.isInstance(item, Unit);
+}
+
+export interface Affectation extends Statment {
+    readonly $type: 'Affectation';
+    Right: Expr
+    variable: Array<Variable>
+}
+
+export const Affectation = 'Affectation';
+
+export function isAffectation(item: unknown): item is Affectation {
+    return reflection.isInstance(item, Affectation);
+}
+
+export interface ConditionnalStructure extends Statment {
+    readonly $type: 'ConditionnalStructure' | 'Ifz' | 'RbLoop';
+    Body: StatementBlock
+    Condition: Expr
+}
+
+export const ConditionnalStructure = 'ConditionnalStructure';
+
+export function isConditionnalStructure(item: unknown): item is ConditionnalStructure {
+    return reflection.isInstance(item, ConditionnalStructure);
+}
+
+export interface Expr extends Statment {
+    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'FunctionCall' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'Soustraction' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable';
+}
+
+export const Expr = 'Expr';
+
+export function isExpr(item: unknown): item is Expr {
+    return reflection.isInstance(item, Expr);
+}
+
+export interface Rbreturn extends Statment {
+    readonly $type: 'Rbreturn';
+    returnedExpr?: Expr
+}
+
+export const Rbreturn = 'Rbreturn';
+
+export function isRbreturn(item: unknown): item is Rbreturn {
+    return reflection.isInstance(item, Rbreturn);
+}
+
+export interface RobotInstruction extends Statment {
+    readonly $type: 'Forward' | 'RobotInstruction' | 'Rotate';
+}
+
+export const RobotInstruction = 'RobotInstruction';
+
+export function isRobotInstruction(item: unknown): item is RobotInstruction {
+    return reflection.isInstance(item, RobotInstruction);
+}
+
+export interface StatementBlock extends Statment {
+    readonly $container: ConditionnalStructure | Function_ | Ifz;
+    readonly $type: 'StatementBlock';
+    statments: Array<Statment>
+}
+
+export const StatementBlock = 'StatementBlock';
+
+export function isStatementBlock(item: unknown): item is StatementBlock {
+    return reflection.isInstance(item, StatementBlock);
+}
+
+export interface VariableDefinition extends Statment {
+    readonly $container: FunctionDefinitionParameters;
+    readonly $type: 'VariableDefinition';
+    left?: Expr
+    type: Type
+    variable: Array<Variable>
+}
+
+export const VariableDefinition = 'VariableDefinition';
+
+export function isVariableDefinition(item: unknown): item is VariableDefinition {
+    return reflection.isInstance(item, VariableDefinition);
+}
+
+export interface Boolean extends Type {
+    readonly $type: 'Boolean';
+}
+
+export const Boolean = 'Boolean';
+
+export function isBoolean(item: unknown): item is Boolean {
+    return reflection.isInstance(item, Boolean);
+}
+
+export interface Number_ extends Type {
+    readonly $type: 'Number_';
+}
+
+export const Number_ = 'Number_';
+
+export function isNumber_(item: unknown): item is Number_ {
+    return reflection.isInstance(item, Number_);
+}
+
+export interface Void extends Type {
+    readonly $type: 'Void';
+}
+
+export const Void = 'Void';
+
+export function isVoid(item: unknown): item is Void {
+    return reflection.isInstance(item, Void);
+}
+
+export interface CM extends Unit {
+    readonly $type: 'CM';
+}
+
+export const CM = 'CM';
+
+export function isCM(item: unknown): item is CM {
+    return reflection.isInstance(item, CM);
+}
+
+export interface KM extends Unit {
+    readonly $type: 'KM';
+}
+
+export const KM = 'KM';
+
+export function isKM(item: unknown): item is KM {
+    return reflection.isInstance(item, KM);
+}
+
+export interface MM extends Unit {
+    readonly $type: 'MM';
+}
+
+export const MM = 'MM';
+
+export function isMM(item: unknown): item is MM {
+    return reflection.isInstance(item, MM);
+}
+
+export interface Ifz extends ConditionnalStructure {
+    readonly $type: 'Ifz';
+    Elsez: Array<StatementBlock>
+}
+
+export const Ifz = 'Ifz';
+
+export function isIfz(item: unknown): item is Ifz {
+    return reflection.isInstance(item, Ifz);
+}
+
+export interface RbLoop extends ConditionnalStructure {
+    readonly $type: 'RbLoop';
+}
+
+export const RbLoop = 'RbLoop';
+
+export function isRbLoop(item: unknown): item is RbLoop {
+    return reflection.isInstance(item, RbLoop);
+}
+
+export interface BinaryExpr extends Expr {
+    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'Division' | 'Equals' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Or' | 'Soustraction';
+    Left: Expr
+    Right: Expr
+}
+
+export const BinaryExpr = 'BinaryExpr';
+
+export function isBinaryExpr(item: unknown): item is BinaryExpr {
+    return reflection.isInstance(item, BinaryExpr);
+}
+
+export interface ConstantExpr extends Expr {
+    readonly $type: 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr';
+}
+
+export const ConstantExpr = 'ConstantExpr';
+
+export function isConstantExpr(item: unknown): item is ConstantExpr {
+    return reflection.isInstance(item, ConstantExpr);
+}
+
+export interface FunctionCall extends Expr {
+    readonly $type: 'FunctionCall';
+    function: Reference<Function_>
+    functionparameters: FunctionCallParameters
+}
+
+export const FunctionCall = 'FunctionCall';
+
+export function isFunctionCall(item: unknown): item is FunctionCall {
+    return reflection.isInstance(item, FunctionCall);
+}
+
+export interface UnaryExpr extends Expr {
+    readonly $type: 'Not' | 'UnaryExpr' | 'UnaryRightExpr';
+}
+
+export const UnaryExpr = 'UnaryExpr';
+
+export function isUnaryExpr(item: unknown): item is UnaryExpr {
+    return reflection.isInstance(item, UnaryExpr);
+}
+
+export interface Variable extends Expr {
+    readonly $container: Affectation | VariableDefinition;
+    readonly $type: 'Variable';
+    Name: string
+}
+
+export const Variable = 'Variable';
+
+export function isVariable(item: unknown): item is Variable {
+    return reflection.isInstance(item, Variable);
+}
+
+export interface Forward extends RobotInstruction {
+    readonly $type: 'Forward';
+    unit: Unit
+    Value: Expr
+}
+
+export const Forward = 'Forward';
+
+export function isForward(item: unknown): item is Forward {
+    return reflection.isInstance(item, Forward);
+}
+
+export interface Rotate extends RobotInstruction {
+    readonly $type: 'Rotate';
+    Value: Expr
+}
+
+export const Rotate = 'Rotate';
+
+export function isRotate(item: unknown): item is Rotate {
+    return reflection.isInstance(item, Rotate);
+}
+
+export interface Addition extends BinaryExpr {
+    readonly $type: 'Addition';
+}
+
+export const Addition = 'Addition';
+
+export function isAddition(item: unknown): item is Addition {
+    return reflection.isInstance(item, Addition);
+}
+
+export interface And extends BinaryExpr {
+    readonly $type: 'And';
+}
+
+export const And = 'And';
+
+export function isAnd(item: unknown): item is And {
+    return reflection.isInstance(item, And);
+}
+
+export interface Division extends BinaryExpr {
+    readonly $type: 'Division';
+}
+
+export const Division = 'Division';
+
+export function isDivision(item: unknown): item is Division {
+    return reflection.isInstance(item, Division);
+}
+
+export interface Equals extends BinaryExpr {
+    readonly $type: 'Equals';
+}
+
+export const Equals = 'Equals';
+
+export function isEquals(item: unknown): item is Equals {
+    return reflection.isInstance(item, Equals);
+}
+
+export interface LessThan extends BinaryExpr {
+    readonly $type: 'LessThan';
+}
+
+export const LessThan = 'LessThan';
+
+export function isLessThan(item: unknown): item is LessThan {
+    return reflection.isInstance(item, LessThan);
+}
+
+export interface MoreThan extends BinaryExpr {
+    readonly $type: 'MoreThan';
+}
+
+export const MoreThan = 'MoreThan';
+
+export function isMoreThan(item: unknown): item is MoreThan {
+    return reflection.isInstance(item, MoreThan);
+}
+
+export interface Multiplication extends BinaryExpr {
+    readonly $type: 'Multiplication';
+}
+
+export const Multiplication = 'Multiplication';
+
+export function isMultiplication(item: unknown): item is Multiplication {
+    return reflection.isInstance(item, Multiplication);
+}
+
+export interface Or extends BinaryExpr {
+    readonly $type: 'Or';
+}
+
+export const Or = 'Or';
+
+export function isOr(item: unknown): item is Or {
+    return reflection.isInstance(item, Or);
+}
+
+export interface Soustraction extends BinaryExpr {
+    readonly $type: 'Soustraction';
+}
+
+export const Soustraction = 'Soustraction';
+
+export function isSoustraction(item: unknown): item is Soustraction {
+    return reflection.isInstance(item, Soustraction);
+}
+
+export interface ConstBoolean extends ConstantExpr {
+    readonly $type: 'ConstBoolean';
+    Value: boolean
+}
+
+export const ConstBoolean = 'ConstBoolean';
+
+export function isConstBoolean(item: unknown): item is ConstBoolean {
+    return reflection.isInstance(item, ConstBoolean);
+}
+
+export interface ConstNumber extends ConstantExpr {
+    readonly $type: 'ConstNumber';
+    Value: number
+}
+
+export const ConstNumber = 'ConstNumber';
+
+export function isConstNumber(item: unknown): item is ConstNumber {
+    return reflection.isInstance(item, ConstNumber);
+}
+
+export interface UnaryRightExpr extends UnaryExpr {
+    readonly $type: 'Not' | 'UnaryRightExpr';
+    right: Expr
+}
+
+export const UnaryRightExpr = 'UnaryRightExpr';
+
+export function isUnaryRightExpr(item: unknown): item is UnaryRightExpr {
+    return reflection.isInstance(item, UnaryRightExpr);
+}
+
+export interface Not extends UnaryRightExpr {
+    readonly $type: 'Not';
+}
+
+export const Not = 'Not';
+
+export function isNot(item: unknown): item is Not {
+    return reflection.isInstance(item, Not);
 }
 
 export type MyDslAstType = {
-    Greeting: Greeting
-    Model: Model
-    Person: Person
+    Addition: Addition
+    Affectation: Affectation
+    And: And
+    BinaryExpr: BinaryExpr
+    Boolean: Boolean
+    CM: CM
+    ConditionnalStructure: ConditionnalStructure
+    ConstBoolean: ConstBoolean
+    ConstNumber: ConstNumber
+    ConstantExpr: ConstantExpr
+    Division: Division
+    Equals: Equals
+    Expr: Expr
+    Forward: Forward
+    FunctionCall: FunctionCall
+    FunctionCallParameters: FunctionCallParameters
+    FunctionDefinitionParameters: FunctionDefinitionParameters
+    Function_: Function_
+    Ifz: Ifz
+    KM: KM
+    LessThan: LessThan
+    MM: MM
+    MoreThan: MoreThan
+    Multiplication: Multiplication
+    Not: Not
+    Number_: Number_
+    Or: Or
+    Program: Program
+    RbLoop: RbLoop
+    Rbreturn: Rbreturn
+    RobotInstruction: RobotInstruction
+    Rotate: Rotate
+    Soustraction: Soustraction
+    StatementBlock: StatementBlock
+    Statment: Statment
+    Type: Type
+    UnaryExpr: UnaryExpr
+    UnaryRightExpr: UnaryRightExpr
+    Unit: Unit
+    Variable: Variable
+    VariableDefinition: VariableDefinition
+    Void: Void
 }
 
 export class MyDslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Greeting', 'Model', 'Person'];
+        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
         switch (subtype) {
+            case Addition:
+            case And:
+            case Division:
+            case Equals:
+            case LessThan:
+            case MoreThan:
+            case Multiplication:
+            case Or:
+            case Soustraction: {
+                return this.isSubtype(BinaryExpr, supertype);
+            }
+            case Affectation:
+            case ConditionnalStructure:
+            case Expr:
+            case Rbreturn:
+            case RobotInstruction:
+            case StatementBlock:
+            case VariableDefinition: {
+                return this.isSubtype(Statment, supertype);
+            }
+            case BinaryExpr:
+            case ConstantExpr:
+            case FunctionCall:
+            case UnaryExpr:
+            case Variable: {
+                return this.isSubtype(Expr, supertype);
+            }
+            case Boolean:
+            case Number_:
+            case Void: {
+                return this.isSubtype(Type, supertype);
+            }
+            case CM:
+            case KM:
+            case MM: {
+                return this.isSubtype(Unit, supertype);
+            }
+            case ConstBoolean:
+            case ConstNumber: {
+                return this.isSubtype(ConstantExpr, supertype);
+            }
+            case Forward:
+            case Rotate: {
+                return this.isSubtype(RobotInstruction, supertype);
+            }
+            case Ifz:
+            case RbLoop: {
+                return this.isSubtype(ConditionnalStructure, supertype);
+            }
+            case Not: {
+                return this.isSubtype(UnaryRightExpr, supertype);
+            }
+            case UnaryRightExpr: {
+                return this.isSubtype(UnaryExpr, supertype);
+            }
             default: {
                 return false;
             }
@@ -73,8 +605,8 @@ export class MyDslAstReflection extends AbstractAstReflection {
     getReferenceType(refInfo: ReferenceInfo): string {
         const referenceId = `${refInfo.container.$type}:${refInfo.property}`;
         switch (referenceId) {
-            case 'Greeting:person': {
-                return Person;
+            case 'FunctionCall:function': {
+                return Function_;
             }
             default: {
                 throw new Error(`${referenceId} is not a valid reference id.`);
@@ -84,12 +616,67 @@ export class MyDslAstReflection extends AbstractAstReflection {
 
     getTypeMetaData(type: string): TypeMetaData {
         switch (type) {
-            case 'Model': {
+            case 'FunctionCallParameters': {
                 return {
-                    name: 'Model',
+                    name: 'FunctionCallParameters',
                     mandatory: [
-                        { name: 'greetings', type: 'array' },
-                        { name: 'persons', type: 'array' }
+                        { name: 'expr', type: 'array' }
+                    ]
+                };
+            }
+            case 'FunctionDefinitionParameters': {
+                return {
+                    name: 'FunctionDefinitionParameters',
+                    mandatory: [
+                        { name: 'variabledefinition', type: 'array' }
+                    ]
+                };
+            }
+            case 'Program': {
+                return {
+                    name: 'Program',
+                    mandatory: [
+                        { name: 'function', type: 'array' }
+                    ]
+                };
+            }
+            case 'Affectation': {
+                return {
+                    name: 'Affectation',
+                    mandatory: [
+                        { name: 'variable', type: 'array' }
+                    ]
+                };
+            }
+            case 'StatementBlock': {
+                return {
+                    name: 'StatementBlock',
+                    mandatory: [
+                        { name: 'statments', type: 'array' }
+                    ]
+                };
+            }
+            case 'VariableDefinition': {
+                return {
+                    name: 'VariableDefinition',
+                    mandatory: [
+                        { name: 'variable', type: 'array' }
+                    ]
+                };
+            }
+            case 'Ifz': {
+                return {
+                    name: 'Ifz',
+                    mandatory: [
+                        { name: 'Elsez', type: 'array' }
+                    ]
+                };
+            }
+            case 'ConstBoolean': {
+                return {
+                    name: 'ConstBoolean',
+                    mandatory: [
+                        { name: 'Value', type: 'boolean' }
                     ]
                 };
             }
