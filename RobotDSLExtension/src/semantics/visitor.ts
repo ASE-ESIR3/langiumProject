@@ -9,6 +9,8 @@ import { AdditionNode } from "./nodes/AdditionNode.js";
 import { MultiplicationNode } from "./nodes/MultiplicationNode.js";
 import { SoustractionNode } from "./nodes/SoustractionNode.js";
 import { DivisionNode } from "./nodes/DivisionNode.js";
+import { VariableNode } from "./nodes/VariableNode.js";
+import { functionCallNode } from "./nodes/FunctionCallNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -22,4 +24,6 @@ export interface MyDslVisitor {
     visitMultiplication(node: MultiplicationNode ):any;
     visitSoustraction(node: SoustractionNode ):any;
     visitDivision(node: DivisionNode ):any;
+    visitVariable(node: VariableNode):any;
+    visitFunctionCall(node: functionCallNode):any;
 }

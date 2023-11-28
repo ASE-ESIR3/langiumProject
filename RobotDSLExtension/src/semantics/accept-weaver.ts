@@ -14,6 +14,8 @@ import { AdditionNode } from './nodes/AdditionNode.js';
 import { MultiplicationNode } from './nodes/MultiplicationNode.js';
 import { SoustractionNode } from './nodes/SoustractionNode.js';
 import { DivisionNode } from './nodes/DivisionNode.js';
+import { VariableNode } from './nodes/VariableNode.js';
+import { functionCallNode } from './nodes/FunctionCallNode.js';
 
 
 /**
@@ -77,6 +79,14 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitDivision(node as DivisionNode);}
     }
 
+    weaveVariable(node : InterfaceAST.Variable, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitVariable(node as VariableNode);}
+    }
+
+    weaveFunctionCall(node : InterfaceAST.FunctionCall, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFunctionCall(node as functionCallNode);}
+    }
+
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
         Function_ : this.weaveFunction_,
@@ -88,8 +98,9 @@ export class MyDslAcceptWeaver {
         Addition: this.weaveAddition,
         Multiplication: this.weaveMultiplication,
         Soustraction: this.weaveSoustraction,
-        Division: this.weaveDivision
-
+        Division: this.weaveDivision,
+        Variable: this.weaveVariable,
+        FunctionCall: this.weaveFunctionCall
     };
 
 }

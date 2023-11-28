@@ -1,9 +1,11 @@
 import { AdditionNode } from "./nodes/AdditionNode.js";
 import { DivisionNode } from "./nodes/DivisionNode.js";
 import { ExprNode } from "./nodes/ExprNode.js";
+import { functionCallNode } from "./nodes/FunctionCallNode.js";
 import { MultiplicationNode } from "./nodes/MultiplicationNode.js";
 import { SoustractionNode } from "./nodes/SoustractionNode.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
+import { VariableNode } from "./nodes/VariableNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { functionNode  } from "./nodes/functionNode.js";
 import { programNode } from "./nodes/programNode.js";
@@ -64,6 +66,14 @@ export class PrintVisitor implements MyDslVisitor {
     }
 
     visitDivision(node: DivisionNode) {
+        
+    }
+
+    visitVariable(node: VariableNode) {
+        
+    }
+
+    visitFunctionCall(node: functionCallNode) {
         
     }
 

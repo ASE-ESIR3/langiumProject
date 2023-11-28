@@ -1,0 +1,1 @@
+node bin/cli.js print ../../myRobotProject/main.rbtdsl 

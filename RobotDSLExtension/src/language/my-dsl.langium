@@ -78,7 +78,7 @@ Forward returns Forward:
 ;
 
 Rotate returns Rotate:
-    'Rotate' Value=Expr   
+    'Rotate' Value=Expr
 ;
 
 Affectation returns Affectation:

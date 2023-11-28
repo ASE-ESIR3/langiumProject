@@ -11,10 +11,17 @@ import { AdditionNode } from "./nodes/AdditionNode.js";
 import { MultiplicationNode } from "./nodes/MultiplicationNode.js";
 import { SoustractionNode } from "./nodes/SoustractionNode.js";
 import { DivisionNode } from "./nodes/DivisionNode.js";
+import { VariableNode } from "./nodes/VariableNode.js";
+import { functionCallNode } from "./nodes/FunctionCallNode.js";
 //import { isStatementBlock } from "../language/generated/ast.js";
 
+
 export class PrintVisitor implements MyDslVisitor {
+    public venv: Map<string, number> = new Map<string, number>();
+    constructor() {
     
+    }
+
     visit(model: programNode): any {
         this.visitProgram(model);
     }
@@ -76,6 +83,7 @@ export class PrintVisitor implements MyDslVisitor {
         (node.left as ExprNode).accept(this);
         const value = (node.left as ExprNode).accept(this);
         console.log("VariableDefinition value: " + value);
+        this.venv.set(node.variable.Name, value);
     }
 
     visitAddition(node: AdditionNode ){
@@ -95,7 +103,24 @@ export class PrintVisitor implements MyDslVisitor {
 
     visitDivision(node: DivisionNode ){
         console.log("Division");
-        return parseInt((node.Left as ExprNode).accept(this)) / parseInt((node.Right as ExprNode).accept(this)); 
+        return Math.round(parseInt((node.Left as ExprNode).accept(this)) / parseInt((node.Right as ExprNode).accept(this))); 
+    }
+
+    visitVariable(node: VariableNode){
+        console.log("Variable");
+        console.log("Variable name: " + node.Name);
+        return this.venv.get(node.Name);
+    }
+
+    visitFunctionCall(node: functionCallNode){
+        console.log("FunctionCall");
+        console.log("FunctionCall name: " + node.functionName);
+        if(node.functionName == "print"){
+            console.log("FunctionCall print");
+            return null;
+        }
+        return null;
     }
 
 }
+
