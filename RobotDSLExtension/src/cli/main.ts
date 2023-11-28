@@ -1,4 +1,4 @@
-import type { programNode } from '../semantics/visitor.js';
+import type { programNode } from '../semantics/nodes/programNode.js';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import { MyDslLanguageMetaData } from '../language/generated/module.js';

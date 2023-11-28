@@ -2,7 +2,8 @@ import type { DefaultSharedModuleContext, LangiumServices, LangiumSharedServices
 import { createDefaultModule, createDefaultSharedModule, inject } from 'langium';
 import { MyDslGeneratedModule, MyDslGeneratedSharedModule } from './generated/module.js';
 import { MyDslValidator, registerValidationChecks } from './my-dsl-validator.js';
-
+import { weaveAcceptMethods } from '../semantics/accept-weaver.js';
+    
 /**
  * Declaration of custom services - add your own service classes here.
  */
@@ -58,6 +59,8 @@ export function createMyDslServices(context: DefaultSharedModuleContext): {
         MyDslModule
     );
     shared.ServiceRegistry.register(MyDsl);
+    weaveAcceptMethods(MyDsl);
     registerValidationChecks(MyDsl);
+    
     return { shared, MyDsl };
 }

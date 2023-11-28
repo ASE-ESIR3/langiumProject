@@ -1,13 +1,13 @@
 import type { ValidationAcceptor, ValidationChecks } from 'langium';
 import { Function_, MyDslAstType } from './generated/ast.js';
 import type { MyDslServices } from './my-dsl-module.js';
-
-/**
+/** 
  * Register custom validation checks.
  */
 export function registerValidationChecks(services: MyDslServices) {
     const registry = services.validation.ValidationRegistry;
     const validator = services.validation.MyDslValidator;
+    
     const checks: ValidationChecks<MyDslAstType> = {
         Function_: validator.printFunName,
         //Variable: validator.printFunNam

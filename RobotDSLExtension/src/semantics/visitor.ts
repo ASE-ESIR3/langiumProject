@@ -1,61 +1,25 @@
-import * as ASTInterfaces from '../language/generated/ast.js';
-import { AstNode, CstNode, LangiumDocument } from 'langium';
+import { functionNode } from "./nodes/functionNode.js";
+import { programNode } from "./nodes/programNode.js";
+import { StatementNode } from "./nodes/statementNode.js";
+import { StatementBlockNode} from "./nodes/statementBlockNode.js";
+import { ExprNode } from "./nodes/ExprNode.js";
+import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
+import { ConstNumberNode } from "./nodes/constNumberNode.js";
+import { AdditionNode } from "./nodes/AdditionNode.js";
+import { MultiplicationNode } from "./nodes/MultiplicationNode.js";
+import { SoustractionNode } from "./nodes/SoustractionNode.js";
+import { DivisionNode } from "./nodes/DivisionNode.js";
 
 export interface MyDslVisitor {
-    // TODO : create one visit method for each concept of the language
     visitProgram(node: programNode): any;
     visitFunction_(node: functionNode): any;
-}
-
-// TODO : create one concrete class for each concept
-export class programNode implements ASTInterfaces.Program {
-    constructor(
-        public $type: 'Program'
-    ){}
-    function!: functionNode[];
-    $container?: AstNode | undefined;
-    $containerProperty?: string | undefined;
-    $containerIndex?: number | undefined;
-    $cstNode?: CstNode | undefined;
-    $document?: LangiumDocument<AstNode> | undefined;
-    accept (visitor: MyDslVisitor) : any {
-        return visitor.visitProgram(this);
-    }
-}
-
-export class functionNode implements ASTInterfaces.Function_ {
-    constructor(
-        public $type: 'Function_',
-        public $container: ASTInterfaces.Program,
-        
-    ){}
-    type!: ASTInterfaces.Type;
-    $containerProperty?: string | undefined;
-    $containerIndex?: number | undefined;
-    $cstNode?: CstNode | undefined;
-    $document?: LangiumDocument<AstNode> | undefined;
-    FunctionName!: string;
-    functiondefinitionparameters!: ASTInterfaces.FunctionDefinitionParameters;
-    Body!: ASTInterfaces.StatementBlock;
-    accept(visitor: MyDslVisitor) : any {
-        return visitor.visitFunction_(this);
-    }
-}
-
-export class PrintVisitor implements MyDslVisitor {
-    visitProgram(node: programNode): any {
-        console.log("Program");
-        console.log(node.function);
-        node.function.forEach(element => {
-            element.accept(this);
-            console.log(node.function);
-        });
-    
-    }
-
-    visitFunction_(node: functionNode): any {
-        console.log("Function_");
-        console.log(node.FunctionName);
-        return null;
-    }
+    visitStatment(node: StatementNode): any;
+    visitStatmentBlock(node: StatementBlockNode): any;
+    visitExpr(node: ExprNode): any;
+    visitVariableDefinition(node: VariableDefinitionNode):any;
+    visitConstNumber(node: ConstNumberNode):any;
+    visitAddition(node: AdditionNode ):any;
+    visitMultiplication(node: MultiplicationNode ):any;
+    visitSoustraction(node: SoustractionNode ):any;
+    visitDivision(node: DivisionNode ):any;
 }
