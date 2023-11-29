@@ -1,3 +1,6 @@
+
+import { functionCallNode } from "./nodes/FunctionCallNode.js";
+import { VariableNode } from "./nodes/VariableNode.js";
 import { functionNode  } from "./nodes/functionNode.js";
 import { programNode } from "./nodes/programNode.js";
 import { StatementNode } from "./nodes/statementNode.js";
