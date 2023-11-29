@@ -1,0 +1,28 @@
+Number square(Number a = 0){
+    print((a*a));
+    return (a*a);
+}
+
+Void main() {
+    
+    Number a = 3;
+    Number stop = 100;
+    Number step = 10;
+    square(a);
+    
+    Boolean test = true;
+
+    if( test ){
+        print( (1 == 1));
+    } else{
+        print((a + 1));
+    };
+    print(a);
+    print(stop);
+    while( (a < stop) ){
+        print(a);
+        a = (a + step);
+        return;
+    };
+
+}
