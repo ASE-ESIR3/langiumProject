@@ -6,7 +6,6 @@ interface Program {
 interface Function_ {
 	Body: StatementBlock
 	FunctionName: string
-	
 	^type: Type
 	functiondefinitionparameters: FunctionDefinitionParameters
 }

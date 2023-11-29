@@ -70,7 +70,7 @@ ConstNumber returns ConstNumber:
 ;
 
 ConstBoolean returns ConstBoolean:
-    Value?=EBoolean  
+    Value=EBoolean
 ;
 
 Forward returns Forward:
@@ -78,7 +78,7 @@ Forward returns Forward:
 ;
 
 Rotate returns Rotate:
-    'Rotate' Value=Expr   
+    'Rotate' Value=Expr
 ;
 
 Affectation returns Affectation:

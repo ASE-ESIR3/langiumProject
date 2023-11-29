@@ -33,9 +33,9 @@ export default function(): void {
 
 
     program
-        .command('print')
+        .command('interpret')
         .argument('<file>', `source file (possible file extensions: ${fileExtensions})`)
-        .description('prints the AST of a source file')
+        .description('interprets the source file')
         .action(async (fileName: string) => {
             const services = createMyDslServices(NodeFileSystem).MyDsl;
             const model = await extractAstNode<programNode>(fileName, services);

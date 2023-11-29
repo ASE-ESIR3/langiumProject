@@ -14,4 +14,3 @@ export class ConstNumberNode implements ASTInterfaces.ConstNumber {
     $document?: LangiumDocument<AstNode> | undefined;
     accept(visitor: MyDslVisitor) : any {};
 }
-

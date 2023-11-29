@@ -911,7 +911,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "definition": {
         "$type": "Assignment",
         "feature": "Value",
-        "operator": "?=",
+        "operator": "=",
         "terminal": {
           "$type": "RuleCall",
           "rule": {

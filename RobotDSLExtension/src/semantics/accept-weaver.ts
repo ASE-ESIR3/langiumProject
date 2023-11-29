@@ -14,6 +14,15 @@ import { AdditionNode } from './nodes/AdditionNode.js';
 import { MultiplicationNode } from './nodes/MultiplicationNode.js';
 import { SoustractionNode } from './nodes/SoustractionNode.js';
 import { DivisionNode } from './nodes/DivisionNode.js';
+import { VariableNode } from './nodes/VariableNode.js';
+import { functionCallNode } from './nodes/FunctionCallNode.js';
+import { FunctionCallParametersNode } from './nodes/FunctionCallParameterNode.js';
+import { AffectationNode } from './nodes/AffectationNode.js';
+import { ConstBooleanNode } from './nodes/ConstBooleanNode.js';
+import { EqualsNode } from './nodes/equalsNode.js';
+import { NotNode } from './nodes/NotNode.js';
+import { AndNode } from './nodes/AndNode.js';
+import { OrNode } from './nodes/OrNode.js';
 
 
 /**
@@ -77,6 +86,43 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitDivision(node as DivisionNode);}
     }
 
+    weaveVariable(node : InterfaceAST.Variable, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitVariable(node as VariableNode);}
+    }
+
+    weaveFunctionCall(node : InterfaceAST.FunctionCall, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFunctionCall(node as functionCallNode);}
+    }
+
+    weaveFunctionCallParameters(node : InterfaceAST.FunctionCallParameters, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFunctionCallParameters(node as FunctionCallParametersNode);}
+    }
+
+    weaveAffectation(node : InterfaceAST.Affectation, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitAffectation(node as AffectationNode);}
+    }
+
+    weaveConstBoolean(node : InterfaceAST.ConstBoolean, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitConstBoolean(node as ConstBooleanNode);}
+    }
+
+    weaveOr(node : InterfaceAST.Or, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitOr(node as OrNode);}
+    }
+
+    weaveAnd(node : InterfaceAST.And, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitAnd(node as AndNode);}
+    }
+
+    weaveNot(node : InterfaceAST.Not, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitNot(node as NotNode);}
+    }
+
+    weaveEquals(node : InterfaceAST.Equals, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitEquals(node as EqualsNode);}
+    }
+
+
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
         Function_ : this.weaveFunction_,
@@ -85,11 +131,19 @@ export class MyDslAcceptWeaver {
         Expr: this.weaveExpr,
         VariableDefinition: this.weaveVaribaleDefinition,
         ConstNumber: this.weaveConstNumber,
+        ConstBoolean: this.weaveConstBoolean,
         Addition: this.weaveAddition,
         Multiplication: this.weaveMultiplication,
         Soustraction: this.weaveSoustraction,
-        Division: this.weaveDivision
-
+        Division: this.weaveDivision,
+        Variable: this.weaveVariable,
+        FunctionCall: this.weaveFunctionCall,
+        FunctionCallParameters: this.weaveFunctionCallParameters,
+        Affectation: this.weaveAffectation,
+        Or: this.weaveOr,
+        And: this.weaveAnd,
+        Not: this.weaveNot,
+        Equals: this.weaveEquals
     };
 
 }
