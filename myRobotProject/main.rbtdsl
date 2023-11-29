@@ -1,14 +1,13 @@
+
 Number square(Number a = 0){
-    print((a*a));
     return (a*a);
 }
 
 Void main() {
-    
     Number a = 3;
-    Number stop = 100;
+    Number stop = (square(a) * square(a));
     Number step = 10;
-    square(a);
+    print(stop);
     
     Boolean test = true;
 
@@ -22,7 +21,7 @@ Void main() {
     while( (a < stop) ){
         print(a);
         a = (a + step);
-        return ;
+        
     };
 
 }

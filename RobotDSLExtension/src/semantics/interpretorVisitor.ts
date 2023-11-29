@@ -31,6 +31,7 @@ import { ReturnNode } from "./nodes/ReturnNode.js";
 export class InterpretorVisitor implements MyDslVisitor {
     public ctx = [new Map<string, any>()];
     public progNode: programNode | undefined;
+    public isReturning = false;
     getCurrentContext() {
         return this.ctx[this.ctx.length - 1];
     }
@@ -66,23 +67,29 @@ export class InterpretorVisitor implements MyDslVisitor {
     visitStatmentBlock(node: StatementBlockNode):any {
         
         node.statments.forEach(element => {
-            element.accept(this);
+            const ret = element.accept(this);
+            if (this.isReturning){
+                return ret;
+            }
         });
         
         return null;
     }
 
     visitStatment(node: StatementNode) {
-
+        var ret = null;
         if (isStatementBlock(node)){
-            const node_ = ( node as StatementBlockNode)
-
-            node_.statments.forEach(element => {
-                element.accept(this);
-            });
+            const node_ = ( node as StatementBlockNode);
+            //same for but not with lambda
+            for (let i = 0; i < node_.statments.length; i++) {
+                 const element = node_.statments[i];
+                    ret = element.accept(this);
+                    if (this.isReturning){
+                        break;
+                    }
+                }
         }
-
-        return null;
+        return ret;
     }
 
     visitConstNumber(node: ConstNumberNode){
@@ -153,10 +160,10 @@ export class InterpretorVisitor implements MyDslVisitor {
                 });
             }
             
-            func.Body.accept(this);
-            
+            const returnVal = func.Body.accept(this);
+            this.isReturning = false;
             this.ctx.pop();
-            return 0;
+            return returnVal;
         } else {
             throw new Error(`Function ${node.functionName} not found`);
         }
@@ -196,19 +203,24 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitif(node: IfNode) {
         if (node.Condition.accept(this) == "true"){
-            node.Body.accept(this);
+            return node.Body.accept(this);
+            
         }
         else{
             node.Elsez.forEach(element => {
-                element.accept(this);
+                return element.accept(this);
             });
         }
+    
     }
 
     visitWhile(node: WhileNode) {
         
         while ( node.Condition.accept(this)){
-            node.Body.accept(this);
+            const ret = node.Body.accept(this);
+            if(this.isReturning){
+                return ret;
+            }
         }
     }
 
@@ -226,6 +238,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitReturn(node: ReturnNode) {
+        this.isReturning = true;
         if (node.returnedExpr == undefined){
             return null;
         }

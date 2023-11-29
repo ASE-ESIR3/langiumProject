@@ -49,7 +49,7 @@ export function weaveAcceptMethods(services: MyDslServices) {
 export class MyDslAcceptWeaver {
     weaveProgram(node : InterfaceAST.Program, accept : ValidationAcceptor) : void{
 
-        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitProgram(node as unknown as programNode);}
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitProgram(node as programNode);}
     }
 
     weaveFunction_(node : InterfaceAST.Function_, accept : ValidationAcceptor) : void{
