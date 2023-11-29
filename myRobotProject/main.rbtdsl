@@ -3,7 +3,7 @@ Number square(Number a = 0){
     return (a*a);
 }
 
-Void main() {
+Void main(Number argc, Void argv) {
     Number a = 3;
     Number stop = (square(a) * square(a));
     Number step = 10;

@@ -1,10 +1,11 @@
 import * as ASTInterfaces from '../../language/generated/ast.js';
 import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
+import { VariableDefinitionNode } from './VariableDefinitionNode.js';
 
 export class FunctionDefinitionParametersNode implements ASTInterfaces.FunctionDefinitionParameters {
     constructor(public $type: 'FunctionDefinitionParameters'){}
-    variabledefinition!: ASTInterfaces.VariableDefinition[];
+    variabledefinition!: VariableDefinitionNode[];
     $container!: ASTInterfaces.Function_;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;

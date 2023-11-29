@@ -7,6 +7,7 @@ import { extractAstNode } from './cli-util.js';
 import { generateJavaScript } from './generator.js';
 import { NodeFileSystem } from 'langium/node';
 import { interpreter } from '../semantics/interpreter.js';
+import { compiler } from '../semantics/compiler.js';
 //import { PrintVisitor } from '../semantics/visitor.js';
 
 export const generateAction = async (fileName: string, opts: GenerateOptions): Promise<void> => {
@@ -25,11 +26,15 @@ export default function(): void {
 
     const fileExtensions = MyDslLanguageMetaData.fileExtensions.join(', ');
     program
-        .command('generate')
-        .argument('<file>', `source file (possible file extensions: ${fileExtensions})`)
-        .option('-d, --destination <dir>', 'destination directory of generating')
-        .description('generates JavaScript code that prints "Hello, {name}!" for each greeting in a source file')
-        .action(generateAction);
+        .command('compile')
+        .argument('<file>', `source file (possible file extensions: ${fileExtensions})`).argument('<destination>', `destination folder`)
+        .description('compile the code to arduino code')
+        .action(async (fileName: string,destination:string) => {
+            const services = createMyDslServices(NodeFileSystem).MyDsl;
+            const model = await extractAstNode<programNode>(fileName, services);
+            compiler.compile(model,destination);
+
+        });
 
 
     program

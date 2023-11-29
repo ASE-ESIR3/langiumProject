@@ -14,6 +14,8 @@ Holding the vscode extension and the grammar files produced by xtext, converted 
 
 4. run `sh interpret` to try the interpretor the extension
 
+5. run `sh compile` to try the compiler 
+
 ## modify the test project
 
 at the root find the myRobotProject folder, it contains the test project.
