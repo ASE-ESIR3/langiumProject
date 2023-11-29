@@ -1,1 +1,1 @@
-node bin/cli.js interpret ../../myRobotProject/main.rbtdsl 
+node bin/cli.js interpret ../myRobotProject/main.rbtdsl 

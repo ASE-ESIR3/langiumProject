@@ -226,6 +226,9 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitReturn(node: ReturnNode) {
+        if (node.returnedExpr == undefined){
+            return null;
+        }
         return node.returnedExpr.accept(this);
     }
 
