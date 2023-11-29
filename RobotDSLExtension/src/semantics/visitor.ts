@@ -14,6 +14,11 @@ import { functionCallNode } from "./nodes/FunctionCallNode.js";
 import { FunctionCallParametersNode } from "./nodes/FunctionCallParameterNode.js";
 import { AffectationNode } from "./nodes/AffectationNode.js";
 import { ConstBooleanNode } from "./nodes/ConstBooleanNode.js";
+import { WhileNode } from "./nodes/WhileNode.js";
+import { MoreThanNode } from "./nodes/MoreThanNode.js";
+import { LessThanNode } from "./nodes/LessThanNode.js";
+import { FunctionDefinitionParametersNode } from "./nodes/FunctionDefinitionParametersNode.js";
+import { ReturnNode } from "./nodes/ReturnNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -36,4 +41,10 @@ export interface MyDslVisitor {
     visitAnd(node: any):any;
     visitNot(node: any):any;
     visitEquals(node: any):any;
+    visitif(node: any):any;
+    visitWhile(node: WhileNode):any;
+    visitMoreThan(node: MoreThanNode):any;
+    visitLessThan(node: LessThanNode):any;
+    visitFunctionDefinitionParameters(node: FunctionDefinitionParametersNode):any;
+    visitReturn(node: ReturnNode):any;
 }

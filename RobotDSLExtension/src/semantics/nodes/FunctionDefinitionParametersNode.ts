@@ -2,14 +2,10 @@ import * as ASTInterfaces from '../../language/generated/ast.js';
 import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
 
-
-export class AdditionNode implements ASTInterfaces.Addition {
-    constructor(public $type: 'Addition',
-                public $container: ASTInterfaces.Expr){}
-    Left!: ASTInterfaces.Expr;
-    Right!: ASTInterfaces.Expr;
-    Value!: number;
-    
+export class FunctionDefinitionParametersNode implements ASTInterfaces.FunctionDefinitionParameters {
+    constructor(public $type: 'FunctionDefinitionParameters'){}
+    variabledefinition!: ASTInterfaces.VariableDefinition[];
+    $container!: ASTInterfaces.Function_;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;

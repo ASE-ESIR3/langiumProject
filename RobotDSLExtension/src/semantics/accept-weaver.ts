@@ -23,6 +23,12 @@ import { EqualsNode } from './nodes/equalsNode.js';
 import { NotNode } from './nodes/NotNode.js';
 import { AndNode } from './nodes/AndNode.js';
 import { OrNode } from './nodes/OrNode.js';
+import { IfNode } from './nodes/IfNode.js';
+import { WhileNode } from './nodes/WhileNode.js';
+import { MoreThanNode } from './nodes/MoreThanNode.js';
+import { LessThanNode } from './nodes/LessThanNode.js';
+import { FunctionDefinitionParametersNode } from './nodes/FunctionDefinitionParametersNode.js';
+import { ReturnNode } from './nodes/ReturnNode.js';
 
 
 /**
@@ -122,6 +128,29 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitEquals(node as EqualsNode);}
     }
 
+    weaveIf(node : InterfaceAST.Ifz, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitif(node as IfNode);}
+    }
+
+    weaveWhile(node : InterfaceAST.RbLoop, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitWhile(node as WhileNode);}
+    }
+
+    weaveMoreThan(node : InterfaceAST.MoreThan, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitMoreThan(node as MoreThanNode);}
+    }
+
+    weaveLessThan(node : InterfaceAST.LessThan, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitLessThan(node as LessThanNode);}
+    }
+
+    weaveFunctionDefinitionParameters(node : InterfaceAST.FunctionDefinitionParameters, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFunctionDefinitionParameters(node as FunctionDefinitionParametersNode);}
+    }
+
+    weaveReturn(node : InterfaceAST.Rbreturn, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitReturn(node as ReturnNode);}
+    }
 
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
@@ -143,7 +172,13 @@ export class MyDslAcceptWeaver {
         Or: this.weaveOr,
         And: this.weaveAnd,
         Not: this.weaveNot,
-        Equals: this.weaveEquals
+        Equals: this.weaveEquals,
+        Ifz: this.weaveIf,
+        RbLoop: this.weaveWhile,
+        LessThan: this.weaveLessThan,
+        FunctionDefinitionParameters: this.weaveFunctionDefinitionParameters,
+        Rbreturn: this.weaveReturn,
+
     };
 
 }

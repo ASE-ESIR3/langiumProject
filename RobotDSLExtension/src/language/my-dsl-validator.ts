@@ -1,5 +1,5 @@
 import type { ValidationAcceptor, ValidationChecks } from 'langium';
-import { Function_, MyDslAstType } from './generated/ast.js';
+import { Function_, MyDslAstType, Program } from './generated/ast.js';
 import type { MyDslServices } from './my-dsl-module.js';
 /** 
  * Register custom validation checks.
@@ -9,7 +9,8 @@ export function registerValidationChecks(services: MyDslServices) {
     const validator = services.validation.MyDslValidator;
     
     const checks: ValidationChecks<MyDslAstType> = {
-        Function_: validator.printFunName,
+        Function_: validator.ensurefunctionName,
+        Program: validator.ensureMainFunctionExists,
         //Variable: validator.printFunNam
     };
     registry.register(checks, validator);
@@ -21,11 +22,20 @@ export function registerValidationChecks(services: MyDslServices) {
 export class MyDslValidator {
 
 
-    printFunName(fun: Function_, accept: ValidationAcceptor): void {
-        accept('warning', 'congrats, your name is : ' + fun.FunctionName + '.', { node: fun, property: 'FunctionName' });
-         
+    ensurefunctionName(fun: Function_, accept: ValidationAcceptor): void {
+        if (!fun.FunctionName.charAt(0).match(/[a-z]/)) {
+            accept('warning', 'Function name should not becapitalized.', { node: fun, property: 'FunctionName' });
+        }
+        if(fun.FunctionName.toLowerCase() == "main" && !fun.FunctionName.charAt(0).match(/[a-z]/)){
+            accept('error', 'Function main should be written like "main".', { node: fun, property: 'FunctionName' });
+            
+        }
     }
-    /*printFunNam(var_: Variable, accept: ValidationAcceptor): void {
-        accept('info', 'congrats, your name is : ' + var_.Name + '.', { node: var_, property: 'Name' });
-    }*/
+    
+    ensureMainFunctionExists(prog: Program, accept: ValidationAcceptor): void {
+        if (!prog.function.find(fun => fun.FunctionName == "main")) {
+            accept('error', 'Your program does not contain any main() function.', { node: prog, property: 'function' });
+        }
+    }
+
 }

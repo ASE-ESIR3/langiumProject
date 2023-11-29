@@ -6,7 +6,6 @@ import { MyDslVisitor } from '../visitor.js';
 export class ConstBooleanNode implements ASTInterfaces.ConstBoolean {
     constructor(public $type: 'ConstBoolean'){}
     Value!: boolean;
-    
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;

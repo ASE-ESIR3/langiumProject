@@ -2,6 +2,7 @@ import * as ASTInterfaces from '../../language/generated/ast.js';
 import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
 import { StatementBlockNode } from './statementBlockNode.js';
+import { FunctionDefinitionParametersNode } from './FunctionDefinitionParametersNode.js';
 
 export class functionNode implements ASTInterfaces.Function_ {
     constructor(public $type: 'Function_',
@@ -12,7 +13,7 @@ export class functionNode implements ASTInterfaces.Function_ {
     $cstNode?: CstNode | undefined;
     $document?: LangiumDocument<AstNode> | undefined;
     FunctionName!: string;
-    functiondefinitionparameters!: ASTInterfaces.FunctionDefinitionParameters;
+    functiondefinitionparameters!: FunctionDefinitionParametersNode;
     Body!: StatementBlockNode;
     accept(visitor: MyDslVisitor) : any {};
 }
