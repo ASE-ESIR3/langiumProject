@@ -47,11 +47,9 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitProgram(node: programNode): any {
         const mainFunction = node.function.find(f => f.FunctionName === 'main');
-        // If 'main' function is found, start the interpretation from there
         if (mainFunction) {
-            mainFunction.accept(this); // Start interpretation from the main function
+            mainFunction.accept(this); // start interpretation from the main function
         } else {
-            // Handle case where there is no 'main' function
             console.error("No main function found in the program");
         }
 
@@ -80,7 +78,6 @@ export class InterpretorVisitor implements MyDslVisitor {
         var ret = null;
         if (isStatementBlock(node)){
             const node_ = ( node as StatementBlockNode);
-            //same for but not with lambda
             for (let i = 0; i < node_.statments.length; i++) {
                  const element = node_.statments[i];
                     ret = element.accept(this);
@@ -126,13 +123,11 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitVariable(node: VariableNode){
-        // Look for the variable in the stack of contexts
         for (let i = this.ctx.length - 1; i >= 0; i--) {
             if (this.ctx[i].has(node.Name)) {
                 return this.ctx[i].get(node.Name);
             }
         }
-        // Handle the case where the variable is not found
         throw new Error(`Variable ${node.Name} not found`);
     }
 
