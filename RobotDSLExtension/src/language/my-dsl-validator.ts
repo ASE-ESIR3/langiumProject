@@ -30,6 +30,17 @@ export class MyDslValidator {
             accept('error', 'Function main should be written like "main".', { node: fun, property: 'FunctionName' });
             
         }
+
+        if(fun.FunctionName.toLowerCase() == "setup"){
+            accept('error', 'Function cant be named setup. it is a reserved word.', { node: fun, property: 'FunctionName' });
+            
+        }
+
+        if(fun.FunctionName.toLowerCase() == "loop"){
+            accept('error', 'Function cant be named loop. it is a reserved word.', { node: fun, property: 'FunctionName' });
+            
+        }
+
     }
     
     ensureMainFunctionExists(prog: Program, accept: ValidationAcceptor): void {
