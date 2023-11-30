@@ -10,7 +10,7 @@ Holding the vscode extension and the grammar files produced by xtext, converted 
 
 2. run `npm install` in the root folder
 
-3. run `sh buildVSExtension.sh` script to build the extension
+3. run `sh buildAll.sh` script to build All the editor and web engine
 
 4. run `sh interpret` to try the interpretor the extension
 

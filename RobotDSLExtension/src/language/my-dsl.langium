@@ -11,7 +11,7 @@ Type returns Type:
 ;
 
 Statment returns Statment:
-    (And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | Rbreturn | Variable )';'
+    (And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable )';'
 ;
 
 Expr returns Expr:
@@ -112,6 +112,11 @@ MoreThan returns MoreThan:
 RbLoop returns RbLoop:
     'while(' Condition=Expr ')' Body=StatementBlock  
 ;
+
+For returns For:
+    'for(' Initialization=(VariableDefinition | Variable ) ';' Condition=Expr ';' Increment=Affectation ')' Body=StatementBlock
+;
+
 
 Ifz returns Ifz:
     'if(' Condition=Expr ')' Body=StatementBlock ('else' ( Elsez+=StatementBlock  )* )?

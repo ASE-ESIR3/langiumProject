@@ -85,7 +85,7 @@ export function isProgram(item: unknown): item is Program {
 }
 
 export interface Statment extends AstNode {
-    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
+    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
 }
 
 export const Statment = 'Statment';
@@ -115,6 +115,7 @@ export function isUnit(item: unknown): item is Unit {
 }
 
 export interface Affectation extends Statment {
+    readonly $container: For;
     readonly $type: 'Affectation';
     Right: Expr
     variable: Variable
@@ -127,7 +128,7 @@ export function isAffectation(item: unknown): item is Affectation {
 }
 
 export interface ConditionnalStructure extends Statment {
-    readonly $type: 'ConditionnalStructure' | 'Ifz' | 'RbLoop';
+    readonly $type: 'ConditionnalStructure' | 'For' | 'Ifz' | 'RbLoop';
     Body: StatementBlock
     Condition: Expr
 }
@@ -182,7 +183,7 @@ export function isStatementBlock(item: unknown): item is StatementBlock {
 }
 
 export interface VariableDefinition extends Statment {
-    readonly $container: FunctionDefinitionParameters;
+    readonly $container: For | FunctionDefinitionParameters;
     readonly $type: 'VariableDefinition';
     left?: Expr
     type: Type
@@ -255,6 +256,18 @@ export function isMM(item: unknown): item is MM {
     return reflection.isInstance(item, MM);
 }
 
+export interface For extends ConditionnalStructure {
+    readonly $type: 'For';
+    Increment: Affectation | Expr
+    Initialization: Variable | VariableDefinition
+}
+
+export const For = 'For';
+
+export function isFor(item: unknown): item is For {
+    return reflection.isInstance(item, For);
+}
+
 export interface Ifz extends ConditionnalStructure {
     readonly $type: 'Ifz';
     Elsez: Array<StatementBlock>
@@ -321,7 +334,7 @@ export function isUnaryExpr(item: unknown): item is UnaryExpr {
 }
 
 export interface Variable extends Expr {
-    readonly $container: Affectation | VariableDefinition;
+    readonly $container: Affectation | For | VariableDefinition;
     readonly $type: 'Variable';
     Name: string
 }
@@ -502,6 +515,7 @@ export type MyDslAstType = {
     Division: Division
     Equals: Equals
     Expr: Expr
+    For: For
     Forward: Forward
     FunctionCall: FunctionCall
     FunctionCallParameters: FunctionCallParameters
@@ -536,7 +550,7 @@ export type MyDslAstType = {
 export class MyDslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
+        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -582,13 +596,14 @@ export class MyDslAstReflection extends AbstractAstReflection {
             case ConstNumber: {
                 return this.isSubtype(ConstantExpr, supertype);
             }
-            case Forward:
-            case Rotate: {
-                return this.isSubtype(RobotInstruction, supertype);
-            }
+            case For:
             case Ifz:
             case RbLoop: {
                 return this.isSubtype(ConditionnalStructure, supertype);
+            }
+            case Forward:
+            case Rotate: {
+                return this.isSubtype(RobotInstruction, supertype);
             }
             case Not: {
                 return this.isSubtype(UnaryRightExpr, supertype);

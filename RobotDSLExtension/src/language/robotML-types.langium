@@ -122,6 +122,11 @@ interface MoreThan extends BinaryExpr {
 interface RbLoop extends ConditionnalStructure {
 }
 
+interface For extends ConditionnalStructure {
+	Increment: Affectation | Expr
+	Initialization: VariableDefinition | Variable
+}
+
 interface ConditionnalStructure extends Statment {
 	Body: StatementBlock
 	Condition: Expr

@@ -26,6 +26,7 @@ import { LessThanNode } from "./nodes/LessThanNode.js";
 import { MoreThanNode } from "./nodes/MoreThanNode.js";
 import { ReturnNode } from "./nodes/ReturnNode.js";
 import { FunctionDefinitionParametersNode } from "./nodes/FunctionDefinitionParametersNode.js";
+import { ForNode } from "./nodes/ForNode.js";
 
 
 
@@ -186,6 +187,10 @@ export class CompilerVisitor implements MyDslVisitor {
         
         const ret = "while (" + node.Condition.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
         return ret;
+    }
+
+    visitFor(node: ForNode) {
+        return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
     }
 
     visitMoreThan(node: MoreThanNode) {

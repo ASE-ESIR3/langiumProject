@@ -19,6 +19,7 @@ import { MoreThanNode } from "./nodes/MoreThanNode.js";
 import { LessThanNode } from "./nodes/LessThanNode.js";
 import { FunctionDefinitionParametersNode } from "./nodes/FunctionDefinitionParametersNode.js";
 import { ReturnNode } from "./nodes/ReturnNode.js";
+import { ForNode } from "./nodes/ForNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -47,4 +48,5 @@ export interface MyDslVisitor {
     visitLessThan(node: LessThanNode):any;
     visitFunctionDefinitionParameters(node: FunctionDefinitionParametersNode):any;
     visitReturn(node: ReturnNode):any;
+    visitFor(node: ForNode):any;
 }

@@ -25,6 +25,7 @@ import { WhileNode } from "./nodes/WhileNode.js";
 import { LessThanNode } from "./nodes/LessThanNode.js";
 import { MoreThanNode } from "./nodes/MoreThanNode.js";
 import { ReturnNode } from "./nodes/ReturnNode.js";
+import { ForNode } from "./nodes/ForNode.js";
 
 
 
@@ -217,6 +218,19 @@ export class InterpretorVisitor implements MyDslVisitor {
                 return ret;
             }
         }
+    }
+
+    visitFor(node: ForNode) {
+        this.ctx.push(new Map<string, any>());
+        node.Initialization.accept(this);
+        while ( node.Condition.accept(this)){
+            node.Increment.accept(this);
+            const ret = node.Body.accept(this);
+            if(this.isReturning){
+                return ret;
+            }
+        }
+        this.ctx.pop();
     }
 
     visitMoreThan(node: MoreThanNode) {

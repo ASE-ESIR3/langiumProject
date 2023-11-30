@@ -29,6 +29,7 @@ import { MoreThanNode } from './nodes/MoreThanNode.js';
 import { LessThanNode } from './nodes/LessThanNode.js';
 import { FunctionDefinitionParametersNode } from './nodes/FunctionDefinitionParametersNode.js';
 import { ReturnNode } from './nodes/ReturnNode.js';
+import { ForNode } from './nodes/ForNode.js';
 
 
 /**
@@ -136,6 +137,10 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitWhile(node as WhileNode);}
     }
 
+    weaveFor(node : InterfaceAST.For, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFor(node as ForNode);}
+    }
+
     weaveMoreThan(node : InterfaceAST.MoreThan, accept : ValidationAcceptor) : void{
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitMoreThan(node as MoreThanNode);}
     }
@@ -178,6 +183,7 @@ export class MyDslAcceptWeaver {
         LessThan: this.weaveLessThan,
         FunctionDefinitionParameters: this.weaveFunctionDefinitionParameters, 
         Rbreturn: this.weaveReturn,
+        For: this.weaveFor,
 
     };
 
