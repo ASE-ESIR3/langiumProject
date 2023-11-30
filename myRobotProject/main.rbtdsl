@@ -25,8 +25,10 @@ Void main() {
         
     };
 
-    for( a; (a < 100); a = (a + 1) ){
-        print(a);
+    for( Number val = 0; (val < 4); val = (val + 1) ){
+        print(val);
+        Rotate 90;
+        Forward 10 MM;
         
     };
     return;
