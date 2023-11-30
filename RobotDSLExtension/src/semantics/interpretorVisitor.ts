@@ -51,6 +51,8 @@ export class InterpretorVisitor implements MyDslVisitor {
     visit(model: programNode): any {
         this.progNode = model;
         this.visitProgram(model);
+        console.log("Robot has been moving:")
+        console.log(this.robotinstruction);
     }
 
     visitProgram(node: programNode): any {

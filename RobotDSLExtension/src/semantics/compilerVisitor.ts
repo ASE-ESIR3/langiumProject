@@ -146,8 +146,6 @@ export class CompilerVisitor implements MyDslVisitor {
             return "getDistance()";
         }
 
-        
-
         return node.functionName + "(" + node.functionparameters.accept(this) + ")";
     }
 

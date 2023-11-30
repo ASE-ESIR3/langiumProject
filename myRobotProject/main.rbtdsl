@@ -25,7 +25,7 @@ Void main() {
         
     };
 
-    for( a; (a < 100000); a = (a + 1) ){
+    for( a; (a < 100); a = (a + 1) ){
         print(a);
         
     };
