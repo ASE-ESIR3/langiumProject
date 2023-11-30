@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isStatementBlock } from "../language/generated/ast.js";
+import { isKM, isMM, isStatementBlock } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -29,10 +29,14 @@ import { ForNode } from "./nodes/ForNode.js";
 import { BooleanNode } from "./nodes/BooleanNode.js";
 import { NumberNode } from "./nodes/NumberNode.js";
 import { TypeNode } from "./nodes/TypeNode.js";
+import { UnitNode } from "./nodes/UnitNode.js";
+import { ForwardNode } from "./nodes/ForwardNode.js";
+import { RotateNode } from "./nodes/RotateNode.js";
 
 
 
 export class InterpretorVisitor implements MyDslVisitor {
+    public robotinstruction: string[] = [];
     public ctx = [new Map<string, any>()];
     public progNode: programNode | undefined;
     public isReturning = false;
@@ -268,6 +272,32 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitType(node: TypeNode) {
         
+    }
+
+    visitUnit(node: UnitNode) {
+        if (isMM(node)){
+            return 0.1;
+        }
+        if (isKM(node)){
+            return 0.01;
+        }
+
+        return 1;
+           
+    }
+
+    visitForward(node: ForwardNode) {
+        var action = "forward " + node.Value.accept(this)*node.unit.accept(this);
+        this.robotinstruction.push(action);
+        console.log(action)
+        return null;
+    }
+
+    visitRotate(node: RotateNode) {
+        var action = "rotate " + node.Value.accept(this);
+        this.robotinstruction.push(action);
+        console.log(action)
+        return null;
     }
 }
 

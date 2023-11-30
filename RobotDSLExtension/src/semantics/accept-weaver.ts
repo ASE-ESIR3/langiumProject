@@ -33,6 +33,9 @@ import { ForNode } from './nodes/ForNode.js';
 import { BooleanNode } from './nodes/BooleanNode.js';
 import { NumberNode } from './nodes/NumberNode.js';
 import { TypeNode } from './nodes/TypeNode.js';
+import { UnitNode } from './nodes/UnitNode.js';
+import { ForwardNode } from './nodes/ForwardNode.js';
+import { RotateNode } from './nodes/RotateNode.js';
 
 
 /**
@@ -172,6 +175,20 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitType(node as TypeNode);}
     }
 
+    weaveUnit(node : InterfaceAST.Unit, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitUnit(node as UnitNode);}
+    }
+
+    weaveForward(node : InterfaceAST.Forward, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitForward(node as ForwardNode);}
+    }
+
+    weaveRotate(node : InterfaceAST.Rotate, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitRotate(node as RotateNode);}
+    }
+
+
+
 
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
@@ -203,6 +220,9 @@ export class MyDslAcceptWeaver {
         Number_: this.weaveNumber,
         Boolean: this.weaveBoolean,
         Type: this.weaveType,
+        Unit: this.weaveUnit,
+        Forward: this.weaveForward,
+        Rotate: this.weaveRotate,
 
     };
 

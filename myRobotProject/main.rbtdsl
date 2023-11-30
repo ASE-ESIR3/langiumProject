@@ -1,5 +1,5 @@
 
-Number square(Number a = 0){
+Number square(Number a ){
     return (a*a);
 }
 
@@ -8,7 +8,8 @@ Void main() {
     Number stop = (square(a) * square(a));
     Number step = 10;
     print(stop);
-    
+    Rotate stop;
+    Forward stop MM;
     Boolean test = true;
 
     if( test ){
@@ -28,5 +29,5 @@ Void main() {
         print(a);
         
     };
-
+    return;
 }

@@ -1,13 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
-int square(int a = 0){
+#include <stdbool.h>
+int square(int a){
 return a*a;
 }
-void main(){
+void setup(){
 int a = 3;
 int stop = square(a)*square(a);
 int step = 10;
 printf("%d",stop);
+rotate(stop);
+forward(stop*0.1);
 bool test = true;
 if (test)
 {
@@ -36,4 +39,5 @@ printf("%d",a);
 
 }
 ;
+return ;
 }

@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isBoolean, isNumber_, isStatementBlock, isVoid } from "../language/generated/ast.js";
+import { isBoolean, isCM, isKM, isMM, isNumber_, isStatementBlock, isVoid } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -29,6 +29,8 @@ import { FunctionDefinitionParametersNode } from "./nodes/FunctionDefinitionPara
 import { ForNode } from "./nodes/ForNode.js";
 import { BooleanNode } from "./nodes/BooleanNode.js";
 import { NumberNode } from "./nodes/NumberNode.js";
+import { RotateNode } from "./nodes/RotateNode.js";
+import { ForwardNode } from "./nodes/ForwardNode.js";
 
 
 
@@ -60,7 +62,11 @@ export class CompilerVisitor implements MyDslVisitor {
         if (node.functiondefinitionparameters != null){
             params = node.functiondefinitionparameters.accept(this);
         }
-        return node.type.accept(this) + node.FunctionName + "(" + params + ")" +  node.Body.accept(this);
+        var funcname = node.FunctionName;
+        if (funcname == "main"){
+            funcname = "setup";
+        }
+        return node.type.accept(this) + funcname + "(" + params + ")" +  node.Body.accept(this);
     }
 
     visitStatmentBlock(node: StatementBlockNode):any {
@@ -132,6 +138,7 @@ export class CompilerVisitor implements MyDslVisitor {
 
     visitFunctionCall(node: functionCallNode){
         if(node.functionName == "print"){
+            
             return 'printf("%d",' + node.functionparameters.accept(this) + ")";
         }
 
@@ -222,7 +229,11 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitReturn(node: ReturnNode) {
-        return "return " + node.returnedExpr.accept(this);
+        var retExpr = "";
+        if (node.returnedExpr != null){
+            retExpr = node.returnedExpr.accept(this);
+        }
+        return "return " + retExpr;
     }
 
     visitBoolean(node: BooleanNode) {
@@ -246,6 +257,27 @@ export class CompilerVisitor implements MyDslVisitor {
         else{
             return "void ";
         }
+    }
+
+    visitUnit(node: any) {
+        if (isMM(node)){
+            return "*0.1";
+        }
+        if (isKM(node)){
+            return "*0.01";
+        }
+        if(isCM(node)){
+            return "*1";
+        }
+        return "*1";
+    }
+
+    visitForward(node: ForwardNode) {
+        return "forward(" + node.Value.accept(this) + node.unit.accept(this) + ")";
+    }
+
+    visitRotate(node: RotateNode) {
+        return "rotate(" + node.Value.accept(this) + ")";
     }
 }
 

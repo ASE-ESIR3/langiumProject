@@ -23,6 +23,9 @@ import { ForNode } from "./nodes/ForNode.js";
 import { BooleanNode } from "./nodes/BooleanNode.js";
 import { NumberNode } from "./nodes/NumberNode.js";
 import { TypeNode } from "./nodes/TypeNode.js";
+import { UnitNode } from "./nodes/UnitNode.js";
+import { ForwardNode } from "./nodes/ForwardNode.js";
+import { RotateNode } from "./nodes/RotateNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -55,4 +58,7 @@ export interface MyDslVisitor {
     visitBoolean(node:BooleanNode) : any;
     visitNumber(node:NumberNode) : any;
     visitType(node:TypeNode) : any;
+    visitUnit(node:UnitNode) : any;
+    visitForward(node:ForwardNode) : any;
+    visitRotate(node:RotateNode) : any;
 }
