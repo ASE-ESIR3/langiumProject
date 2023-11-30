@@ -26,6 +26,9 @@ import { LessThanNode } from "./nodes/LessThanNode.js";
 import { MoreThanNode } from "./nodes/MoreThanNode.js";
 import { ReturnNode } from "./nodes/ReturnNode.js";
 import { ForNode } from "./nodes/ForNode.js";
+import { BooleanNode } from "./nodes/BooleanNode.js";
+import { NumberNode } from "./nodes/NumberNode.js";
+import { TypeNode } from "./nodes/TypeNode.js";
 
 
 
@@ -254,5 +257,17 @@ export class InterpretorVisitor implements MyDslVisitor {
         return node.returnedExpr.accept(this);
     }
 
+    visitBoolean(node: BooleanNode) {
+        return Boolean;
+
+    }
+
+    visitNumber(node: NumberNode) {
+        return Number;
+    }
+
+    visitType(node: TypeNode) {
+        
+    }
 }
 

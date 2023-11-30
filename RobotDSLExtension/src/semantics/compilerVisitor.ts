@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isStatementBlock } from "../language/generated/ast.js";
+import { isBoolean, isNumber_, isStatementBlock, isVoid } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -27,6 +27,8 @@ import { MoreThanNode } from "./nodes/MoreThanNode.js";
 import { ReturnNode } from "./nodes/ReturnNode.js";
 import { FunctionDefinitionParametersNode } from "./nodes/FunctionDefinitionParametersNode.js";
 import { ForNode } from "./nodes/ForNode.js";
+import { BooleanNode } from "./nodes/BooleanNode.js";
+import { NumberNode } from "./nodes/NumberNode.js";
 
 
 
@@ -54,8 +56,11 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitFunction_(node: functionNode): any {
-
-        return "int " + node.FunctionName + "(" + node.functiondefinitionparameters.accept(this) + ")" +  node.Body.accept(this);
+        var params = "";
+        if (node.functiondefinitionparameters != null){
+            params = node.functiondefinitionparameters.accept(this);
+        }
+        return node.type.accept(this) + node.FunctionName + "(" + params + ")" +  node.Body.accept(this);
     }
 
     visitStatmentBlock(node: StatementBlockNode):any {
@@ -102,7 +107,7 @@ export class CompilerVisitor implements MyDslVisitor {
         if (node.left != null){
             right = " = " + node.left.accept(this);
         }
-        return "int " + node.variable.Name + right ;
+        return node.type.accept(this) + node.variable.Name + right ;
     }
 
     visitAddition(node: AdditionNode ){
@@ -220,5 +225,27 @@ export class CompilerVisitor implements MyDslVisitor {
         return "return " + node.returnedExpr.accept(this);
     }
 
+    visitBoolean(node: BooleanNode) {
+        return "bool";
+    }
+
+    visitNumber(node: NumberNode) {
+        return "int";
+    }
+
+    visitType(node: any) {
+        if (isNumber_(node)){
+            return "int ";
+        }
+        else if (isBoolean(node)){
+            return "bool ";
+        }
+        else if (isVoid(node)){
+            return "void ";
+        }
+        else{
+            return "void ";
+        }
+    }
 }
 

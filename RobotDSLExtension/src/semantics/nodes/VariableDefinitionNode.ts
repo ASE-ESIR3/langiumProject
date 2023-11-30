@@ -2,6 +2,8 @@ import * as ASTInterfaces from '../../language/generated/ast.js';
 import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
 import { ExprNode } from './ExprNode.js';
+import { NumberNode } from './NumberNode.js';
+import { BooleanNode } from './BooleanNode.js';
 
 export class VariableDefinitionNode implements ASTInterfaces.VariableDefinition {
     constructor(public $type: 'VariableDefinition'
@@ -9,7 +11,7 @@ export class VariableDefinitionNode implements ASTInterfaces.VariableDefinition 
     ){}
     $container!: ASTInterfaces.FunctionDefinitionParameters;
     left?: ExprNode | undefined;
-    type!: ASTInterfaces.Type;
+    type!: NumberNode | BooleanNode ;
     variable!: ASTInterfaces.Variable;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;

@@ -3,11 +3,13 @@ import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
 import { StatementBlockNode } from './statementBlockNode.js';
 import { FunctionDefinitionParametersNode } from './FunctionDefinitionParametersNode.js';
+import { NumberNode } from './NumberNode.js';
+import { BooleanNode } from './BooleanNode.js';
 
 export class functionNode implements ASTInterfaces.Function_ {
     constructor(public $type: 'Function_',
                 public $container: ASTInterfaces.Program){}
-    type!: ASTInterfaces.Type;
+    type!: NumberNode | BooleanNode ;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;

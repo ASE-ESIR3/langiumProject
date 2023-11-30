@@ -3,12 +3,12 @@
 int square(int a = 0){
 return a*a;
 }
-int main(int argc,int argv){
+void main(){
 int a = 3;
 int stop = square(a)*square(a);
 int step = 10;
 printf("%d",stop);
-int test = true;
+bool test = true;
 if (test)
 {
 printf("%d",1==1);
@@ -25,6 +25,13 @@ while (a<stop){
 {
 printf("%d",a);
 a = a+step;
+}
+
+}
+;
+for (a; a<100000; a = a+1){
+{
+printf("%d",a);
 }
 
 }

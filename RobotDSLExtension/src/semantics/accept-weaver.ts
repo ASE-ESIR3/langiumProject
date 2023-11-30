@@ -30,6 +30,9 @@ import { LessThanNode } from './nodes/LessThanNode.js';
 import { FunctionDefinitionParametersNode } from './nodes/FunctionDefinitionParametersNode.js';
 import { ReturnNode } from './nodes/ReturnNode.js';
 import { ForNode } from './nodes/ForNode.js';
+import { BooleanNode } from './nodes/BooleanNode.js';
+import { NumberNode } from './nodes/NumberNode.js';
+import { TypeNode } from './nodes/TypeNode.js';
 
 
 /**
@@ -157,6 +160,19 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitReturn(node as ReturnNode);}
     }
 
+    weaveBoolean(node : InterfaceAST.Boolean, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitBoolean(node as BooleanNode);}
+    }
+
+    weaveNumber(node : InterfaceAST.Number_, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitNumber(node as NumberNode);}
+    }
+
+    weaveType(node : InterfaceAST.Type, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitType(node as TypeNode);}
+    }
+
+
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
         Function_ : this.weaveFunction_,
@@ -184,6 +200,9 @@ export class MyDslAcceptWeaver {
         FunctionDefinitionParameters: this.weaveFunctionDefinitionParameters, 
         Rbreturn: this.weaveReturn,
         For: this.weaveFor,
+        Number_: this.weaveNumber,
+        Boolean: this.weaveBoolean,
+        Type: this.weaveType,
 
     };
 
