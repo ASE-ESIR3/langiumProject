@@ -63,9 +63,6 @@ export class CompilerVisitor implements MyDslVisitor {
             params = node.functiondefinitionparameters.accept(this);
         }
         var funcname = node.FunctionName;
-        if (funcname == "main"){
-            funcname = "setup";
-        }
         return node.type.accept(this) + funcname + "(" + params + ")" +  node.Body.accept(this);
     }
 
