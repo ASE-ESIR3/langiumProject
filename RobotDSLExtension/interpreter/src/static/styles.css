@@ -1,0 +1,153 @@
+html,body {
+    background: rgb(33,33,33);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: white;
+    margin: 0;
+}
+h1 {
+    text-align: center;
+}
+footer {
+    text-align: center;
+    color: #444;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+/* for monaco */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+
+#monaco-editor-root {
+    flex-grow: 1;
+}
+
+/* for p5.js */
+canvas {
+    display: block;
+}
+
+#buttons {
+    display: flex;
+    justify-content: center;
+}
+
+.build {
+    display: inline;
+    margin: 8px 10px;
+    width: 300px;
+    height: 30px;
+    background: none;
+    border: 2px #fff solid;
+    color: #fff;
+    transition: 0.3s;
+    font-size: 1.2rem;
+    border-radius: 4px;
+}
+.build:hover {
+    border-color: #6cf;
+    color: #6cf;
+    cursor: pointer;
+}
+.build:active {
+    color: #fff;
+    border-color: #fff;
+} 
+
+#page-wrapper {
+    display: flex;
+    max-width: 2000px;
+    margin: 4px auto;
+    padding: 4px;
+    min-height: 80vh;
+    justify-content: center;
+}
+#page-wrapper .editor {
+    display: flex;
+    width: 45%;
+}
+
+#page-wrapper .simulator {
+    display: flex;
+    width: 55%;
+}
+
+/* Typechecking Modal */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    position: relative;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.modal-header {
+    padding: 2px 16px;
+    color: white;
+}
+
+#errorModal .modal-header {background-color: #880000;}
+#validModal .modal-header {background-color: #008800;}
+
+/* Modal Body */
+.modal-body {
+    padding: 2px 16px;
+    color: #222222;
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.error {
+    color: #cb0000;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+} 
+
+@media(max-width: 1000px) {
+    #page-wrapper {
+        display: block;
+    }
+    #page-wrapper .editor,
+    #page-wrapper .simulator
+    {
+        display: block;
+        width: auto;
+    }
+    #fsm-canvas {
+        margin-top: 32px;
+    }
+    #page-wrapper {
+        min-height: auto;
+    }
+}

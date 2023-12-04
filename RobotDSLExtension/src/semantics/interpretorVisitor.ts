@@ -44,6 +44,10 @@ export class InterpretorVisitor implements MyDslVisitor {
         return this.ctx[this.ctx.length - 1];
     }
 
+    printContext() {
+        console.log("Current context: " + this.getCurrentContext().values());
+    }
+
     constructor() {
     
     }
@@ -51,8 +55,8 @@ export class InterpretorVisitor implements MyDslVisitor {
     visit(model: programNode): any {
         this.progNode = model;
         this.visitProgram(model);
-        console.log("Robot has been moving:")
-        console.log(this.robotinstruction);
+        console.log("Robot has been moving:");
+        console.log(this.robotinstruction)
     }
 
     visitProgram(node: programNode): any {
@@ -72,15 +76,13 @@ export class InterpretorVisitor implements MyDslVisitor {
         return null;
     }
 
-    visitStatmentBlock(node: StatementBlockNode):any {
-        
-        node.statments.forEach(element => {
+    visitStatmentBlock(node: StatementBlockNode): any {
+        for (const element of node.statments) {
             const ret = element.accept(this);
-            if (this.isReturning){
+            if (this.isReturning) {
                 return ret;
             }
-        });
-        
+        }
         return null;
     }
 
@@ -90,9 +92,10 @@ export class InterpretorVisitor implements MyDslVisitor {
             const node_ = ( node as StatementBlockNode);
             for (let i = 0; i < node_.statments.length; i++) {
                  const element = node_.statments[i];
+
                     ret = element.accept(this);
                     if (this.isReturning){
-                        break;
+                        return ret;
                     }
                 }
         }
@@ -158,13 +161,15 @@ export class InterpretorVisitor implements MyDslVisitor {
         const func = this.progNode!.function.find(f => f.FunctionName === node.functionName);
         if (func) {
             this.ctx.push(new Map<string, any>());
-            if ( func.functiondefinitionparameters.variabledefinition.length != 0){
-                const parameters = node.functionparameters.expr;
-                func.functiondefinitionparameters.variabledefinition.forEach((node,i) => {
-                    this.getCurrentContext().set(node.variable.Name, parameters[i].accept(this));
-                });
+            if ( func.functiondefinitionparameters != null){
+                if ( func.functiondefinitionparameters.variabledefinition.length != 0){
+                    const parameters = node.functionparameters.expr;
+                    func.functiondefinitionparameters.variabledefinition.forEach((node,i) => {
+                        this.getCurrentContext().set(node.variable.Name, parameters[i].accept(this));
+                    });
+                }
             }
-            
+
             const returnVal = func.Body.accept(this);
             this.isReturning = false;
             this.ctx.pop();
@@ -203,7 +208,7 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitEquals(node: EqualsNode) {
 
-        return node.Left.accept(this) === node.Right.accept(this);    
+        return node.Left.accept(this) == node.Right.accept(this);    
     }
 
     visitif(node: IfNode) {
@@ -212,9 +217,15 @@ export class InterpretorVisitor implements MyDslVisitor {
             
         }
         else{
-            node.Elsez.forEach(element => {
-                return element.accept(this);
-            });
+            var ret = null;
+            for (let i = 0; i < node.Elsez.length; i++) {
+                const element = node.Elsez[i];
+                   ret = element.accept(this);
+                   if (this.isReturning){
+                       return ret;
+                   }
+               }
+
         }
     
     }
@@ -247,7 +258,6 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitLessThan(node: LessThanNode) {
-
         return parseInt(node.Left.accept(this)) < parseInt(node.Right.accept(this));    
     }
 
@@ -257,10 +267,10 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitReturn(node: ReturnNode) {
         this.isReturning = true;
-        if (node.returnedExpr == undefined){
-            return null;
+        if (node.returnedExpr) {
+            return node.returnedExpr.accept(this);
         }
-        return node.returnedExpr.accept(this);
+        return null;
     }
 
     visitBoolean(node: BooleanNode) {
@@ -292,6 +302,7 @@ export class InterpretorVisitor implements MyDslVisitor {
         var action = "forward " + node.Value.accept(this)*node.unit.accept(this);
         this.robotinstruction.push(action);
         console.log(action)
+
         return null;
     }
 

@@ -187,15 +187,12 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitRotate(node as RotateNode);}
     }
 
-
-
-
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
         Function_ : this.weaveFunction_,
         StatementBlock : this.weaveStatmentBlock,
         Statment : this.weaveStatment,
-        Expr: this.weaveExpr,
+        //Expr: this.weaveExpr,
         VariableDefinition: this.weaveVaribaleDefinition,
         ConstNumber: this.weaveConstNumber,
         ConstBoolean: this.weaveConstBoolean,
@@ -214,6 +211,7 @@ export class MyDslAcceptWeaver {
         Ifz: this.weaveIf,
         RbLoop: this.weaveWhile,
         LessThan: this.weaveLessThan,
+        MoreThan: this.weaveMoreThan,
         FunctionDefinitionParameters: this.weaveFunctionDefinitionParameters, 
         Rbreturn: this.weaveReturn,
         For: this.weaveFor,

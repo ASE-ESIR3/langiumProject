@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <!-- Page & Monaco styling -->
+        <link href="styles.css" rel="stylesheet"/>
+        <title>RoboML in Langium</title>
+
+        <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
+        <!-- <script src="simulator/libraries/p5.js"></script> -->
+        <script src="simulator/libraries/p5.sound.min.js"></script>
+    </head>
+    <body>
+        <h1>RoboML in Langium</h1>
+        <div id="buttons">
+            <input class="build" type="button" value="Parse and Validate" onclick="window.parseAndValidate()">
+            <input class="build" type="button" value="Execute Simulation" onclick="window.execute()">
+            <input class="build" type="button" value="Restart Simulation" onclick="window.resetSimulation()">
+            <input class="build" type="button" value="Clear Data" onclick="window.setup()">
+        </div>
+
+        <div id="page-wrapper">
+            <div class="editor">
+                <div class="wrapper">
+                    <!-- Monaco Root -->
+                    <div id="monaco-editor-root"></div>
+                </div>
+            </div>
+            <div class="simulator">
+                <canvas id="simulator"></canvas>
+            </div>
+        </div>
+
+        <div id="errorModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>RoboML Type checking errors</h2>
+                </div>
+                <div class="modal-body"></div>
+            </div>
+        </div>
+
+        <div id="validModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close">&times;</span>
+                    <h2>RoboML Type checking validation</h2>
+                </div>
+                <div class="modal-body">
+                    Your code is correctly typed.
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p style="font-style:italic">Powered by</p>
+            <img width="125" src="https://langium.org/assets/langium_logo_w_nib.svg" alt="Langium">
+        </footer>
+        <!-- Monaco Configuration -->
+        <script type="module" src="setup.js"></script>
+        <script src="simulator/wall.js"></script>
+        <script src="simulator/block.js"></script>
+        <script src="simulator/robot.js"></script>
+        <script src="simulator/sketch.js"></script>
+    </body>
+</html>
