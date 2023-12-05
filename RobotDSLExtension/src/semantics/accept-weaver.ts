@@ -57,7 +57,6 @@ export function weaveAcceptMethods(services: MyDslServices) {
  */
 export class MyDslAcceptWeaver {
     weaveProgram(node : InterfaceAST.Program, accept : ValidationAcceptor) : void{
-
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitProgram(node as programNode);}
     }
 

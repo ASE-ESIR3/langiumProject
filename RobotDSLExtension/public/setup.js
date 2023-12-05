@@ -60,7 +60,7 @@ const parseAndValidate = (async () => {
 
 const execute = (async () => {
     console.info('running current code...');
-    // To implement
+    window.scene.Robot.pos.x += 1;
 });
 
 const setupSimulator = (scene) => {

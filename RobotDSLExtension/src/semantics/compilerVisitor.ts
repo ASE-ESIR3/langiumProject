@@ -144,8 +144,11 @@ export class CompilerVisitor implements MyDslVisitor {
         if (node.functionName == "getDistance"){
             return "getDistance()";
         }
-
-        return node.functionName + "(" + node.functionparameters.accept(this) + ")";
+        var ret = "";
+        if(node.functionparameters){
+            ret = node.functionparameters.accept(this);
+        }
+        return node.functionName + "(" + ret + ")";
     }
 
     visitFunctionCallParameters(node: FunctionCallParametersNode) {
@@ -282,7 +285,7 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitConstString(node: ConstStringNode) {
-        return node.Value;
+        return '"' + node.Value + '"';
     }
 
 }

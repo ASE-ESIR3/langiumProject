@@ -1,32 +1,38 @@
 Number test2(){
+    
     return 10;
 }
 
 
 Number test1(){
-    return (1*1);
+    return 10;
 }
 
-Number onOublis(Number a) {
-    return (test2() + test1());
+Number x(Number a) {
+    print(a);
+    if((a < 0)){
+        return 10;
+    };
 
+    return x((a-1));
 }
 
 Boolean test3(){
-    return 'adaefaef';
+    return true;
 }
 
 
 Void main() {
-    Number a = (5 == 5);
 
-    print((onOublis(a) + 10));
+    Number a = 10;
+
+    print(x(a));
+
+    Throw 'test aled je suis un test';
+    
     for(Number i = 0; (i < 10); i = (i + 1)) {
         print('je suis un aled' );
     };
-
-
-    Throw 'test aled je suis un test';
 
     Forward a MM;
 

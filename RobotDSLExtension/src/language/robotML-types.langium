@@ -103,7 +103,7 @@ interface Variable extends Expr {
 
 interface FunctionCall extends Expr {
 	functionparameters: FunctionCallParameters
-	functionName: string
+	functionName:string
 }
 
 interface FunctionCallParameters {

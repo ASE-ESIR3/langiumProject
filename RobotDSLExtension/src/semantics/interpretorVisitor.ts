@@ -35,27 +35,38 @@ import { RotateNode } from "./nodes/RotateNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
 import { exit } from "process";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
+import { Scene } from "../web/simulator/scene.js";
 
-
+export class Context {
+    public variables: Map<string, any> = new Map<string, any>();
+    public returnVal: any;
+    public isReturning = false;
+}
 
 export class InterpretorVisitor implements MyDslVisitor {
     public robotinstruction: string[] = [];
-    public ctx = [new Map<string, any>()];
+    public ctx = [new Context()];
+
+
     public progNode: programNode | undefined;
-    public isReturning = false;
+
+
+    public scene:Scene;
+
     getCurrentContext() {
         return this.ctx[this.ctx.length - 1];
     }
 
     printContext() {
-        console.log("Current context: " + this.getCurrentContext().values());
+        console.log("Current context: " + this.getCurrentContext().variables.values());
     }
 
     constructor() {
     
     }
 
-    visit(model: programNode): any {
+    visit(model: programNode,scene:Scene): any {
+        this.scene = scene;
         this.progNode = model;
         this.visitProgram(model);
         console.log("Robot has been moving:");
@@ -73,16 +84,14 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitFunction_(node: functionNode): any {
-        this.ctx.push(new Map<string, any>());
         node.Body.accept(this);
-        this.ctx.pop();
         return null;
     }
 
     visitStatmentBlock(node: StatementBlockNode): any {
         for (const element of node.statments) {
             const ret = element.accept(this);
-            if (this.isReturning) {
+            if (this.getCurrentContext().isReturning) {
                 return ret;
             }
         }
@@ -97,7 +106,7 @@ export class InterpretorVisitor implements MyDslVisitor {
                  const element = node_.statments[i];
 
                     ret = element.accept(this);
-                    if (this.isReturning){
+                    if (this.getCurrentContext().isReturning){
                         return ret;
                     }
                 }
@@ -119,7 +128,7 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitVariableDefinition(node:VariableDefinitionNode){
         const value = node.left ? node.left.accept(this) : undefined;
-        this.getCurrentContext().set(node.variable.Name, value);
+        this.getCurrentContext().variables.set(node.variable.Name, value);
     }
 
     visitAddition(node: AdditionNode ){
@@ -140,8 +149,8 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitVariable(node: VariableNode){
         for (let i = this.ctx.length - 1; i >= 0; i--) {
-            if (this.ctx[i].has(node.Name)) {
-                return this.ctx[i].get(node.Name);
+            if (this.ctx[i].variables.has(node.Name)) {
+                return this.ctx[i].variables.get(node.Name);
             }
         }
         throw new Error(`Variable ${node.Name} not found`);
@@ -158,23 +167,24 @@ export class InterpretorVisitor implements MyDslVisitor {
         }
 
         if (node.functionName == "getDistance"){
-            return 0;
+            return 0;//this.scene.robot.getRay().findClosestIntersection(this.scene.entities);
+
         }
 
         const func = this.progNode!.function.find(f => f.FunctionName === node.functionName);
+        
         if (func) {
-            this.ctx.push(new Map<string, any>());
+            this.ctx.push(new Context());
             if ( func.functiondefinitionparameters != null){
                 if ( func.functiondefinitionparameters.variabledefinition.length != 0){
                     const parameters = node.functionparameters.expr;
                     func.functiondefinitionparameters.variabledefinition.forEach((node,i) => {
-                        this.getCurrentContext().set(node.variable.Name, parameters[i].accept(this));
+                        this.getCurrentContext().variables.set(node.variable.Name, parameters[i].accept(this));
                     });
                 }
             }
 
             const returnVal = func.Body.accept(this);
-            this.isReturning = false;
             this.ctx.pop();
             return returnVal;
         } else {
@@ -194,7 +204,7 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitAffectation(node: AffectationNode) {
         const value = (node.Right as ExprNode).accept(this);
-        this.getCurrentContext().set(node.variable.Name, value);
+        this.getCurrentContext().variables.set(node.variable.Name, value);
     }
 
     visitAnd(node: AndNode) {
@@ -215,7 +225,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitif(node: IfNode) {
-        if (node.Condition.accept(this) == "true"){
+        if (node.Condition.accept(this)){
             return node.Body.accept(this);
             
         }
@@ -224,7 +234,7 @@ export class InterpretorVisitor implements MyDslVisitor {
             for (let i = 0; i < node.Elsez.length; i++) {
                 const element = node.Elsez[i];
                    ret = element.accept(this);
-                   if (this.isReturning){
+                   if (this.getCurrentContext().isReturning){
                        return ret;
                    }
                }
@@ -237,19 +247,19 @@ export class InterpretorVisitor implements MyDslVisitor {
         
         while ( node.Condition.accept(this)){
             const ret = node.Body.accept(this);
-            if(this.isReturning){
+            if(this.getCurrentContext().isReturning){
                 return ret;
             }
         }
     }
 
     visitFor(node: ForNode) {
-        this.ctx.push(new Map<string, any>());
+        this.ctx.push(new Context());
         node.Initialization.accept(this);
         while ( node.Condition.accept(this)){
             node.Increment.accept(this);
             const ret = node.Body.accept(this);
-            if(this.isReturning){
+            if(this.getCurrentContext().isReturning){
                 return ret;
             }
         }
@@ -269,7 +279,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitReturn(node: ReturnNode) {
-        this.isReturning = true;
+        this.getCurrentContext().isReturning = true;
         if (node.returnedExpr) {
             return node.returnedExpr.accept(this);
         }
@@ -296,23 +306,21 @@ export class InterpretorVisitor implements MyDslVisitor {
         if (isKM(node)){
             return 0.01;
         }
-
         return 1;
-           
+        
     }
 
     visitForward(node: ForwardNode) {
         var action = "forward " + node.Value.accept(this)*node.unit.accept(this);
+        this.scene.robot.move(node.Value.accept(this)*node.unit.accept(this));
         this.robotinstruction.push(action);
-        console.log(action)
-
         return null;
     }
 
     visitRotate(node: RotateNode) {
         var action = "rotate " + node.Value.accept(this);
+        this.scene.robot.turn(node.Value.accept(this));
         this.robotinstruction.push(action);
-        console.log(action)
         return null;
     }
 
