@@ -1,6 +1,6 @@
 import { MonacoEditorLanguageClientWrapper, vscode } from './monaco-editor-wrapper/index.js';
 import { buildWorkerDefinition } from "./monaco-editor-workers/index.js";
-import monarchSyntax from "./syntaxes/robo-ml.monarch.js";
+import monarchSyntax from "./syntaxes/my-dsl.monarch.js";
 
 buildWorkerDefinition('./monaco-editor-workers/workers', new URL('', window.location.href).href, false);
 
