@@ -36,6 +36,8 @@ import { TypeNode } from './nodes/TypeNode.js';
 import { UnitNode } from './nodes/UnitNode.js';
 import { ForwardNode } from './nodes/ForwardNode.js';
 import { RotateNode } from './nodes/RotateNode.js';
+import { ThrowNode } from './nodes/ThrowNode.js';
+import { ConstStringNode } from './nodes/ConstStringNode.js';
 
 
 /**
@@ -187,6 +189,17 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitRotate(node as RotateNode);}
     }
 
+    weaveThrow(node : InterfaceAST.Throw, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitThrow(node as ThrowNode);}
+    }
+
+    weaveConstString(node : InterfaceAST.ConstString, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitConstString(node as ConstStringNode);}
+    }
+
+    
+    
+
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
         Function_ : this.weaveFunction_,
@@ -221,6 +234,8 @@ export class MyDslAcceptWeaver {
         Unit: this.weaveUnit,
         Forward: this.weaveForward,
         Rotate: this.weaveRotate,
+        Throw: this.weaveThrow,
+        ConstString: this.weaveConstString,
 
     };
 

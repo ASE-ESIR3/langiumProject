@@ -85,7 +85,7 @@ export function isProgram(item: unknown): item is Program {
 }
 
 export interface Statment extends AstNode {
-    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
+    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'Throw' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
 }
 
 export const Statment = 'Statment';
@@ -140,7 +140,7 @@ export function isConditionnalStructure(item: unknown): item is ConditionnalStru
 }
 
 export interface Expr extends Statment {
-    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'FunctionCall' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'Soustraction' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable';
+    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'FunctionCall' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'Soustraction' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable';
 }
 
 export const Expr = 'Expr';
@@ -180,6 +180,17 @@ export const StatementBlock = 'StatementBlock';
 
 export function isStatementBlock(item: unknown): item is StatementBlock {
     return reflection.isInstance(item, StatementBlock);
+}
+
+export interface Throw extends Statment {
+    readonly $type: 'Throw';
+    err: ConstString
+}
+
+export const Throw = 'Throw';
+
+export function isThrow(item: unknown): item is Throw {
+    return reflection.isInstance(item, Throw);
 }
 
 export interface VariableDefinition extends Statment {
@@ -302,7 +313,7 @@ export function isBinaryExpr(item: unknown): item is BinaryExpr {
 }
 
 export interface ConstantExpr extends Expr {
-    readonly $type: 'ConstBoolean' | 'ConstNumber' | 'ConstantExpr';
+    readonly $type: 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstantExpr';
 }
 
 export const ConstantExpr = 'ConstantExpr';
@@ -480,6 +491,18 @@ export function isConstNumber(item: unknown): item is ConstNumber {
     return reflection.isInstance(item, ConstNumber);
 }
 
+export interface ConstString extends ConstantExpr {
+    readonly $container: Throw;
+    readonly $type: 'ConstString';
+    Value: string
+}
+
+export const ConstString = 'ConstString';
+
+export function isConstString(item: unknown): item is ConstString {
+    return reflection.isInstance(item, ConstString);
+}
+
 export interface UnaryRightExpr extends UnaryExpr {
     readonly $type: 'Not' | 'UnaryRightExpr';
     right: Expr
@@ -511,6 +534,7 @@ export type MyDslAstType = {
     ConditionnalStructure: ConditionnalStructure
     ConstBoolean: ConstBoolean
     ConstNumber: ConstNumber
+    ConstString: ConstString
     ConstantExpr: ConstantExpr
     Division: Division
     Equals: Equals
@@ -538,6 +562,7 @@ export type MyDslAstType = {
     Soustraction: Soustraction
     StatementBlock: StatementBlock
     Statment: Statment
+    Throw: Throw
     Type: Type
     UnaryExpr: UnaryExpr
     UnaryRightExpr: UnaryRightExpr
@@ -550,7 +575,7 @@ export type MyDslAstType = {
 export class MyDslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
+        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstString', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Throw', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -572,6 +597,7 @@ export class MyDslAstReflection extends AbstractAstReflection {
             case Rbreturn:
             case RobotInstruction:
             case StatementBlock:
+            case Throw:
             case VariableDefinition: {
                 return this.isSubtype(Statment, supertype);
             }
@@ -593,7 +619,8 @@ export class MyDslAstReflection extends AbstractAstReflection {
                 return this.isSubtype(Unit, supertype);
             }
             case ConstBoolean:
-            case ConstNumber: {
+            case ConstNumber:
+            case ConstString: {
                 return this.isSubtype(ConstantExpr, supertype);
             }
             case For:

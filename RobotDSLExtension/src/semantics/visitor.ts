@@ -26,6 +26,8 @@ import { TypeNode } from "./nodes/TypeNode.js";
 import { UnitNode } from "./nodes/UnitNode.js";
 import { ForwardNode } from "./nodes/ForwardNode.js";
 import { RotateNode } from "./nodes/RotateNode.js";
+import { ThrowNode } from "./nodes/ThrowNode.js";
+import { ConstStringNode } from "./nodes/ConstStringNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -61,4 +63,6 @@ export interface MyDslVisitor {
     visitUnit(node:UnitNode) : any;
     visitForward(node:ForwardNode) : any;
     visitRotate(node:RotateNode) : any;
+    visitThrow(node:ThrowNode):any;
+    visitConstString(node: ConstStringNode):any;
 }

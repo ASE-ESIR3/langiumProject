@@ -32,6 +32,9 @@ import { TypeNode } from "./nodes/TypeNode.js";
 import { UnitNode } from "./nodes/UnitNode.js";
 import { ForwardNode } from "./nodes/ForwardNode.js";
 import { RotateNode } from "./nodes/RotateNode.js";
+import { ThrowNode } from "./nodes/ThrowNode.js";
+import { exit } from "process";
+import { ConstStringNode } from "./nodes/ConstStringNode.js";
 
 
 
@@ -311,6 +314,15 @@ export class InterpretorVisitor implements MyDslVisitor {
         this.robotinstruction.push(action);
         console.log(action)
         return null;
+    }
+
+    visitThrow(node: ThrowNode) {
+        console.log("Error has been thrown: " + node.err.accept(this));
+        exit(0);
+    }
+
+    visitConstString(node: ConstStringNode) {
+        return node.Value;
     }
 }
 

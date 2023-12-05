@@ -158,3 +158,10 @@ interface Boolean extends Type {
 interface Void extends Type {
 }
 
+interface Throw extends Statment {
+	err: ConstString
+}
+
+interface ConstString extends ConstantExpr {
+	Value: string
+}

@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import * as path from 'node:path';
 import { LanguageClient, TransportKind } from 'vscode-languageclient/node.js';
 
+//import { builtinHelloWorld } from '../language/builtins';
 let client: LanguageClient;
 
 // This function is called when the extension is activated.
@@ -56,3 +57,4 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
     client.start();
     return client;
 }
+

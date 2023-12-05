@@ -8,18 +8,35 @@ import { generateJavaScript } from './generator.js';
 import { NodeFileSystem } from 'langium/node';
 import { interpreter } from '../semantics/interpreter.js';
 import { compiler } from '../semantics/compiler.js';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFile, writeFile } from 'fs';
 //import { PrintVisitor } from '../semantics/visitor.js';
 
 
 
 function concatenateStandardWithFile(fileName: string,globalOut:string = ""){
     
-    var standard:string = readFileSync('src/standardLib/standard.rbtdsl', 'utf8');
-    var file:string = readFileSync(fileName, 'utf8');
-    //write in output file
-    var output:string = standard.concat(file);
-    writeFileSync(globalOut, output);
+    
+
+    var standard;
+
+    readFile('src/standardLib/std.rbtdsl', (err, data) => {
+        if (err) throw err;
+        standard = data;
+      });
+      var file; 
+    
+
+    readFile(fileName, (err, data) => {
+    if (err) throw err;
+    file = data;
+    });
+
+    var output:string = standard + "\n"+ file;
+    writeFile(globalOut, output, (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+      });
+    
 
 
 }
@@ -47,10 +64,8 @@ export default function(): void {
         .argument('<file>', `source file (possible file extensions: ${fileExtensions})`).argument('<destination>', `destination folder`)
         .description('compile the code to arduino code')
         .action(async (fileName: string,destination:string) => {
-            const globalOutputFile = 'outGenerated.rbtdsl';
-            concatenateStandardWithFile(fileName,globalOutputFile);
             const services = createMyDslServices(NodeFileSystem).MyDsl;
-            const model = await extractAstNode<programNode>(globalOutputFile, services);
+            const model = await extractAstNode<programNode>(fileName, services);
             compiler.compile(model,destination);
 
         });

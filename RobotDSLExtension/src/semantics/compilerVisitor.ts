@@ -31,6 +31,8 @@ import { BooleanNode } from "./nodes/BooleanNode.js";
 import { NumberNode } from "./nodes/NumberNode.js";
 import { RotateNode } from "./nodes/RotateNode.js";
 import { ForwardNode } from "./nodes/ForwardNode.js";
+import { ThrowNode } from "./nodes/ThrowNode.js";
+import { ConstStringNode } from "./nodes/ConstStringNode.js";
 
 
 
@@ -274,5 +276,14 @@ export class CompilerVisitor implements MyDslVisitor {
     visitRotate(node: RotateNode) {
         return "rotate(" + node.Value.accept(this) + ")";
     }
+
+    visitThrow(node: ThrowNode) {
+        return "exit(0)";
+    }
+
+    visitConstString(node: ConstStringNode) {
+        return node.Value;
+    }
+
 }
 

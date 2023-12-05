@@ -11,11 +11,11 @@ Type returns Type:
 ;
 
 Statment returns Statment:
-    (And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable )';'
+    (And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
 ;
 
 Expr returns Expr:
-    And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
+   ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
 ;
 
 
@@ -31,6 +31,11 @@ StatementBlock returns StatementBlock:
 EString returns string:
     STRING | ID 
 ;
+
+ConstString returns ConstString:
+     Value=STRING
+;
+
 
 FunctionDefinitionParameters returns FunctionDefinitionParameters:
     ( variabledefinition+=VariableDefinition ","? )*
@@ -165,3 +170,8 @@ Void returns Void:
 Variable returns Variable:
     Name=EString
 ;
+
+Throw returns Throw:
+    'Throw' err=ConstString
+;
+
