@@ -1,35 +1,35 @@
-
-Number square(Number a ){
-    return (a*a);
+Number test2(){
+    return 10;
 }
 
+
+Number test1(){
+    return (1*1);
+}
+
+Number onOublis(Number a) {
+    return (test2() + test1());
+
+}
+
+Boolean test3(){
+    return 'adaefaef';
+}
+
+
 Void main() {
-    Number a = 3;
-    Number stop = (square(a) * square(a));
-    Number step = 10;
-    print(stop);
-    Rotate stop;
-    Forward stop MM;
-    Boolean test = true;
+    Number a = (5 == 5);
 
-    if( test ){
-        print( (1 == 1));
-    } else{
-        print((a + 1));
-    };
-    print(a);
-    print(stop);
-    while( (a < stop) ){
-        print(a);
-        a = (a + step);
-        
+    print((onOublis(a) + 10));
+    for(Number i = 0; (i < 10); i = (i + 1)) {
+        print('je suis un aled' );
     };
 
-    for( Number val = 0; (val < 4); val = (val + 1) ){
-        print(val);
-        Rotate 90;
-        Forward 10 MM;
-        
-    };
+
+    Throw 'test aled je suis un test';
+
+    Forward a MM;
+
+
     return;
 }
