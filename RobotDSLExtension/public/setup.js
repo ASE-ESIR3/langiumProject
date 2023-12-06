@@ -12,26 +12,17 @@ editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your pro
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
-let code = `let void entry () {
-    var number count = 0
-    loop count < 5
-    {	
-        setSpeed(500 * (count + 1))
-        count = count + 1
-        square(count)
-    }
+let code = `
+Void main() {
+
+    Number a = 10;
+    for(Number i = 0; (i < 3); i = (i + 1)) {
+        Forward a CM;
+        Rotate 120;
+    };
 }
 
-let void square(number factor){
-    Forward 500 * factor
-    Clock 90
-    Forward 500 * factor
-    Clock 90
-    Forward 500 * factor
-    Clock 90
-    Forward 500 * factor
-    Clock 90
-}`
+`
 
 editorConfig.setMainCode(code);
 
@@ -60,7 +51,12 @@ const parseAndValidate = (async () => {
 
 const execute = (async () => {
     console.info('running current code...');
-    window.scene.Robot.pos.x += 1;
+    console.log(editorConfig.getMainCode());
+    client.getLanguageClient().sendNotification('browser/execute', {
+        content: client.getEditor().getModel()?.getValue()
+    });
+
+    window.p5robot.move(100);
 });
 
 const setupSimulator = (scene) => {
@@ -133,3 +129,6 @@ client.setWorker(lsWorker);
 const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
 
 
+client.getLanguageClient().onNotification('browser/sendStatements', (params) => {
+    console.log(params);
+});
