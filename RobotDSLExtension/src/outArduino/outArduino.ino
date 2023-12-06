@@ -103,15 +103,12 @@ return true;
 }
 void main(){
 int a = 10;
-printf("%d",x(getDistance()));
-for (int i = 0; i<10; i = i+1){
+for (int i = 0; i<3; i = i+1){
 {
-printf("%d","je suis un aled");
+forward(a*1);
+rotate(120);
 }
 
 }
 ;
-forward(a*0.1);
-exit(0);
-return ;
 }

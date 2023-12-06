@@ -1,43 +1,9 @@
-Number test2(){
-    
-    return 10;
-}
-
-
-Number test1(){
-    return 10;
-}
-
-Number x(Number a) {
-    print(a);
-    if((a < 0)){
-        return 10;
-    };
-
-    return x((a-1));
-}
-
-Boolean test3(){
-    return true;
-}
-
 
 Void main() {
 
     Number a = 10;
-
-    print(x(getDistance()));
-
-
-    
-    for(Number i = 0; (i < 10); i = (i + 1)) {
-        print('je suis un aled' );
+    for(Number i = 0; (i < 3); i = (i + 1)) {
+        Forward a CM;
+        Rotate 120;
     };
-
-    Forward a MM;
-    
-    Throw 'test aled je suis un test';
-
-
-    return;
 }

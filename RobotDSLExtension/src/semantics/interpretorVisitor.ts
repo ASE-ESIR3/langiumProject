@@ -33,7 +33,6 @@ import { UnitNode } from "./nodes/UnitNode.js";
 import { ForwardNode } from "./nodes/ForwardNode.js";
 import { RotateNode } from "./nodes/RotateNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
-import { exit } from "process";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { Scene } from "../web/simulator/scene.js";
 
@@ -66,6 +65,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     visit(model: programNode,scene:Scene): any {
         this.scene = scene;
         this.progNode = model;
+        console.log(model);
         this.visitProgram(model);
         console.log("Robot has been moving:");
         console.log(this.robotinstruction)
@@ -98,6 +98,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitStatment(node: StatementNode) {
+        console.log("finding main on interpretation");
         var ret = null;
         if (isStatementBlock(node)){
             const node_ = ( node as StatementBlockNode);
@@ -325,7 +326,7 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitThrow(node: ThrowNode) {
         console.log("Error has been thrown: " + node.err.accept(this));
-        exit(0);
+        //exit(0);
     }
 
     visitConstString(node: ConstStringNode) {
