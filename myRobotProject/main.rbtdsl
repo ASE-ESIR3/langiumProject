@@ -26,15 +26,17 @@ Void main() {
 
     Number a = 10;
 
-    print(x(a));
+    print(x(getDistance()));
 
-    Throw 'test aled je suis un test';
+
     
     for(Number i = 0; (i < 10); i = (i + 1)) {
         print('je suis un aled' );
     };
 
     Forward a MM;
+    
+    Throw 'test aled je suis un test';
 
 
     return;

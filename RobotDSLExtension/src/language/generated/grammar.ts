@@ -93,6 +93,13 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
+                  "$ref": "#/rules@7"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
                   "$ref": "#/rules@9"
                 },
                 "arguments": []

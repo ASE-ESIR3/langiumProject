@@ -4,12 +4,13 @@ import { BaseScene, Scene } from '../web/simulator/scene.js';
 
 
 export class interpreter{
-    static interpret(model: programNode){
+    static interpret(model: programNode ): any[]{
         const visitor = new InterpretorVisitor();
         const startTime = Date.now();
         var scene:Scene = new BaseScene();
-        visitor.visit(model,scene);
+        const statments = visitor.visit(model,scene);
         const endTime = Date.now();
         console.log(`Interpretation took ${endTime - startTime}ms`);
+        return statments;
     }
 }

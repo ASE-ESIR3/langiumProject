@@ -47,9 +47,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     public robotinstruction: string[] = [];
     public ctx = [new Context()];
 
-
     public progNode: programNode | undefined;
-
 
     public scene:Scene;
 
@@ -71,6 +69,7 @@ export class InterpretorVisitor implements MyDslVisitor {
         this.visitProgram(model);
         console.log("Robot has been moving:");
         console.log(this.robotinstruction)
+        return this.robotinstruction;
     }
 
     visitProgram(node: programNode): any {
