@@ -8,7 +8,7 @@ MonacoEditorLanguageClientWrapper.addMonacoStyles('monaco-editor-styles');
 
 const client = new MonacoEditorLanguageClientWrapper();
 const editorConfig = client.getEditorConfig();
-editorConfig.setMainLanguageId('my-ml');       // WARNING Dependent of your project
+editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your project
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 

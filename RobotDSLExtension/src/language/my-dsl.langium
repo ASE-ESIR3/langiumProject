@@ -11,7 +11,7 @@ Type returns Type:
 ;
 
 Statment returns Statment:
-    (And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
+    (ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
 ;
 
 Expr returns Expr:
@@ -33,7 +33,7 @@ EString returns string:
 ;
 
 ConstString returns ConstString:
-     Value=STRING
+   Value=STRING 
 ;
 
 
