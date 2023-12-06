@@ -73,16 +73,20 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitProgram(node: programNode): any {
+
         const mainFunction = node.function.find(f => f.FunctionName === 'main');
         if (mainFunction) {
+                                
             mainFunction.accept(this); // start interpretation from the main function
         } else {
             console.error("No main function found in the program");
         }
+        return null;
 
     }
 
     visitFunction_(node: functionNode): any {
+        console.log("parse the function");
         node.Body.accept(this);
         return null;
     }
@@ -98,7 +102,6 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitStatment(node: StatementNode) {
-        console.log("finding main on interpretation");
         var ret = null;
         if (isStatementBlock(node)){
             const node_ = ( node as StatementBlockNode);

@@ -5,10 +5,11 @@ import { StatementBlockNode } from './statementBlockNode.js';
 import { FunctionDefinitionParametersNode } from './FunctionDefinitionParametersNode.js';
 import { NumberNode } from './NumberNode.js';
 import { BooleanNode } from './BooleanNode.js';
+import { programNode } from './programNode.js';
 
 export class functionNode implements ASTInterfaces.Function_ {
-    constructor(public $type: 'Function_',
-                public $container: ASTInterfaces.Program){}
+    constructor(public $type: 'Function_'){}
+    $container!: programNode;
     type!: NumberNode | BooleanNode ;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
@@ -17,5 +18,6 @@ export class functionNode implements ASTInterfaces.Function_ {
     FunctionName!: string;
     functiondefinitionparameters!: FunctionDefinitionParametersNode;
     Body!: StatementBlockNode;
-    accept(visitor: MyDslVisitor) : any {};
+    accept(visitor: MyDslVisitor) : any {
+    };
 }

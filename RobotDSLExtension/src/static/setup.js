@@ -50,13 +50,15 @@ const parseAndValidate = (async () => {
 });
 
 const execute = (async () => {
+
     console.info('running current code...');
-    console.log(editorConfig.getMainCode());
+    console.log(client.getEditor().getModel()?.getValue());
     client.getLanguageClient().sendNotification('browser/execute', {
-        content: client.getEditor().getModel()?.getValue()
+        content: client.getEditor().getModel().getValue()    
     });
 
     window.p5robot.move(100);
+
 });
 
 const setupSimulator = (scene) => {

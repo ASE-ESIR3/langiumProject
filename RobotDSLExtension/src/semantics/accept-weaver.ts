@@ -61,7 +61,10 @@ export class MyDslAcceptWeaver {
     }
 
     weaveFunction_(node : InterfaceAST.Function_, accept : ValidationAcceptor) : void{
-        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitFunction_(node as functionNode);}
+        console.log("weaveFunction_");
+        (<any> node).accept = (visitor: MyDslVisitor) => {
+            return visitor.visitFunction_(node as functionNode);}
+        console.log(node);
     }
 
     weaveStatmentBlock(node : InterfaceAST.StatementBlock, accept : ValidationAcceptor) : void{

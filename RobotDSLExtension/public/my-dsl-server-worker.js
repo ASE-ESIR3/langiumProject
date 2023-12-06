@@ -35110,9 +35110,11 @@ var MyDslAcceptWeaver = class {
     };
   }
   weaveFunction_(node, accept) {
+    console.log("weaveFunction_");
     node.accept = (visitor2) => {
       return visitor2.visitFunction_(node);
     };
+    console.log(node);
   }
   weaveStatmentBlock(node, accept) {
     node.accept = (visitor2) => {
@@ -35289,11 +35291,11 @@ var MyDslModule = {
 };
 function createMyDslServices(context) {
   const shared2 = inject(createDefaultSharedModule(context), MyDslGeneratedSharedModule);
-  const MyDsl = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
-  shared2.ServiceRegistry.register(MyDsl);
-  weaveAcceptMethods(MyDsl);
-  registerValidationChecks2(MyDsl);
-  return { shared: shared2, MyDsl };
+  const MyDsl2 = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
+  shared2.ServiceRegistry.register(MyDsl2);
+  weaveAcceptMethods(MyDsl2);
+  registerValidationChecks2(MyDsl2);
+  return { shared: shared2, MyDsl: MyDsl2 };
 }
 
 // out/semantics/interpretorVisitor.js
@@ -35330,8 +35332,10 @@ var InterpretorVisitor = class {
     } else {
       console.error("No main function found in the program");
     }
+    return null;
   }
   visitFunction_(node) {
+    console.log("parse the function");
     node.Body.accept(this);
     return null;
   }
@@ -35345,7 +35349,6 @@ var InterpretorVisitor = class {
     return null;
   }
   visitStatment(node) {
-    console.log("finding main on interpretation");
     var ret = null;
     if (isStatementBlock(node)) {
       const node_ = node;
@@ -35688,15 +35691,17 @@ var interpreter = class {
 var messageReader = new import_browser.BrowserMessageReader(self);
 var messageWriter = new import_browser.BrowserMessageWriter(self);
 var connection = (0, import_browser.createConnection)(messageReader, messageWriter);
-var { shared } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
+var { shared, MyDsl } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
 console.log("started language server");
 startLanguageServer(shared);
 connection.onNotification("browser/execute", (params) => {
   console.log("received execute notification");
   console.log(params);
   const program = params.content;
-  const parseResult = shared.workspace.LangiumDocumentFactory.fromString(program, URI2.parse("memory://RobotML.document"));
+  const parseResult = shared.workspace.LangiumDocumentFactory.fromString(program, URI2.parse("memory://MyDsl.document"));
   console.log("starting interpretation");
+  weaveAcceptMethods(MyDsl);
+  console.log(parseResult.parseResult.value.accept);
   const statements = interpreter.interpret(parseResult.parseResult.value);
   console.log(statements);
   connection.sendNotification("browser/sendStatements", statements);
