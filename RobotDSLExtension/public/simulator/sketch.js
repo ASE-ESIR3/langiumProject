@@ -13,7 +13,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(58,97,18);
   stroke(255);
   strokeWeight(1);
 
@@ -26,8 +26,8 @@ function draw() {
     updateRobot();
   }
 
-  window.cam.x = window.p5robot.x - canevasSizeX/2;
-  window.cam.y = window.p5robot.y - canevasSizeY/2;
+  window.cam.x = (window.p5robot.x - canevasSizeX/(2*window.cam.zx) );
+  window.cam.y = (window.p5robot.y - canevasSizeY/(2*window.cam.zy) );
 
 
   if(window.p5robot !== null){
@@ -36,9 +36,12 @@ function draw() {
       let trail1 = window.p5robot.trails[i];
       let trail2 = window.p5robot.trails[i+1];
       //draw a line
-      
-      line(trail1.x-window.cam.x ,trail1.y- window.cam.y,trail2.x-window.cam.x,trail2.y-window.cam.y);
-      
+      line(
+        (trail1.x - window.cam.x) * window.cam.zx,
+        (trail1.y - window.cam.y) * window.cam.zy,
+        (trail2.x - window.cam.x) * window.cam.zx,
+        (trail2.y - window.cam.y) * window.cam.zy
+      );
     }
 
     window.p5robot.show();

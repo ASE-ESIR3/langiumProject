@@ -138,7 +138,14 @@ window.onclick = function(event) {
     if (event.target == errorModal) {
         errorModal.style.display = "none";
     }
-  } 
+}
+
+let zoomSlider = document.getElementById('zoomSlider');
+zoomSlider.addEventListener('input', function() {
+    let zoomValue = parseFloat(this.value);
+    window.cam.zx = zoomValue;
+    window.cam.zy = zoomValue;
+});
 
 const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
 console.log(workerURL.href);

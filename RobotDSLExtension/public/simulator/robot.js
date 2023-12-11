@@ -24,14 +24,21 @@ class Robot {
 
     show() {
         push();
-        const canvasX = this.x * this.factor;
-        const canvasY = this.y * this.factor;
-        translate(canvasX- window.cam.x , canvasY-window.cam.y);
+        const canvasX = this.x ;
+        const canvasY = this.y ;
+        translate((canvasX - window.cam.x)* window.cam.zx, (canvasY-window.cam.y)* window.cam.zy);
         rotate(this.angle);
         stroke(255, 0, 0);
         fill(255, 0, 0);
-        const h = (Math.sqrt(3)/2) * (this.width/3)
-        triangle(-0.5*h, -(this.height/6), -0.5*h, this.height/6, 0.5*h, 0);
+        
+        const h = (Math.sqrt(3) / 2) * (this.width / 3) * window.cam.zx;
+        const heightZoomed = this.height * window.cam.zy;
+
+        triangle(
+        -0.5 * h, -heightZoomed / 6, 
+        -0.5 * h, heightZoomed / 6, 
+        0.5 * h, 0
+        );
         pop();
     }
   
