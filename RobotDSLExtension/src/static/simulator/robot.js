@@ -50,24 +50,24 @@ class Robot {
             this.angle -= Math.PI*2;
         }
 
-        if(this.angle<0){
+        /*if(this.angle<0){
             this.angle += 360;
         } else if (this.angle >= 360){
             this.angle -= 360;
-        }
+        }*/
     }
 
     async move(dist){
         //make the robot move slowly with delay towards the target
-
+        this.trails.push( {x: this.x, y: this.y}); 
         let anglecos = cos(this.angle);
         let anglesin = sin(this.angle);
         for (let i = 0; i < dist; i++){
             this.x += anglecos;
             this.y += anglesin;
-            await new Promise(r => setTimeout(r, 0.1));
+            //await new Promise(r => setTimeout(r, 0.1));
         }
-        this.trails.push( {x: this.x, y: this.y}); 
+
     }
 
     side(dist){

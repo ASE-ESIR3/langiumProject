@@ -1,6 +1,7 @@
 canevasSizeX = 1000;
 canevasSizeY = 1000;
 function setup() {
+
   createCanvas(canevasSizeX, canevasSizeY, document.getElementById("simulator"),WEBGL);
   window.entities = [];
   window.p5robot = null;
@@ -10,6 +11,11 @@ function setup() {
   window.scene = null;
   window.p5robot = new Robot(1, width/2, height/2);
   window.cam = new Cam(0, 0);
+
+  window.addEventListener('resize', function() {
+    //resizeCanvas(windowWidth, windowHeight);
+  });
+
 }
 
 function draw() {
@@ -43,7 +49,16 @@ function draw() {
         (trail2.y - window.cam.y) * window.cam.zy
       );
     }
-
+    if(window.p5robot.trails.length > 0){
+      let trail11 = window.p5robot.trails[window.p5robot.trails.length -1 ];
+      let trail21 = {x: window.p5robot.x, y: window.p5robot.y};
+      line(
+        (trail11.x - window.cam.x) * window.cam.zx,
+        (trail11.y - window.cam.y) * window.cam.zy,
+        (trail21.x - window.cam.x) * window.cam.zx,
+        (trail21.y - window.cam.y) * window.cam.zy
+      );
+  }
     window.p5robot.show();
   }
   

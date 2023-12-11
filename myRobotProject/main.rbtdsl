@@ -1,26 +1,25 @@
+
 Void main() {
-    drawSquare(100);
-    drawHexagon(100);
-    drawTriangle(100);
+    flocon(3, 100);
 }
 
-Void drawSquare(Number size) {
-    for(Number j = 0; (j < 4); j = (j + 1)) {
-        Forward size CM;
-        Rotate 90;
-    };
-}
+Void flocon(Number max, Number size)
+{
 
-Void drawHexagon(Number size) {
-    for(Number j = 0; (j < 6); j = (j + 1)) {
-        Forward size CM;
-        Rotate 60;
+    if((max == 0)){
+    
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    Rotate -90;
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    }
+    else
+    {
+        flocon((max - 1), (size/3));
     };
-}
-
-Void drawTriangle(Number size) {
-    for(Number j = 0; (j < 3); j = (j + 1)) {
-        Forward size CM;
-        Rotate 120;
-    };
+    
+   
 }

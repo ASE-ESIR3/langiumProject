@@ -169,11 +169,12 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
 
         const statement = params[i];
         if (statement.type === "Forward") {
+            console.log("forward " + statement.Value);
             await window.p5robot.move(statement.Value);
         }
 
         if (statement.type === "Rotate") {
-            console.log(statement.Value);
+            console.log("Rotate " + statement.Value);
             window.p5robot.turn(statement.Value * 1);
         }
         //await new Promise(r => setTimeout(r, 1000));

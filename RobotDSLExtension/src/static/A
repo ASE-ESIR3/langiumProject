@@ -1,0 +1,14 @@
+Void main() {
+    drawA(1000);
+}
+
+Void drawA(Number size) {
+    Rotate -60;
+    Forward size CM;
+    Rotate 120;
+    Forward size CM;
+    Rotate -180;
+    Forward (size / 2) CM;
+    Rotate -60;
+    Forward (size / 2) CM;
+}
