@@ -14,28 +14,30 @@ editorConfig.setMonarchTokensProvider(monarchSyntax);
 
 let code = `
 Void main() {
-    drawHouse(150);
+    drawSquare(100);
+    drawHexagon(100);
+    drawTriangle(100);
 }
 
-Void drawHouse(Number size) {
+Void drawSquare(Number size) {
     for(Number j = 0; (j < 4); j = (j + 1)) {
         Forward size CM;
         Rotate 90;
     };
+}
 
-    Rotate 45;
-    Forward (size / sqrt(2)) CM;
-    Rotate 90;
-    Forward (size / sqrt(2)) CM;
-    Rotate 135;
-    Forward size CM;
-    Rotate 90;
-    Forward (size / 3) CM; 
+Void drawHexagon(Number size) {
+    for(Number j = 0; (j < 6); j = (j + 1)) {
+        Forward size CM;
+        Rotate 60;
+    };
+}
 
-    for(j = 0; j < 2; j = j + 1) {
-        Forward (size / 3) CM;
-        Rotate 90;
-    }
+Void drawTriangle(Number size) {
+    for(Number j = 0; (j < 3); j = (j + 1)) {
+        Forward size CM;
+        Rotate 120;
+    };
 }`
 
 editorConfig.setMainCode(code);
