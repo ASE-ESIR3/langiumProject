@@ -34,6 +34,7 @@ class Robot {
   
 
     turn(angle){
+        angle = angle * Math.PI / 180;
         this.angle += angle;
 
         if(this.angle<0){

@@ -35290,11 +35290,11 @@ var MyDslModule = {
 };
 function createMyDslServices(context) {
   const shared2 = inject(createDefaultSharedModule(context), MyDslGeneratedSharedModule);
-  const MyDsl = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
-  shared2.ServiceRegistry.register(MyDsl);
-  weaveAcceptMethods(MyDsl);
-  registerValidationChecks2(MyDsl);
-  return { shared: shared2, MyDsl };
+  const MyDsl2 = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
+  shared2.ServiceRegistry.register(MyDsl2);
+  weaveAcceptMethods(MyDsl2);
+  registerValidationChecks2(MyDsl2);
+  return { shared: shared2, MyDsl: MyDsl2 };
 }
 
 // out/semantics/interpretorVisitor.js
@@ -35688,18 +35688,24 @@ var interpreter = class {
 };
 
 // out/language/main-browser.js
+async function extractAstNodeFromString(content, services) {
+  var _a;
+  const doc = services.shared.workspace.LangiumDocumentFactory.fromString(content, URI2.parse("memory://minilogo.document"));
+  await services.shared.workspace.DocumentBuilder.build([doc], { validation: true });
+  return (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+}
 var messageReader = new import_browser.BrowserMessageReader(self);
 var messageWriter = new import_browser.BrowserMessageWriter(self);
 var connection = (0, import_browser.createConnection)(messageReader, messageWriter);
-var { shared } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
+var { shared, MyDsl } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
 console.log("started language server");
 startLanguageServer(shared);
-connection.onNotification("browser/execute", (params) => {
+connection.onNotification("browser/execute", async (params) => {
   console.log("received execute notification");
   console.log(params);
-  const doc = shared.workspace.LangiumDocumentFactory.fromString(params.content, params.uri);
+  const doc = await extractAstNodeFromString(params.content, MyDsl);
   console.log("starting interpretation");
-  const statements = interpreter.interpret(doc.parseResult.value);
+  const statements = interpreter.interpret(doc);
   console.log(statements);
   connection.sendNotification("browser/sendStatements", statements);
 });

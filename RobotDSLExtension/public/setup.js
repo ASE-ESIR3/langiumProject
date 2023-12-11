@@ -45,15 +45,16 @@ const typecheck = (async () => {
 const reset = (async () => {
     window.p5robot.reset();
     window.resetSimulation();
+    stopping = true;
 });
 
 const parseAndValidate = (async () => {
     console.info('validating current code...');
     // To implement
 });
-
+var stopping = false;
 const execute = (async () => {
-
+    stopping = false;
     console.info('running current code...');
     console.log(client.getEditor().getModel()?.getValue());
     client.getLanguageClient().sendNotification('browser/execute', {
@@ -137,6 +138,10 @@ const startingPromise = client.startEditor(document.getElementById("monaco-edito
 client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
     console.log(params);
     for (let i = 0; i < params.length; i++) {
+        if (stopping){
+            break;
+        }
+
         const statement = params[i];
         if (statement.type === "Forward") {
             await window.p5robot.move(statement.Value);

@@ -64,6 +64,9 @@ export class CompilerVisitor implements MyDslVisitor {
             params = node.functiondefinitionparameters.accept(this);
         }
         var funcname = node.FunctionName;
+        if (funcname == "main"){
+            funcname = "mainrobot";
+        }
         return node.type.accept(this) + funcname + "(" + params + ")" +  node.Body.accept(this);
     }
 
@@ -143,6 +146,11 @@ export class CompilerVisitor implements MyDslVisitor {
         if (node.functionName == "getDistance"){
             return "getDistance()";
         }
+
+        if (node.functionName == "setSpeed"){
+            return "setSpeed(" + node.functionparameters.accept(this) + ")";
+        }
+
         var ret = "";
         if(node.functionparameters){
             ret = node.functionparameters.accept(this);

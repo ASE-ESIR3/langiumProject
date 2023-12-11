@@ -1,7 +1,7 @@
 #include <PinChangeInt.h>
 #include <PinChangeIntConfig.h>
 #include <EEPROM.h>
-#define _NAMIKI_MOTOR	 //for Namiki 22CL-103501PG80:1
+#define _NAMIKI_MOTOR     //for Namiki 22CL-103501PG80:1
 #include <fuzzy_table.h>
 #include <PID_Beta6.h>
 #include <MotorWheel.h>
@@ -26,9 +26,9 @@
    wheel2   /                    \   wheel3
    Right    /                    \   Left
 
-*/
+/
 
-/*
+/
   irqISR(irq1,isr1);
   MotorWheel wheel1(5,4,12,13,&irq1);
 
@@ -66,23 +66,26 @@ void setup() {
 }
 
 void forward(int value){
+  Omni.setCarAdvance(100);
+  Omni.delayMS(1000);
+  Omni.setCarStop();
 }
 
 void rotate(int value){
-  Omni.setCarRotate(value);
+  Omni.setCarRotate(3.1415926545/6);
+  Omni.delayMS(4000);
+  Omni.setCarStop();
 }
 
 void setSpeed(int value){
-  Omni.setCarSpeedMMPS(value);
+
 }
 
 void loop() {
-  main();
-  return;
+  mainrobot();
 }
 
-
-void main(){
+void mainrobot(){
 int a = 10;
 for (int i = 0; i<3; i = i+1){
 {
