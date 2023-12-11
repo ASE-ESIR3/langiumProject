@@ -35,7 +35,6 @@ import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 
 
-
 export class CompilerVisitor implements MyDslVisitor {
     public ctx = [new Map<string, any>()];
     public progNode: programNode | undefined;
@@ -196,7 +195,6 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitWhile(node: WhileNode) {
-        
         const ret = "while (" + node.Condition.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
         return ret;
     }

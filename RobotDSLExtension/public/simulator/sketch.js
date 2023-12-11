@@ -23,8 +23,17 @@ function draw() {
   }
 
   if(window.p5robot !== null){
+
+    for (let i = 0; i < window.p5robot.trails.length; i++){
+      let trail = window.p5robot.trails[i];
+      let trailX = trail.x * window.p5robot.factor;
+      let trailY = trail.y * window.p5robot.factor;
+      point(trailX, trailY);
+    }
+
     window.p5robot.show();
   }
+  
 }
 
 function updateRobot(){

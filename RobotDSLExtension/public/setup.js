@@ -20,9 +20,7 @@ Void main() {
         Forward a CM;
         Rotate 120;
     };
-}
-
-`
+}`
 
 editorConfig.setMainCode(code);
 
@@ -44,6 +42,11 @@ const typecheck = (async () => {
     }
 });
 
+const reset = (async () => {
+    window.p5robot.reset();
+    window.resetSimulation();
+});
+
 const parseAndValidate = (async () => {
     console.info('validating current code...');
     // To implement
@@ -54,11 +57,9 @@ const execute = (async () => {
     console.info('running current code...');
     console.log(client.getEditor().getModel()?.getValue());
     client.getLanguageClient().sendNotification('browser/execute', {
-        content: client.getEditor().getModel().getValue()    
+        content: client.getEditor().getModel().getValue(),
+        uri: client.getEditor().getModel().uri.toString()
     });
-
-    window.p5robot.move(100);
-
 });
 
 const setupSimulator = (scene) => {
@@ -99,6 +100,8 @@ const setupSimulator = (scene) => {
 window.execute = execute;
 window.typecheck = typecheck;
 
+window.reset = reset;
+
 var errorModal = document.getElementById("errorModal");
 var validModal = document.getElementById("validModal");
 var closeError = document.querySelector("#errorModal .close");
@@ -131,6 +134,19 @@ client.setWorker(lsWorker);
 const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
 
 
-client.getLanguageClient().onNotification('browser/sendStatements', (params) => {
+client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
     console.log(params);
+    for (let i = 0; i < params.length; i++) {
+        const statement = params[i];
+        if (statement.type === "Forward") {
+            await window.p5robot.move(statement.Value);
+        }
+
+        if (statement.type === "Rotate") {
+            console.log(statement.Value);
+            window.p5robot.turn(statement.Value * 1);
+        }
+        await new Promise(r => setTimeout(r, 1000));
+    }
+
 });

@@ -39,7 +39,6 @@ import { RotateNode } from './nodes/RotateNode.js';
 import { ThrowNode } from './nodes/ThrowNode.js';
 import { ConstStringNode } from './nodes/ConstStringNode.js';
 
-
 /**
  * Register custom validation checks.
  * TODO : Call this function in the language module.ts file (see registerValidationChecks(...);)
@@ -64,7 +63,6 @@ export class MyDslAcceptWeaver {
         console.log("weaveFunction_");
         (<any> node).accept = (visitor: MyDslVisitor) => {
             return visitor.visitFunction_(node as functionNode);}
-        console.log(node);
     }
 
     weaveStatmentBlock(node : InterfaceAST.StatementBlock, accept : ValidationAcceptor) : void{

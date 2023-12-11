@@ -43,7 +43,7 @@ export class Context {
 }
 
 export class InterpretorVisitor implements MyDslVisitor {
-    public robotinstruction: string[] = [];
+    public robotinstruction: any[] = [];
     public ctx = [new Context()];
 
     public progNode: programNode | undefined;
@@ -76,7 +76,7 @@ export class InterpretorVisitor implements MyDslVisitor {
 
         const mainFunction = node.function.find(f => f.FunctionName === 'main');
         if (mainFunction) {
-                                
+            console.log(mainFunction.accept);     
             mainFunction.accept(this); // start interpretation from the main function
         } else {
             console.error("No main function found in the program");
@@ -314,14 +314,15 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitForward(node: ForwardNode) {
-        var action = "forward " + node.Value.accept(this)*node.unit.accept(this);
+
+        var action = {type: "Forward", Value: node.Value.accept(this)*node.unit.accept(this)};
         this.scene.robot.move(node.Value.accept(this)*node.unit.accept(this));
         this.robotinstruction.push(action);
         return null;
     }
 
     visitRotate(node: RotateNode) {
-        var action = "rotate " + node.Value.accept(this);
+        var action = {type: "Rotate", Value: parseInt(node.Value.accept(this))};
         this.scene.robot.turn(node.Value.accept(this));
         this.robotinstruction.push(action);
         return null;

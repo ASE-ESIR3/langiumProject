@@ -7,8 +7,16 @@ class Robot {
         this.angle = _angle;
         this.width = _width;
         this.height = _height;
+        this.trails = [];
     }
   
+    reset(){
+        this.x = window.width/2;
+        this.y = window.height/2;
+        this.angle = 0;
+        this.trails = [];
+    }
+
     show() {
         push();
         const canvasX = this.x * this.factor;
@@ -22,12 +30,12 @@ class Robot {
         const h = (Math.sqrt(3)/2) * (this.width/3)
         triangle(-0.5*h, -(this.height/6), -0.5*h, this.height/6, 0.5*h, 0);
         pop();
-
-        
     }
   
+
     turn(angle){
         this.angle += angle;
+
         if(this.angle<0){
             this.angle += 360;
         } else if (this.angle >= 360){
@@ -35,11 +43,17 @@ class Robot {
         }
     }
 
-    move(dist){
+    async move(dist){
+        //make the robot move slowly with delay towards the target
+
         let anglecos = cos(this.angle);
         let anglesin = sin(this.angle);
-        this.x += anglecos*dist;
-        this.y += anglesin*dist;
+        for (let i = 0; i < dist; i++){
+            this.x += anglecos;
+            this.y += anglesin;
+            await new Promise(r => setTimeout(r, 10));
+            this.trails.push( {x: this.x, y: this.y}); 
+        }
     }
 
     side(dist){
@@ -48,4 +62,5 @@ class Robot {
         this.x += -anglesin*dist;
         this.y += anglecos*dist;
     }
+
   }

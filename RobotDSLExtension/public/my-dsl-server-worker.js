@@ -35114,7 +35114,6 @@ var MyDslAcceptWeaver = class {
     node.accept = (visitor2) => {
       return visitor2.visitFunction_(node);
     };
-    console.log(node);
   }
   weaveStatmentBlock(node, accept) {
     node.accept = (visitor2) => {
@@ -35291,11 +35290,11 @@ var MyDslModule = {
 };
 function createMyDslServices(context) {
   const shared2 = inject(createDefaultSharedModule(context), MyDslGeneratedSharedModule);
-  const MyDsl2 = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
-  shared2.ServiceRegistry.register(MyDsl2);
-  weaveAcceptMethods(MyDsl2);
-  registerValidationChecks2(MyDsl2);
-  return { shared: shared2, MyDsl: MyDsl2 };
+  const MyDsl = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
+  shared2.ServiceRegistry.register(MyDsl);
+  weaveAcceptMethods(MyDsl);
+  registerValidationChecks2(MyDsl);
+  return { shared: shared2, MyDsl };
 }
 
 // out/semantics/interpretorVisitor.js
@@ -35328,6 +35327,7 @@ var InterpretorVisitor = class {
   visitProgram(node) {
     const mainFunction = node.function.find((f) => f.FunctionName === "main");
     if (mainFunction) {
+      console.log(mainFunction.accept);
       mainFunction.accept(this);
     } else {
       console.error("No main function found in the program");
@@ -35515,13 +35515,13 @@ var InterpretorVisitor = class {
     return 1;
   }
   visitForward(node) {
-    var action = "forward " + node.Value.accept(this) * node.unit.accept(this);
+    var action = { type: "Forward", Value: node.Value.accept(this) * node.unit.accept(this) };
     this.scene.robot.move(node.Value.accept(this) * node.unit.accept(this));
     this.robotinstruction.push(action);
     return null;
   }
   visitRotate(node) {
-    var action = "rotate " + node.Value.accept(this);
+    var action = { type: "Rotate", Value: parseInt(node.Value.accept(this)) };
     this.scene.robot.turn(node.Value.accept(this));
     this.robotinstruction.push(action);
     return null;
@@ -35691,18 +35691,15 @@ var interpreter = class {
 var messageReader = new import_browser.BrowserMessageReader(self);
 var messageWriter = new import_browser.BrowserMessageWriter(self);
 var connection = (0, import_browser.createConnection)(messageReader, messageWriter);
-var { shared, MyDsl } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
+var { shared } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
 console.log("started language server");
 startLanguageServer(shared);
 connection.onNotification("browser/execute", (params) => {
   console.log("received execute notification");
   console.log(params);
-  const program = params.content;
-  const parseResult = shared.workspace.LangiumDocumentFactory.fromString(program, URI2.parse("memory://MyDsl.document"));
+  const doc = shared.workspace.LangiumDocumentFactory.fromString(params.content, params.uri);
   console.log("starting interpretation");
-  weaveAcceptMethods(MyDsl);
-  console.log(parseResult.parseResult.value.accept);
-  const statements = interpreter.interpret(parseResult.parseResult.value);
+  const statements = interpreter.interpret(doc.parseResult.value);
   console.log(statements);
   connection.sendNotification("browser/sendStatements", statements);
 });

@@ -1,6 +1,5 @@
 
 Void main() {
-
     Number a = 10;
     for(Number i = 0; (i < 3); i = (i + 1)) {
         Forward a CM;

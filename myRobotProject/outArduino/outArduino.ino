@@ -81,30 +81,9 @@ void loop() {
   return;
 }
 
-int test2(){
-return 10;
-}
-int test1(){
-return 10;
-}
-int x(int a){
-printf("%d",a);
-if (a<0)
-{
-return 10;
-}
 
-
-;
-return x(a-1);
-}
-bool test3(){
-return true;
-}
 void main(){
-
 int a = 10;
-
 for (int i = 0; i<3; i = i+1){
 {
 forward(a*1);
