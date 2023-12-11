@@ -1,4 +1,9 @@
 class Robot {
+
+    mod(n, m) {
+        return ((n % m) + m) % m;
+    }
+
     constructor(factor, _x = 0, _y = 0, _width = 50, _height = 75, _angle = 0) {
         this.factor = factor;
         // x and y represent the center of the robot
@@ -21,10 +26,8 @@ class Robot {
         push();
         const canvasX = this.x * this.factor;
         const canvasY = this.y * this.factor;
-        translate(canvasX, canvasY);
+        translate(canvasX- window.cam.x , canvasY-window.cam.y);
         rotate(this.angle);
-        stroke(255, 255, 255);
-        rect(-this.height/2, -this.width/2, this.height, this.width);
         stroke(255, 0, 0);
         fill(255, 0, 0);
         const h = (Math.sqrt(3)/2) * (this.width/3)
@@ -52,9 +55,9 @@ class Robot {
         for (let i = 0; i < dist; i++){
             this.x += anglecos;
             this.y += anglesin;
-            await new Promise(r => setTimeout(r, 10));
-            this.trails.push( {x: this.x, y: this.y}); 
+            await new Promise(r => setTimeout(r, 0.1));
         }
+        this.trails.push( {x: this.x, y: this.y}); 
     }
 
     side(dist){

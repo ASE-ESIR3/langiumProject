@@ -14,10 +14,28 @@ editorConfig.setMonarchTokensProvider(monarchSyntax);
 
 let code = `
 Void main() {
+    drawSquare(100);
+    drawHexagon(100);
+    drawTriangle(100);
+}
 
-    Number a = 10;
-    for(Number i = 0; (i < 3); i = (i + 1)) {
-        Forward a CM;
+Void drawSquare(Number size) {
+    for(Number j = 0; (j < 4); j = (j + 1)) {
+        Forward size CM;
+        Rotate 90;
+    };
+}
+
+Void drawHexagon(Number size) {
+    for(Number j = 0; (j < 6); j = (j + 1)) {
+        Forward size CM;
+        Rotate 60;
+    };
+}
+
+Void drawTriangle(Number size) {
+    for(Number j = 0; (j < 3); j = (j + 1)) {
+        Forward size CM;
         Rotate 120;
     };
 }`
@@ -151,7 +169,7 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
             console.log(statement.Value);
             window.p5robot.turn(statement.Value * 1);
         }
-        await new Promise(r => setTimeout(r, 1000));
+        //await new Promise(r => setTimeout(r, 1000));
     }
 
 });

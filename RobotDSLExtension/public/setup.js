@@ -14,12 +14,28 @@ editorConfig.setMonarchTokensProvider(monarchSyntax);
 
 let code = `
 Void main() {
+    drawHouse(150);
+}
 
-    Number a = 10;
-    for(Number i = 0; (i < 3); i = (i + 1)) {
-        Forward a CM;
-        Rotate 120;
+Void drawHouse(Number size) {
+    for(Number j = 0; (j < 4); j = (j + 1)) {
+        Forward size CM;
+        Rotate 90;
     };
+
+    Rotate 45;
+    Forward (size / sqrt(2)) CM;
+    Rotate 90;
+    Forward (size / sqrt(2)) CM;
+    Rotate 135;
+    Forward size CM;
+    Rotate 90;
+    Forward (size / 3) CM; 
+
+    for(j = 0; j < 2; j = j + 1) {
+        Forward (size / 3) CM;
+        Rotate 90;
+    }
 }`
 
 editorConfig.setMainCode(code);
@@ -151,7 +167,7 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
             console.log(statement.Value);
             window.p5robot.turn(statement.Value * 1);
         }
-        await new Promise(r => setTimeout(r, 1000));
+        //await new Promise(r => setTimeout(r, 1000));
     }
 
 });

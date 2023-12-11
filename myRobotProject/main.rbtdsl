@@ -1,8 +1,26 @@
-
 Void main() {
-    Number a = 10;
-    for(Number i = 0; (i < 3); i = (i + 1)) {
-        Forward a CM;
+    drawSquare(100);
+    drawHexagon(100);
+    drawTriangle(100);
+}
+
+Void drawSquare(Number size) {
+    for(Number j = 0; (j < 4); j = (j + 1)) {
+        Forward size CM;
+        Rotate 90;
+    };
+}
+
+Void drawHexagon(Number size) {
+    for(Number j = 0; (j < 6); j = (j + 1)) {
+        Forward size CM;
+        Rotate 60;
+    };
+}
+
+Void drawTriangle(Number size) {
+    for(Number j = 0; (j < 3); j = (j + 1)) {
+        Forward size CM;
         Rotate 120;
     };
 }

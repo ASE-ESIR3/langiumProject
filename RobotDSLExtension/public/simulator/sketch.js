@@ -1,11 +1,15 @@
+canevasSizeX = 1000;
+canevasSizeY = 1000;
 function setup() {
-  createCanvas(1000, 1000, document.getElementById("simulator"));
+  createCanvas(canevasSizeX, canevasSizeY, document.getElementById("simulator"),WEBGL);
   window.entities = [];
   window.p5robot = null;
+  window.Robotcamera = null;
   window.time = 0;
   window.lastTimestamp = 0;
   window.scene = null;
   window.p5robot = new Robot(1, width/2, height/2);
+  window.cam = new Cam(0, 0);
 }
 
 function draw() {
@@ -22,13 +26,19 @@ function draw() {
     updateRobot();
   }
 
+  window.cam.x = window.p5robot.x - canevasSizeX/2;
+  window.cam.y = window.p5robot.y - canevasSizeY/2;
+
+
   if(window.p5robot !== null){
 
-    for (let i = 0; i < window.p5robot.trails.length; i++){
-      let trail = window.p5robot.trails[i];
-      let trailX = trail.x * window.p5robot.factor;
-      let trailY = trail.y * window.p5robot.factor;
-      point(trailX, trailY);
+    for (let i = 0; i < window.p5robot.trails.length -1; i++){
+      let trail1 = window.p5robot.trails[i];
+      let trail2 = window.p5robot.trails[i+1];
+      //draw a line
+      
+      line(trail1.x-window.cam.x ,trail1.y- window.cam.y,trail2.x-window.cam.x,trail2.y-window.cam.y);
+      
     }
 
     window.p5robot.show();
@@ -43,7 +53,6 @@ function updateRobot(){
   window.p5robot.x = map(window.time, lastKnownState.time, nextKnownState.time, lastKnownState.pos.x, nextKnownState.pos.x, true)
   window.p5robot.y = map(window.time, lastKnownState.time, nextKnownState.time, lastKnownState.pos.y, nextKnownState.pos.y, true)
   window.p5robot.angle = map(window.time, lastKnownState.time, nextKnownState.time, lastKnownState.rad, nextKnownState.rad, true)
-
   if(window.time >= nextKnownState.time){
     window.time = nextKnownState.time;
     window.lastTimestamp++;
