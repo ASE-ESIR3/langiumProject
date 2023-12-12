@@ -1,25 +1,30 @@
-
 Void main() {
-    flocon(3, 100);
+    print('je suis la 1');
+    sierpinski(1, 500); 
 }
 
-Void flocon(Number max, Number size)
-{
-
-    if((max == 0)){
-    
-    Forward (size/3) CM;
-    Rotate 45;
-    Forward (size/3) CM;
-    Rotate -90;
-    Forward (size/3) CM;
-    Rotate 45;
-    Forward (size/3) CM;
-    }
-    else
-    {
-        flocon((max - 1), (size/3));
+Void sierpinski(Number max, Number size) {
+    print(max);
+    if((max == 0)) {
+        drawTriangle(size);
+    } else {
+        sierpinski((max - 1), (size / 2));
+        Forward (size / 2) CM;
+        sierpinski((max - 1), (size / 2));
+        Forward (size / -2) CM; 
+        Rotate -60;
+        Forward (size / 2) CM;
+        Rotate 60;
+        sierpinski((max - 1), (size / 2));
+        Rotate -60;
+        Forward (size / -2) CM;
+        Rotate 60;
     };
-    
-   
+}
+
+Void drawTriangle(Number size) {
+    for(Number i = 0; (i < 3); i = (i + 1)) {
+        Forward size CM;
+        Rotate -120;
+    };
 }
