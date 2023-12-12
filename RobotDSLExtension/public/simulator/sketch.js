@@ -1,8 +1,7 @@
-canevasSizeX = 500;
-canevasSizeY = 500;
 function setup() {
-
-  createCanvas(canevasSizeX, canevasSizeY, document.getElementById("simulator"),WEBGL);
+  window.canvaSizeWidth = windowWidth/2;
+  window.canvaSizeHeight = windowHeight;
+  createCanvas(window.canvaSizeWidth, window.canvaSizeHeight, document.getElementById("simulator"),WEBGL);
   window.entities = [];
   window.p5robot = null;
   window.Robotcamera = null;
@@ -11,7 +10,7 @@ function setup() {
   window.scene = null;
   window.p5robot = new Robot(1, width/2, height/2);
   window.cam = new Cam(0, 0);
-
+  window.reset();
 
 }
 

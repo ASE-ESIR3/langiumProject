@@ -77,7 +77,9 @@ const reset = (async () => {
     window.resetSimulation();
     stopping = true;
     pausing = false;
+    running = false;
     //clear the code
+    setSpeedDelay( parseFloat(document.getElementById('speedSlider').value));
 
 });
 
@@ -92,15 +94,19 @@ const clearData = (async () => {
 });
 var pausing = false;
 var stopping = false;
+var running = false;
 const execute = (async () => {
-    stopping = false;
-    pausing = false;
-    console.info('running current code...');
-    console.log(client.getEditor().getModel()?.getValue());
-    client.getLanguageClient().sendNotification('browser/execute', {
-        content: client.getEditor().getModel().getValue(),
-        uri: client.getEditor().getModel().uri.toString()
-    });
+    if(!running){
+        running = true;
+        stopping = false;
+        pausing = false;
+        console.info('running current code...');
+        console.log(client.getEditor().getModel()?.getValue());
+        client.getLanguageClient().sendNotification('browser/execute', {
+            content: client.getEditor().getModel().getValue(),
+            uri: client.getEditor().getModel().uri.toString()
+        });
+    }
 });
 
 const setupSimulator = (scene) => {
@@ -143,13 +149,18 @@ window.typecheck = typecheck;
 
 window.reset = reset;
 window.clearData = clearData;
+
+window.canvaSizeWidth = 0;
+window.canvaSizeHeight = 0;
+
+
 window.pauseSimu = function(){
     pausing = !pausing;
     if(pausing){
-        document.getElementById("pauseSimu").innerHTML = "Resume";
+        document.getElementById("pauseSimu").value = "Resume";
         pausing = true;
     } else {
-        document.getElementById("pauseSimu").innerHTML = "Pause";
+        document.getElementById("pauseSimu").value = "Pause";
         pausing = false;
     }
 }
@@ -185,10 +196,15 @@ zoomSlider.addEventListener('input', function() {
 let speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', function() {
     let speedValue = parseFloat(this.value);
-    window.p5robot.speed = speedValue;
-    document.getElementById("speedValue").innerHTML = speedValue ? speedValue : "No delay";
+    setSpeedDelay(speedValue);
+
    
 });
+
+function setSpeedDelay(speedValue){
+    window.p5robot.speed = speedValue;
+    speedValue = parseInt(speedValue);
+}
 
 const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
 console.log(workerURL.href);
@@ -198,6 +214,8 @@ const lsWorker = new Worker(workerURL.href, {
     name: 'RoboMl Language Server'
 });
 client.setWorker(lsWorker);
+
+
 
 // keep a reference to a promise for when the editor is finished starting, we'll use this to setup the canvas on load
 const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
