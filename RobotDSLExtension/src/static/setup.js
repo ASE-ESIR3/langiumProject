@@ -12,7 +12,12 @@ editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your pro
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
-let code = `Void main() {
+let code = getCookie("code");
+console.log("cookies" + document.cookie)
+
+if(code == ""){
+code = 
+`Void main() {
     for(Number i = 0;(i < 3);i = (i + 1))
     {
     flocon(5, 1000);
@@ -48,6 +53,8 @@ Void flocon(Number max, Number size)
 
 
 }`
+}
+
 
 let replaceCode = `Void main() {
 }`
@@ -97,6 +104,7 @@ var stopping = false;
 var running = false;
 const execute = (async () => {
     if(!running){
+        saveEditorCodeInCookie();
         running = true;
         stopping = false;
         pausing = false;
@@ -108,6 +116,10 @@ const execute = (async () => {
         });
     }
 });
+
+function saveEditorCodeInCookie(){
+    setCookie("code", client.getEditor().getModel().getValue(), 1);
+}
 
 const setupSimulator = (scene) => {
     const wideSide = max(scene.size.x, scene.size.y);
@@ -197,8 +209,17 @@ let speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', function() {
     let speedValue = parseFloat(this.value);
     setSpeedDelay(speedValue);
+});
 
-   
+document.getElementById('followRobot').checked = true;
+window.followRobot= true;
+
+document.getElementById('followRobot').addEventListener('change', function() {
+    if (this.checked) {
+        window.followRobot= true;
+    } else {
+        window.followRobot = false;
+    }
 });
 
 function setSpeedDelay(speedValue){

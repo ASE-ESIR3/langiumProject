@@ -2,6 +2,7 @@ function setup() {
   window.canvaSizeWidth = windowWidth/2;
   window.canvaSizeHeight = windowHeight;
   createCanvas(window.canvaSizeWidth, window.canvaSizeHeight, document.getElementById("simulator"),WEBGL);
+  window.canva = document.getElementById("simulator");
   window.entities = [];
   window.p5robot = null;
   window.Robotcamera = null;
@@ -13,6 +14,8 @@ function setup() {
   window.reset();
 
 }
+
+//detect drag of the mouse to move the camera based on current position and last position if clicked
 
 function draw() {
   background(58,97,18);
@@ -28,9 +31,15 @@ function draw() {
     updateRobot();
   }
 
-  window.cam.x = (window.p5robot.x - window.canvaSizeWidth/(2*window.cam.zx) );
-  window.cam.y = (window.p5robot.y - window.canvaSizeHeight/(2*window.cam.zy) );
-
+  if(window.followRobot){
+    window.cam.x = (window.p5robot.x - window.canvaSizeWidth/(2*window.cam.zx) );
+    window.cam.y = (window.p5robot.y - window.canvaSizeHeight/(2*window.cam.zy) );
+  } else {
+  
+    window.cam.x = (window.canvaSizeWidth/2 - window.canvaSizeWidth/(2*window.cam.zx) );
+    window.cam.y = (window.canvaSizeHeight/2 - window.canvaSizeHeight/(2*window.cam.zy) );
+    
+  }
 
   if(window.p5robot !== null){
 

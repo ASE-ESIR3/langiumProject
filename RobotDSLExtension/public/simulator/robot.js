@@ -4,7 +4,7 @@ class Robot {
         return ((n % m) + m) % m;
     }
 
-    constructor(factor, _x = 0, _y = 0, _width = 50, _height = 75, _angle = 0) {
+    constructor(factor, _x = 0, _y = 0, _width = 10, _height = 40, _angle = 0) {
         this.factor = factor;
         // x and y represent the center of the robot
         this.x = _x;
