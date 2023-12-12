@@ -12,32 +12,41 @@ editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your pro
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
-let code = `
-Void main() {
-    drawSquare(100);
-    drawHexagon(100);
-    drawTriangle(100);
-}
-
-Void drawSquare(Number size) {
-    for(Number j = 0; (j < 4); j = (j + 1)) {
-        Forward size CM;
-        Rotate 90;
+let code = `Void main() {
+    for(Number i = 0;(i < 3);i = (i + 1))
+    {
+    flocon(5, 1000);
+    Rotate -120;
     };
 }
 
-Void drawHexagon(Number size) {
-    for(Number j = 0; (j < 6); j = (j + 1)) {
-        Forward size CM;
-        Rotate 60;
-    };
-}
+Void flocon(Number max, Number size)
+{
 
-Void drawTriangle(Number size) {
-    for(Number j = 0; (j < 3); j = (j + 1)) {
-        Forward size CM;
-        Rotate 120;
+    if((max == 0)){
+
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    Rotate -90;
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    }
+    else
+    {
+
+        flocon((max - 1), (size/3));
+        Rotate 45;
+        flocon((max - 1), (size/3));
+        Rotate -90;
+        flocon((max - 1), (size/3));
+        Rotate 45;
+        flocon((max - 1), (size/3));
+
     };
+
+
 }`
 
 editorConfig.setMainCode(code);
@@ -145,6 +154,14 @@ zoomSlider.addEventListener('input', function() {
     let zoomValue = parseFloat(this.value);
     window.cam.zx = zoomValue;
     window.cam.zy = zoomValue;
+});
+
+
+let speedSlider = document.getElementById('speedSlider');
+speedSlider.addEventListener('input', function() {
+    let speedValue = parseFloat(this.value);
+    window.p5robot.speed = speedValue;
+   
 });
 
 const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
