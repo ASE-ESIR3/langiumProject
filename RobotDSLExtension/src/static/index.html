@@ -13,15 +13,34 @@
     </head>
     <body>
         <h1 class = "font-bold text-5xl py-10 hover:text-red-300 " >Robot Language Playground</h1>
-        <div id="buttons" class = "px-5">
-            <button type="button" class="collapse-button">⯆</button>
+        <div id="buttons" class = "px-5  flex rounded-sm">
+            <button type="button" class="collapse-button bg-blue-400 rounded-xl p-2 mx-5 hover:scale-105 duration-100 shadow-sm">></button>
             <input class=" bg-blue-400 rounded-xl p-2 mx-5 hover:scale-105 duration-100 shadow-sm" type="button" value="Parse and Validate" onclick="window.parseAndValidate()">
             <input class=" bg-green-300 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm" type="button" value="Execute Simulation" onclick="window.execute()">
             <input class=" bg-red-400 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm" type="button" value="Restart Simulation" onclick="window.reset()">
             <input class=" bg-orange-300 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm" type="button" value="Clear Data" onclick="window.clearData()">
-            <input type="range" id="zoomSlider" min="0.1" max="2.0" value="1.0" step="0.1" class = "mx-2">
+            <input id = pauseSimu class=" bg-purple-400 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm" type="button" value="pauseSimu" onclick="window.pauseSimu()">
 
-            <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
+            
+            <div class = "block">
+                <div class = "flex" >
+                    <p class = "text-2xl m-auto">Zoom</p>
+                </div>
+                <input type="range" id="zoomSlider" min="0.1" max="2.0" value="1.0" step="0.1" class = "mx-2">
+            </div>
+            <div id="speedManager" class = "flex">
+
+                <div class ="block">
+
+                    <div class = "flex" >
+                        <p class = "text-2xl m-auto"> Sim Delay</p>
+                    </div>
+                    <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
+                    
+                </div>
+
+                <p id="speedValue" class = "  text-5xl ml-5">0</p>
+            </div>
 
         </div>
 

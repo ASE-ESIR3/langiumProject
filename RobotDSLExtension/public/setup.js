@@ -76,6 +76,7 @@ const reset = (async () => {
     window.p5robot.reset();
     window.resetSimulation();
     stopping = true;
+    pausing = false;
     //clear the code
 
 });
@@ -89,10 +90,11 @@ const clearData = (async () => {
     client.getEditor().getModel()?.setValue(replaceCode);
     reset();
 });
-
+var pausing = false;
 var stopping = false;
 const execute = (async () => {
     stopping = false;
+    pausing = false;
     console.info('running current code...');
     console.log(client.getEditor().getModel()?.getValue());
     client.getLanguageClient().sendNotification('browser/execute', {
@@ -141,6 +143,17 @@ window.typecheck = typecheck;
 
 window.reset = reset;
 window.clearData = clearData;
+window.pauseSimu = function(){
+    pausing = !pausing;
+    if(pausing){
+        document.getElementById("pauseSimu").innerHTML = "Resume";
+        pausing = true;
+    } else {
+        document.getElementById("pauseSimu").innerHTML = "Pause";
+        pausing = false;
+    }
+}
+
 
 var errorModal = document.getElementById("errorModal");
 var validModal = document.getElementById("validModal");
@@ -173,6 +186,7 @@ let speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', function() {
     let speedValue = parseFloat(this.value);
     window.p5robot.speed = speedValue;
+    document.getElementById("speedValue").innerHTML = speedValue ? speedValue : "No delay";
    
 });
 
@@ -191,11 +205,18 @@ const startingPromise = client.startEditor(document.getElementById("monaco-edito
 
 client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
     console.log(params);
+    runStatments(params);
+});
+
+
+async function runStatments(params){
     for (let i = 0; i < params.length; i++) {
+        while(pausing){
+            await new Promise(r => setTimeout(r, 100));
+        }
         if (stopping){
             break;
         }
-
         const statement = params[i];
         if (statement.type === "Forward") {
             console.log("forward " + statement.Value);
@@ -209,7 +230,8 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
         //await new Promise(r => setTimeout(r, 1000));
     }
 
-});
+}
+
 
 document.addEventListener("DOMContentLoaded", function() {
     var collapseButton = document.querySelector(".collapse-button");

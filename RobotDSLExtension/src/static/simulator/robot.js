@@ -13,7 +13,7 @@ class Robot {
         this.width = _width;
         this.height = _height;
         this.trails = [];
-        this.speed = 0;
+        this.speed = 10;
     }
   
     reset(){
