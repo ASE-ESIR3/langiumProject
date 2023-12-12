@@ -1,9 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,body {
     background: rgb(33,33,33);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: white;
     margin: 0;
 }
+
+
+.collapse-button {
+    top: 5px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    background-color: #262757;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+
+    font-size: 10px;
+  }
+  
+  .editor {
+    position: relative;
+  }
+
 h1 {
     text-align: center;
 }
@@ -31,10 +52,6 @@ canvas {
     display: block;
 }
 
-#buttons {
-    display: flex;
-    justify-content: center;
-}
 
 .build {
     display: inline;

@@ -181,3 +181,17 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
     }
 
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var collapseButton = document.querySelector(".collapse-button");
+    var editorContent = document.getElementById("monaco-editor-root");
+    collapseButton.addEventListener("click", function() {
+        if (editorContent.style.display === "none") {
+            editorContent.style.display = "block";
+            collapseButton.textContent = "⯆"; // Icon for 'expand'
+        } else {
+            editorContent.style.display = "none";
+            collapseButton.textContent = "⯈"; // Icon for 'collapse'
+        }
+    });
+});
