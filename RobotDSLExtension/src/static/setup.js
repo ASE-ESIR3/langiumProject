@@ -49,6 +49,9 @@ Void flocon(Number max, Number size)
 
 }`
 
+let replaceCode = `Void main() {
+}`
+
 editorConfig.setMainCode(code);
 
 editorConfig.theme = 'vs-dark';
@@ -73,12 +76,20 @@ const reset = (async () => {
     window.p5robot.reset();
     window.resetSimulation();
     stopping = true;
+    //clear the code
+
 });
 
 const parseAndValidate = (async () => {
     console.info('validating current code...');
     // To implement
 });
+
+const clearData = (async () => {
+    client.getEditor().getModel()?.setValue(replaceCode);
+    reset();
+});
+
 var stopping = false;
 const execute = (async () => {
     stopping = false;
@@ -129,6 +140,7 @@ window.execute = execute;
 window.typecheck = typecheck;
 
 window.reset = reset;
+window.clearData = clearData;
 
 var errorModal = document.getElementById("errorModal");
 var validModal = document.getElementById("validModal");
@@ -205,10 +217,10 @@ document.addEventListener("DOMContentLoaded", function() {
     collapseButton.addEventListener("click", function() {
         if (editorContent.style.display === "none") {
             editorContent.style.display = "block";
-            collapseButton.textContent = "⯆"; // Icon for 'expand'
+            collapseButton.textContent = "v"; // Icon for 'expand'
         } else {
             editorContent.style.display = "none";
-            collapseButton.textContent = "⯈"; // Icon for 'collapse'
+            collapseButton.textContent = ">"; // Icon for 'collapse'
         }
     });
 });
