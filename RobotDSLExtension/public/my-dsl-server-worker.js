@@ -35291,9 +35291,9 @@ var MyDslModule = {
 function createMyDslServices(context) {
   const shared2 = inject(createDefaultSharedModule(context), MyDslGeneratedSharedModule);
   const MyDsl2 = inject(createDefaultModule({ shared: shared2 }), MyDslGeneratedModule, MyDslModule);
-  shared2.ServiceRegistry.register(MyDsl2);
   weaveAcceptMethods(MyDsl2);
   registerValidationChecks2(MyDsl2);
+  shared2.ServiceRegistry.register(MyDsl2);
   return { shared: shared2, MyDsl: MyDsl2 };
 }
 
@@ -35689,25 +35689,63 @@ var interpreter = class {
 
 // out/language/main-browser.js
 async function extractAstNodeFromString(content, services) {
-  var _a;
   const doc = services.shared.workspace.LangiumDocumentFactory.fromString(content, URI2.parse("memory://minilogo.document"));
   await services.shared.workspace.DocumentBuilder.build([doc], { validation: true });
-  return (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+  return doc;
+}
+function validate(document) {
+  var _a;
+  const validationErrors = ((_a = document.diagnostics) !== null && _a !== void 0 ? _a : []).filter((e) => e.severity === 1);
+  var errors = [];
+  if (validationErrors.length > 0) {
+    for (const validationError of validationErrors) {
+      console.log(validationError);
+      errors.push({ line: validationError.range.start.line + 1, message: validationError.message, text: document.textDocument.getText(validationError.range) });
+    }
+  }
+  return errors;
 }
 var messageReader = new import_browser.BrowserMessageReader(self);
 var messageWriter = new import_browser.BrowserMessageWriter(self);
 var connection = (0, import_browser.createConnection)(messageReader, messageWriter);
 var { shared, MyDsl } = createMyDslServices(Object.assign({ connection }, EmptyFileSystem));
-console.log("started language server");
 startLanguageServer(shared);
 connection.onNotification("browser/execute", async (params) => {
-  console.log("received execute notification");
-  console.log(params);
-  const doc = await extractAstNodeFromString(params.content, MyDsl);
-  console.log("starting interpretation");
-  const statements = interpreter.interpret(doc);
-  console.log(statements);
-  connection.sendNotification("browser/sendStatements", statements);
+  var _a;
+  try {
+    const doc = await extractAstNodeFromString(params.content, MyDsl);
+    var parsevalue = (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+    var errors = validate(doc);
+    if (errors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+      return;
+    }
+    console.log("starting interpretation");
+    console.log(params);
+    var statements = [];
+    statements = interpreter.interpret(parsevalue);
+    connection.sendNotification("browser/sendStatements", statements);
+  } catch (e) {
+    connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+  }
+});
+connection.onNotification("browser/Validate", async (params) => {
+  var _a;
+  try {
+    const doc = await extractAstNodeFromString(params.content, MyDsl);
+    var parsevalue = (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+    var errors = validate(doc);
+    if (errors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+      return;
+    }
+    console.log("starting validation");
+    console.log(params);
+    interpreter.interpret(parsevalue);
+    connection.sendNotification("browser/sendValidationResults", { errorCount: 0, errors: null });
+  } catch (e) {
+    connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+  }
 });
 /*! Bundled license information:
 

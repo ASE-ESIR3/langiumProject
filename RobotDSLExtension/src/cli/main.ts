@@ -32,8 +32,11 @@ export default function(): void {
         .argument('<file>', `source file (possible file extensions: ${fileExtensions})`)
         .description('interprets the source file')
         .action(async (fileName: string) => {
+            console.log("interpreting1");
             const services = createMyDslServices(NodeFileSystem).MyDsl;
+            console.log("interpreting2");
             const model = await extractAstNode<programNode>(fileName, services);
+            console.log("interpreting3");
             interpreter.interpret(model);
 
         });

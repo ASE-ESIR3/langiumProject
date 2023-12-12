@@ -1,19 +1,34 @@
-import { AstNode, EmptyFileSystem, LangiumServices, URI, startLanguageServer } from 'langium';
+import { EmptyFileSystem, URI, startLanguageServer } from 'langium';
 import { BrowserMessageReader, BrowserMessageWriter, createConnection } from 'vscode-languageserver/browser.js';
-import { createMyDslServices } from './my-dsl-module.js';
+import { MyDslServices, createMyDslServices } from './my-dsl-module.js';
 import { interpreter } from '../semantics/interpreter.js';
 import { programNode } from '../semantics/nodes/programNode.js';
 //import { interpreter } from '../semantics/interpreter.js';
 
 // additional imports
 
-async function extractAstNodeFromString<T extends AstNode>(content: string, services: LangiumServices): Promise<T> {
+async function extractAstNodeFromString(content: string, services: MyDslServices): Promise<any> {
   // create a document from a string instead of a file
   const doc = services.shared.workspace.LangiumDocumentFactory.fromString(content, URI.parse('memory://minilogo.document'));
   // proceed with build & validation
-  await services.shared.workspace.DocumentBuilder.build([doc], { validation: true });
+  await services.shared.workspace.DocumentBuilder.build([doc], { validation: true});
   // get the parse result (root of our AST)
-  return doc.parseResult?.value as T;
+  return doc;
+}
+
+
+function validate(document){
+  const validationErrors = (document.diagnostics ?? []).filter(e => e.severity === 1);
+  var errors = [];
+  if (validationErrors.length > 0) {
+      for (const validationError of validationErrors) {
+        console.log(validationError);
+        errors.push({line:validationError.range.start.line +1, message:validationError.message,text:document.textDocument.getText(validationError.range)});
+        
+      }
+
+  }
+  return errors;
 }
 
 declare const self: DedicatedWorkerGlobalScope;
@@ -24,25 +39,51 @@ const messageWriter = new BrowserMessageWriter(self);
 const connection = createConnection(messageReader, messageWriter);
 
 const { shared,MyDsl} = createMyDslServices({ connection, ...EmptyFileSystem });
-console.log("started language server");
 
 startLanguageServer(shared);
 
 connection.onNotification('browser/execute', async params => {
-    console.log("received execute notification");
-    console.log(params);
-    const doc = await extractAstNodeFromString<programNode>(params.content,MyDsl);
+    try{
+    const doc = await extractAstNodeFromString(params.content,MyDsl);
+    var parsevalue = doc.parseResult?.value as programNode;
+    var errors = validate(doc);
+    if(errors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+      return;
+    }
     console.log("starting interpretation");
-    //MyDsl.shared.workspace.DocumentBuilder.build([doc], { validation: true });
-    const statements = interpreter.interpret(doc);
-    /*var statements = [
-        { type: 'Forward', Value: 100 },
-        { type: 'Rotate', Value: (300 as Number) },
-        { type: 'Forward', Value: 100 },
-        { type: 'Rotate', Value: (300 as Number) },
-        { type: 'Forward', Value: 100 },
-        { type: 'Rotate', Value: (300 as Number) }
-      ]*/
-    console.log(statements);
+    console.log(params);
+    var statements = []
+    statements = interpreter.interpret(parsevalue);
     connection.sendNotification('browser/sendStatements', statements);
+    }
+    catch(e){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+    }
+
+});
+
+connection.onNotification('browser/Validate', async params => {
+
+  try{
+  const doc = await extractAstNodeFromString(params.content,MyDsl);
+  var parsevalue = doc.parseResult?.value as programNode;
+  var errors = validate(doc);
+  if(errors.length > 0){
+    connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+    return;
+  }
+  console.log("starting validation");
+  console.log(params);
+  interpreter.interpret(parsevalue);
+  connection.sendNotification('browser/sendValidationResults', {errorCount:0,errors:null});
+  }
+  catch(e){
+    connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+  }
+  
+
+
+
+
 });

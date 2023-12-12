@@ -92,7 +92,10 @@ const reset = (async () => {
 
 const parseAndValidate = (async () => {
     console.info('validating current code...');
-    // To implement
+    client.getLanguageClient().sendNotification('browser/Validate', {
+        content: client.getEditor().getModel().getValue(),
+        uri: client.getEditor().getModel().uri.toString()
+    });
 });
 
 const clearData = (async () => {
@@ -105,9 +108,6 @@ var running = false;
 const execute = (async () => {
     if(!running){
         saveEditorCodeInCookie();
-        running = true;
-        stopping = false;
-        pausing = false;
         console.info('running current code...');
         console.log(client.getEditor().getModel()?.getValue());
         client.getLanguageClient().sendNotification('browser/execute', {
@@ -158,13 +158,12 @@ const setupSimulator = (scene) => {
 
 window.execute = execute;
 window.typecheck = typecheck;
-
 window.reset = reset;
 window.clearData = clearData;
+window.parseAndValidate = parseAndValidate;
 
 window.canvaSizeWidth = 0;
 window.canvaSizeHeight = 0;
-
 
 window.pauseSimu = function(){
     pausing = !pausing;
@@ -243,9 +242,36 @@ const startingPromise = client.startEditor(document.getElementById("monaco-edito
 
 
 client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
+    running = true;
+    stopping = false;
+    pausing = false;
     console.log(params);
     runStatments(params);
 });
+
+client.getLanguageClient().onNotification('browser/sendValidationResults', async (params) => {
+    console.log(params);
+    openValidationModal(params);
+});
+
+function openValidationModal(params) {
+    if(params.errorCount > 0){
+        var modal = document.getElementById("errorModal");
+        modal.style.display = "block";
+        for(let i = 0; i < params.errors.length; i++){
+            let errorDiv = document.createElement("div");
+            errorDiv.innerHTML = params.errors[i].line + " : " + params.errors[i].message;
+            document.getElementById("errorList").appendChild(errorDiv);
+        }
+
+    }
+    if(params.errorCount == 0){
+        var modal = document.getElementById("validModal");
+        modal.style.display = "block";
+        modal.getAttribute
+    }
+
+}
 
 
 async function runStatments(params){

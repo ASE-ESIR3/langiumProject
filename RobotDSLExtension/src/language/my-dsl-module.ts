@@ -58,9 +58,12 @@ export function createMyDslServices(context: DefaultSharedModuleContext): {
         MyDslGeneratedModule,
         MyDslModule
     );
-    shared.ServiceRegistry.register(MyDsl);
+
     weaveAcceptMethods(MyDsl);
     registerValidationChecks(MyDsl);
+
+    shared.ServiceRegistry.register(MyDsl);
+
     
     return { shared, MyDsl };
 }
