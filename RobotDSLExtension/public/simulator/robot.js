@@ -13,6 +13,7 @@ class Robot {
         this.width = _width;
         this.height = _height;
         this.trails = [];
+        this.speed = 0;
     }
   
     reset(){
@@ -65,7 +66,9 @@ class Robot {
         for (let i = 0; i < dist; i++){
             this.x += anglecos;
             this.y += anglesin;
-            //await new Promise(r => setTimeout(r, 0.1));
+            if(this.speed != 0){
+                await new Promise(r => setTimeout(r, this.speed));
+            }
         }
 
     }
