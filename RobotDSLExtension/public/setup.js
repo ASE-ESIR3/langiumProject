@@ -232,17 +232,23 @@ async function runStatments(params){
 
 }
 
-
 document.addEventListener("DOMContentLoaded", function() {
     var collapseButton = document.querySelector(".collapse-button");
-    var editorContent = document.getElementById("monaco-editor-root");
+    var editorContent = document.getElementById("editor");
     collapseButton.addEventListener("click", function() {
         if (editorContent.style.display === "none") {
             editorContent.style.display = "block";
-            collapseButton.textContent = "v"; // Icon for 'expand'
+            collapseButton.textContent = "v"; 
+            window.canvaSizeWidth = windowWidth/2;
+            window.canvaSizeHeight = windowHeight;
+            resizeCanvas(windowWidth/2, windowHeight);
+
         } else {
             editorContent.style.display = "none";
-            collapseButton.textContent = ">"; // Icon for 'collapse'
+            collapseButton.textContent = ">";
+            window.canvaSizeWidth = windowWidth;
+            window.canvaSizeHeight = windowHeight;
+            resizeCanvas(windowWidth, windowHeight);
         }
     });
 });

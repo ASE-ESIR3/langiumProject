@@ -1,5 +1,5 @@
-canevasSizeX = 1000;
-canevasSizeY = 1000;
+canevasSizeX = 500;
+canevasSizeY = 500;
 function setup() {
 
   createCanvas(canevasSizeX, canevasSizeY, document.getElementById("simulator"),WEBGL);
@@ -12,9 +12,6 @@ function setup() {
   window.p5robot = new Robot(1, width/2, height/2);
   window.cam = new Cam(0, 0);
 
-  window.addEventListener('resize', function() {
-    //resizeCanvas(windowWidth, windowHeight);
-  });
 
 }
 
@@ -32,8 +29,8 @@ function draw() {
     updateRobot();
   }
 
-  window.cam.x = (window.p5robot.x - canevasSizeX/(2*window.cam.zx) );
-  window.cam.y = (window.p5robot.y - canevasSizeY/(2*window.cam.zy) );
+  window.cam.x = (window.p5robot.x - window.canvaSizeWidth/(2*window.cam.zx) );
+  window.cam.y = (window.p5robot.y - window.canvaSizeHeight/(2*window.cam.zy) );
 
 
   if(window.p5robot !== null){
