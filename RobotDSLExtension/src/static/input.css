@@ -53,28 +53,6 @@ canvas {
 }
 
 
-.build {
-    display: inline;
-    margin: 8px 10px;
-    width: 300px;
-    height: 30px;
-    background: none;
-    border: 2px #fff solid;
-    color: #fff;
-    transition: 0.3s;
-    font-size: 1.2rem;
-    border-radius: 4px;
-}
-.build:hover {
-    border-color: #6cf;
-    color: #6cf;
-    cursor: pointer;
-}
-.build:active {
-    color: #fff;
-    border-color: #fff;
-} 
-
 #page-wrapper {
     display: flex;
     max-width: 2000px;
@@ -100,36 +78,38 @@ canvas {
     z-index: 1; /* Sit on top */
     left: 0;
     top: 0;
+    border-radius: 5px;
+    padding: 100px;
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0, 0, 0, 0.539); /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 .modal-content {
-    background-color: #fefefe;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.375);
     position: relative;
     margin: auto;
     padding: 0;
-    border: 1px solid #888;
     width: 80%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .modal-header {
+    border-radius: 5px;
     padding: 2px 16px;
-    color: white;
+    color: rgb(0, 0, 0,255, 1);
 }
 
-#errorModal .modal-header {background-color: #880000;}
-#validModal .modal-header {background-color: #008800;}
+#errorModal .modal-header {background-color: #682929e4;}
+#validModal .modal-header {background-color: #276627;}
 
 /* Modal Body */
 .modal-body {
     padding: 2px 16px;
-    color: #222222;
+    color: #ffffff;
 }
 
 /* The Close Button */

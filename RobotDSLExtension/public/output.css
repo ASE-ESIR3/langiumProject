@@ -938,6 +938,11 @@ video {
   font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
 }
 
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .underline {
   text-decoration-line: underline;
 }
@@ -1118,30 +1123,6 @@ canvas {
   display: block;
 }
 
-.build {
-  display: inline;
-  margin: 8px 10px;
-  width: 300px;
-  height: 30px;
-  background: none;
-  border: 2px #fff solid;
-  color: #fff;
-  transition: 0.3s;
-  font-size: 1.2rem;
-  border-radius: 4px;
-}
-
-.build:hover {
-  border-color: #6cf;
-  color: #6cf;
-  cursor: pointer;
-}
-
-.build:active {
-  color: #fff;
-  border-color: #fff;
-}
-
 #page-wrapper {
   display: flex;
   max-width: 2000px;
@@ -1172,6 +1153,8 @@ canvas {
   /* Sit on top */
   left: 0;
   top: 0;
+  border-radius: 5px;
+  padding: 100px;
   width: 100%;
   /* Full width */
   height: 100%;
@@ -1180,40 +1163,40 @@ canvas {
   /* Enable scroll if needed */
   background-color: rgb(0,0,0);
   /* Fallback color */
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.539);
   /* Black w/ opacity */
 }
 
 /* Modal Content/Box */
 
 .modal-content {
-  background-color: #fefefe;
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.375);
   position: relative;
   margin: auto;
   padding: 0;
-  border: 1px solid #888;
   width: 80%;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
 }
 
 .modal-header {
+  border-radius: 5px;
   padding: 2px 16px;
-  color: white;
+  color: rgb(0, 0, 0,255, 1);
 }
 
 #errorModal .modal-header {
-  background-color: #880000;
+  background-color: #682929e4;
 }
 
 #validModal .modal-header {
-  background-color: #008800;
+  background-color: #276627;
 }
 
 /* Modal Body */
 
 .modal-body {
   padding: 2px 16px;
-  color: #222222;
+  color: #ffffff;
 }
 
 /* The Close Button */
@@ -1267,4 +1250,14 @@ canvas {
   --tw-scale-x: 1.005;
   --tw-scale-y: 1.005;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:opacity-90:hover {
+  opacity: 0.9;
+}
+
+.hover\:shadow-lg:hover {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
