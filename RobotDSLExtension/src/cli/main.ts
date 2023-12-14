@@ -38,6 +38,7 @@ export default function(): void {
             const model = await extractAstNode<programNode>(fileName, services);
             console.log("interpreting3");
             interpreter.interpret(model);
+            console.log("types errors ",interpreter.typeErors);
 
         });
 

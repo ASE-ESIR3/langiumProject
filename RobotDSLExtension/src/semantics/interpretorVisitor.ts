@@ -35,20 +35,47 @@ import { RotateNode } from "./nodes/RotateNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { Scene } from "../web/simulator/scene.js";
+import { MyError } from "./errors.js";
+import { AstNode } from "langium";
+//import { MyError } from "./errors.js";
+//import { integer } from "vscode-languageclient";
 
+export class variableStorage {
+    public value:any;
+    public type:string;
+    constructor(value:any,type:string){
+        this.value = value;
+        this.type = type;
+    }
+}
 export class Context {
-    public variables: Map<string, any> = new Map<string, any>();
+    public variables: Map<string, variableStorage> = new Map<string, variableStorage>();
     public returnVal: any;
     public isReturning = false;
 }
 
+
 export class InterpretorVisitor implements MyDslVisitor {
+    public typeErrors: any[] = [];
     public robotinstruction: any[] = [];
     public ctx = [new Context()];
 
     public progNode: programNode | undefined;
 
     public scene:Scene;
+
+    
+    ensureType(node:AstNode,type:string, value:any){
+        var typeOfExp:string = convertExprStringToNode(value);
+        if(type != typeOfExp ){
+            //get line of the node
+            var line = node.$cstNode?.range.start.line+1;
+            
+            this.typeErrors.push(new MyError(line, "Type error: expect type "+type+" bug got "+typeOfExp , "Type error"));
+            console.error("Type error: expect type "+type+" bug got "+typeOfExp+ "at line "+line);
+        }
+    
+    }
 
     getCurrentContext() {
         return this.ctx[this.ctx.length - 1];
@@ -75,18 +102,17 @@ export class InterpretorVisitor implements MyDslVisitor {
     visitProgram(node: programNode): any {
 
         const mainFunction = node.function.find(f => f.FunctionName === 'main');
-        if (mainFunction) {
-            console.log(mainFunction.accept);     
+        if (mainFunction) { 
             mainFunction.accept(this); // start interpretation from the main function
         } else {
             console.error("No main function found in the program");
+            this.typeErrors.push(new MyError(0,"No main function found in the program"," programm error"));
         }
         return null;
 
     }
 
     visitFunction_(node: functionNode): any {
-        console.log("parse the function");
         node.Body.accept(this);
         return null;
     }
@@ -117,11 +143,11 @@ export class InterpretorVisitor implements MyDslVisitor {
         return ret;
     }
 
-    visitConstNumber(node: ConstNumberNode){
+    visitConstNumber(node: ConstNumberNode):number{
         return node.Value;
     }
 
-    visitConstBoolean(node: ConstBooleanNode) {
+    visitConstBoolean(node: ConstBooleanNode):boolean {
         return node.Value.valueOf();
     }
 
@@ -131,29 +157,32 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitVariableDefinition(node:VariableDefinitionNode){
         const value = node.left ? node.left.accept(this) : undefined;
-        this.getCurrentContext().variables.set(node.variable.Name, value);
+        if(value){
+            this.ensureType(node,node.type.$type,value);
+        }
+        this.getCurrentContext().variables.set(node.variable.Name,  new variableStorage(value,node.type.$type));
     }
 
-    visitAddition(node: AdditionNode ){
+    visitAddition(node: AdditionNode ): number{
         return parseInt((node.Left as ExprNode).accept(this)) + parseInt((node.Right as ExprNode).accept(this)); 
     }
 
-    visitMultiplication(node: MultiplicationNode ){
+    visitMultiplication(node: MultiplicationNode ) : number{
         return parseInt((node.Left as ExprNode).accept(this)) * parseInt((node.Right).accept(this)); 
     }
 
-    visitSoustraction(node: SoustractionNode ){
+    visitSoustraction(node: SoustractionNode ) : number{
         return parseInt((node.Left as ExprNode).accept(this)) - parseInt((node.Right as ExprNode).accept(this)); 
     }
 
-    visitDivision(node: DivisionNode ){
+    visitDivision(node: DivisionNode ): number{
         return Math.round(parseInt((node.Left as ExprNode).accept(this)) / parseInt((node.Right as ExprNode).accept(this))); 
     }
 
     visitVariable(node: VariableNode){
         for (let i = this.ctx.length - 1; i >= 0; i--) {
             if (this.ctx[i].variables.has(node.Name)) {
-                return this.ctx[i].variables.get(node.Name);
+                return this.ctx[i].variables.get(node.Name).value;
             }
         }
         throw new Error(`Variable ${node.Name} not found`);
@@ -182,12 +211,16 @@ export class InterpretorVisitor implements MyDslVisitor {
                 if ( func.functiondefinitionparameters.variabledefinition.length != 0){
                     const parameters = node.functionparameters.expr;
                     func.functiondefinitionparameters.variabledefinition.forEach((node,i) => {
-                        this.getCurrentContext().variables.set(node.variable.Name, parameters[i].accept(this));
+                        var value = parameters[i].accept(this);
+                        this.ensureType(node,node.type.$type,value);
+                        this.getCurrentContext().variables.set(node.variable.Name, new variableStorage(value,node.type.$type));
                     });
                 }
             }
 
             const returnVal = func.Body.accept(this);
+            this.ensureType(node,func.type.$type,returnVal);
+
             this.ctx.pop();
             return returnVal;
         } else {
@@ -207,22 +240,24 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitAffectation(node: AffectationNode) {
         const value = (node.Right as ExprNode).accept(this);
-        this.getCurrentContext().variables.set(node.variable.Name, value);
+        var type = this.getCurrentContext().variables.get(node.variable.Name).type;
+        this.ensureType(node,type,value);
+        this.getCurrentContext().variables.get(node.variable.Name).value = value;
     }
 
-    visitAnd(node: AndNode) {
+    visitAnd(node: AndNode):boolean {
         return node.Left.accept(this) && node.Right.accept(this);  
     }
 
-    visitOr(node: OrNode) {
+    visitOr(node: OrNode):boolean {
         return node.Left.accept(this) || node.Right.accept(this);    
     }
 
-    visitNot(node: NotNode) {
+    visitNot(node: NotNode):boolean {
         return !node.right.accept(this);    
     }
 
-    visitEquals(node: EqualsNode) {
+    visitEquals(node: EqualsNode):boolean {
 
         return node.Left.accept(this) == node.Right.accept(this);    
     }
@@ -230,7 +265,6 @@ export class InterpretorVisitor implements MyDslVisitor {
     visitif(node: IfNode) {
         if (node.Condition.accept(this)){
             return node.Body.accept(this);
-            
         }
         else{
             var ret = null;
@@ -241,7 +275,6 @@ export class InterpretorVisitor implements MyDslVisitor {
                        return ret;
                    }
                }
-
         }
     
     }
@@ -269,11 +302,11 @@ export class InterpretorVisitor implements MyDslVisitor {
         this.ctx.pop();
     }
 
-    visitMoreThan(node: MoreThanNode) {
+    visitMoreThan(node: MoreThanNode):boolean {
         return parseInt(node.Left.accept(this)) > parseInt(node.Right.accept(this));  
     }
 
-    visitLessThan(node: LessThanNode) {
+    visitLessThan(node: LessThanNode):boolean {
         return parseInt(node.Left.accept(this)) < parseInt(node.Right.accept(this));    
     }
 
@@ -314,16 +347,23 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitForward(node: ForwardNode) {
+        var value = node.Value.accept(this);
+        this.ensureType(node,"Number_",value);
 
-        var action = {type: "Forward", Value: node.Value.accept(this)*node.unit.accept(this)};
+        var action = {type: "Forward", Value: value*node.unit.accept(this)};
         this.scene.robot.move(node.Value.accept(this)*node.unit.accept(this));
         this.robotinstruction.push(action);
         return null;
     }
 
     visitRotate(node: RotateNode) {
-        var action = {type: "Rotate", Value: parseInt(node.Value.accept(this))};
-        this.scene.robot.turn(node.Value.accept(this));
+
+        var value = node.Value.accept(this);
+        
+        this.ensureType(node,"Number_",value);
+
+        var action = {type: "Rotate", Value: parseInt(value)};
+        this.scene.robot.turn(value);
         this.robotinstruction.push(action);
         return null;
     }
@@ -333,8 +373,30 @@ export class InterpretorVisitor implements MyDslVisitor {
         //exit(0);
     }
 
-    visitConstString(node: ConstStringNode) {
+    visitConstString(node: ConstStringNode):string {
         return node.Value;
     }
 }
 
+
+function convertExprStringToNode(str:string){
+    var val = parseInt(str);
+    if(!Number.isNaN(val)){
+        return "Number_";
+    }
+    else if(str == "true" || str == "false"){
+        return "Boolean";
+    }
+    return "Void";
+}
+
+/*function MyTypeof(expr:any,type:TypeNode):any{
+
+    if((typeof expr) == "number"){
+        return NumberNode;
+    }
+    if((typeof expr) == "boolean"){
+        return BooleanNode;
+    }
+    return Void;
+}*/

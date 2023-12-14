@@ -10,6 +10,7 @@ export class ConstBooleanNode implements ASTInterfaces.ConstBoolean {
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;
     $document?: LangiumDocument<AstNode> | undefined;
+    javascriptType?: any = Boolean;
     accept(visitor: MyDslVisitor) : any {};
     
 }

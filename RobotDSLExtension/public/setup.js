@@ -150,8 +150,8 @@ const setupSimulator = (scene) => {
         factor,
         scene.robot.pos.x,
         scene.robot.pos.y,
-        scene.robot.size.x * factor,
-        scene.robot.size.y * factor,
+        scene.robot.size.x,
+        scene.robot.size.y,
         scene.robot.rad
     );
 }

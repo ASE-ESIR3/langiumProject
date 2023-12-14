@@ -7,10 +7,10 @@ export class ConstNumberNode implements ASTInterfaces.ConstNumber {
     constructor(public $type: 'ConstNumber',
                 public $container: ASTInterfaces.Statment){}
     Value!: number;
-    
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;
     $document?: LangiumDocument<AstNode> | undefined;
+    javascriptType?: any = Number;
     accept(visitor: MyDslVisitor) : any {};
 }

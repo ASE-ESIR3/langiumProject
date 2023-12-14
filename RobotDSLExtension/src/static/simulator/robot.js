@@ -4,7 +4,7 @@ class Robot {
         return ((n % m) + m) % m;
     }
 
-    constructor(factor, _x = 0, _y = 0, _width = 10, _height = 40, _angle = 0) {
+    constructor(factor, _x = 0, _y = 0, _width = 40, _height = 40, _angle = 0) {
         this.factor = factor;
         // x and y represent the center of the robot
         this.x = _x;
@@ -14,6 +14,8 @@ class Robot {
         this.height = _height;
         this.trails = [];
         this.speed = 10;
+        this.sprite = loadImage("./Roomba.png");
+        this.scale = 1;
     }
   
     reset(){
@@ -28,18 +30,10 @@ class Robot {
         const canvasX = this.x ;
         const canvasY = this.y ;
         translate((canvasX - window.cam.x)* window.cam.zx, (canvasY-window.cam.y)* window.cam.zy);
-        rotate(this.angle);
-        stroke(255, 0, 0);
-        fill(255, 0, 0);
-        
-        const h = (Math.sqrt(3) / 2) * (this.width / 3) * window.cam.zx;
-        const heightZoomed = this.height * window.cam.zy;
+        rotate(this.angle + Math.PI/2);
 
-        triangle(
-        -0.5 * h, -heightZoomed / 6, 
-        -0.5 * h, heightZoomed / 6, 
-        0.5 * h, 0
-        );
+        // affiche this.sprite
+        image(this.sprite, -this.width/2 * window.cam.zx, -this.height/2 * window.cam.zy, this.width * window.cam.zx, this.height * window.cam.zy);
         pop();
     }
   

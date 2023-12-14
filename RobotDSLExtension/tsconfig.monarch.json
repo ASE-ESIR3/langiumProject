@@ -4,7 +4,7 @@
         "module": "ESNext",
         "sourceMap": true,
         "outDir": "out/syntaxes",
-        "strict": true,
+        "strict": false,
         "noUnusedLocals": true,
         "noImplicitReturns": true,
         "noImplicitOverride": true,

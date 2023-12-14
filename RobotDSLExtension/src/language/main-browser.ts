@@ -3,6 +3,7 @@ import { BrowserMessageReader, BrowserMessageWriter, createConnection } from 'vs
 import { MyDslServices, createMyDslServices } from './my-dsl-module.js';
 import { interpreter } from '../semantics/interpreter.js';
 import { programNode } from '../semantics/nodes/programNode.js';
+import { MyError } from '../semantics/errors.js';
 //import { interpreter } from '../semantics/interpreter.js';
 
 // additional imports
@@ -23,7 +24,7 @@ function validate(document){
   if (validationErrors.length > 0) {
       for (const validationError of validationErrors) {
         console.log(validationError);
-        errors.push({line:validationError.range.start.line +1, message:validationError.message,text:document.textDocument.getText(validationError.range)});
+        errors.push(new MyError(validationError.range.start.line + 1, validationError.message, document.textDocument.getText(validationError.range)));
         
       }
 
@@ -55,6 +56,11 @@ connection.onNotification('browser/execute', async params => {
     console.log(params);
     var statements = []
     statements = interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if(typeerrors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:typeerrors.length,errors:typeerrors});
+      return;
+    }
     connection.sendNotification('browser/sendStatements', statements);
     }
     catch(e){
@@ -66,17 +72,22 @@ connection.onNotification('browser/execute', async params => {
 connection.onNotification('browser/Validate', async params => {
 
   try{
-  const doc = await extractAstNodeFromString(params.content,MyDsl);
-  var parsevalue = doc.parseResult?.value as programNode;
-  var errors = validate(doc);
-  if(errors.length > 0){
-    connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
-    return;
-  }
-  console.log("starting validation");
-  console.log(params);
-  interpreter.interpret(parsevalue);
-  connection.sendNotification('browser/sendValidationResults', {errorCount:0,errors:null});
+    const doc = await extractAstNodeFromString(params.content,MyDsl);
+    var parsevalue = doc.parseResult?.value as programNode;
+    var errors = validate(doc);
+    if(errors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+      return;
+    }
+    console.log("starting validation");
+    console.log(params);
+    interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if(typeerrors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:typeerrors.length,errors:typeerrors});
+      return;
+    }
+    connection.sendNotification('browser/sendValidationResults', {errorCount:0,errors:null});
   }
   catch(e){
     connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});

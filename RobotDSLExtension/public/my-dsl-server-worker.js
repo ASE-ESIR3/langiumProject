@@ -35297,7 +35297,22 @@ function createMyDslServices(context) {
   return { shared: shared2, MyDsl: MyDsl2 };
 }
 
+// out/semantics/errors.js
+var MyError = class {
+  constructor(line, message, text) {
+    this.line = line;
+    this.message = message;
+    this.text = text;
+  }
+};
+
 // out/semantics/interpretorVisitor.js
+var variableStorage = class {
+  constructor(value, type) {
+    this.value = value;
+    this.type = type;
+  }
+};
 var Context2 = class {
   constructor() {
     this.variables = /* @__PURE__ */ new Map();
@@ -35305,6 +35320,15 @@ var Context2 = class {
   }
 };
 var InterpretorVisitor = class {
+  ensureType(node, type, value) {
+    var _a;
+    var typeOfExp = convertExprStringToNode(value);
+    if (type != typeOfExp) {
+      var line = ((_a = node.$cstNode) === null || _a === void 0 ? void 0 : _a.range.start.line) + 1;
+      this.typeErrors.push(new MyError(line, "Type error: expect type " + type + " bug got " + typeOfExp, "Type error"));
+      console.error("Type error: expect type " + type + " bug got " + typeOfExp + "at line " + line);
+    }
+  }
   getCurrentContext() {
     return this.ctx[this.ctx.length - 1];
   }
@@ -35312,6 +35336,7 @@ var InterpretorVisitor = class {
     console.log("Current context: " + this.getCurrentContext().variables.values());
   }
   constructor() {
+    this.typeErrors = [];
     this.robotinstruction = [];
     this.ctx = [new Context2()];
   }
@@ -35327,15 +35352,14 @@ var InterpretorVisitor = class {
   visitProgram(node) {
     const mainFunction = node.function.find((f) => f.FunctionName === "main");
     if (mainFunction) {
-      console.log(mainFunction.accept);
       mainFunction.accept(this);
     } else {
       console.error("No main function found in the program");
+      this.typeErrors.push(new MyError(0, "No main function found in the program", " programm error"));
     }
     return null;
   }
   visitFunction_(node) {
-    console.log("parse the function");
     node.Body.accept(this);
     return null;
   }
@@ -35373,7 +35397,10 @@ var InterpretorVisitor = class {
   }
   visitVariableDefinition(node) {
     const value = node.left ? node.left.accept(this) : void 0;
-    this.getCurrentContext().variables.set(node.variable.Name, value);
+    if (value) {
+      this.ensureType(node, node.type.$type, value);
+    }
+    this.getCurrentContext().variables.set(node.variable.Name, new variableStorage(value, node.type.$type));
   }
   visitAddition(node) {
     return parseInt(node.Left.accept(this)) + parseInt(node.Right.accept(this));
@@ -35390,7 +35417,7 @@ var InterpretorVisitor = class {
   visitVariable(node) {
     for (let i = this.ctx.length - 1; i >= 0; i--) {
       if (this.ctx[i].variables.has(node.Name)) {
-        return this.ctx[i].variables.get(node.Name);
+        return this.ctx[i].variables.get(node.Name).value;
       }
     }
     throw new Error(`Variable ${node.Name} not found`);
@@ -35413,11 +35440,14 @@ var InterpretorVisitor = class {
         if (func.functiondefinitionparameters.variabledefinition.length != 0) {
           const parameters = node.functionparameters.expr;
           func.functiondefinitionparameters.variabledefinition.forEach((node2, i) => {
-            this.getCurrentContext().variables.set(node2.variable.Name, parameters[i].accept(this));
+            var value = parameters[i].accept(this);
+            this.ensureType(node2, node2.type.$type, value);
+            this.getCurrentContext().variables.set(node2.variable.Name, new variableStorage(value, node2.type.$type));
           });
         }
       }
       const returnVal = func.Body.accept(this);
+      this.ensureType(node, func.type.$type, returnVal);
       this.ctx.pop();
       return returnVal;
     } else {
@@ -35434,7 +35464,9 @@ var InterpretorVisitor = class {
   }
   visitAffectation(node) {
     const value = node.Right.accept(this);
-    this.getCurrentContext().variables.set(node.variable.Name, value);
+    var type = this.getCurrentContext().variables.get(node.variable.Name).type;
+    this.ensureType(node, type, value);
+    this.getCurrentContext().variables.get(node.variable.Name).value = value;
   }
   visitAnd(node) {
     return node.Left.accept(this) && node.Right.accept(this);
@@ -35515,14 +35547,18 @@ var InterpretorVisitor = class {
     return 1;
   }
   visitForward(node) {
-    var action = { type: "Forward", Value: node.Value.accept(this) * node.unit.accept(this) };
+    var value = node.Value.accept(this);
+    this.ensureType(node, "Number_", value);
+    var action = { type: "Forward", Value: value * node.unit.accept(this) };
     this.scene.robot.move(node.Value.accept(this) * node.unit.accept(this));
     this.robotinstruction.push(action);
     return null;
   }
   visitRotate(node) {
-    var action = { type: "Rotate", Value: parseInt(node.Value.accept(this)) };
-    this.scene.robot.turn(node.Value.accept(this));
+    var value = node.Value.accept(this);
+    this.ensureType(node, "Number_", value);
+    var action = { type: "Rotate", Value: parseInt(value) };
+    this.scene.robot.turn(value);
     this.robotinstruction.push(action);
     return null;
   }
@@ -35533,6 +35569,15 @@ var InterpretorVisitor = class {
     return node.Value;
   }
 };
+function convertExprStringToNode(str) {
+  var val = parseInt(str);
+  if (!Number.isNaN(val)) {
+    return "Number_";
+  } else if (str == "true" || str == "false") {
+    return "Boolean";
+  }
+  return "Void";
+}
 
 // out/web/simulator/utils.js
 var Vector = class _Vector {
@@ -35677,15 +35722,19 @@ var BaseScene = class {
 // out/semantics/interpreter.js
 var interpreter = class {
   static interpret(model) {
+    this.typeErors = [];
     const visitor2 = new InterpretorVisitor();
     const startTime = Date.now();
     var scene = new BaseScene();
     const statments = visitor2.visit(model, scene);
+    this.typeErors = visitor2.typeErrors;
+    console.log(this.typeErors);
     const endTime = Date.now();
     console.log(`Interpretation took ${endTime - startTime}ms`);
     return statments;
   }
 };
+interpreter.typeErors = [];
 
 // out/language/main-browser.js
 async function extractAstNodeFromString(content, services) {
@@ -35700,7 +35749,7 @@ function validate(document) {
   if (validationErrors.length > 0) {
     for (const validationError of validationErrors) {
       console.log(validationError);
-      errors.push({ line: validationError.range.start.line + 1, message: validationError.message, text: document.textDocument.getText(validationError.range) });
+      errors.push(new MyError(validationError.range.start.line + 1, validationError.message, document.textDocument.getText(validationError.range)));
     }
   }
   return errors;
@@ -35724,6 +35773,11 @@ connection.onNotification("browser/execute", async (params) => {
     console.log(params);
     var statements = [];
     statements = interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if (typeerrors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: typeerrors.length, errors: typeerrors });
+      return;
+    }
     connection.sendNotification("browser/sendStatements", statements);
   } catch (e) {
     connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
@@ -35742,6 +35796,11 @@ connection.onNotification("browser/Validate", async (params) => {
     console.log("starting validation");
     console.log(params);
     interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if (typeerrors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: typeerrors.length, errors: typeerrors });
+      return;
+    }
     connection.sendNotification("browser/sendValidationResults", { errorCount: 0, errors: null });
   } catch (e) {
     connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
