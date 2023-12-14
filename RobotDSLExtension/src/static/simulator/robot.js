@@ -1,3 +1,37 @@
+class Particle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.size = random(1, 2);
+        this.initialLife = random(100,200);
+        this.lifespan = this.initialLife; 
+
+    }
+
+    update() {
+        this.lifespan -= 1;
+        if (this.size > 10){
+            this.size += 0.05;
+        }
+        this.x += random(-1, 1);
+        this.y += random(-1, 1);
+    }
+
+    show() {
+        
+        noStroke();
+        fill(255, this.lifespan); 
+        //take in account the camera zoom in the size of the particle
+        
+        ellipse((this.x - window.cam.x) * window.cam.zx, (this.y - window.cam.y) * window.cam.zy, this.size*window.cam.zx);
+        
+    }
+
+    isDead() {
+        return this.lifespan < 0;
+    }
+}
+
 class Robot {
 
     mod(n, m) {
@@ -13,9 +47,11 @@ class Robot {
         this.width = _width;
         this.height = _height;
         this.trails = [];
+        this.particle = [];
         this.speed = 10;
         this.sprite = loadImage("./Roomba.png");
         this.scale = 1;
+        this.particleCreationRate = 10;
     }
   
     reset(){
@@ -26,15 +62,24 @@ class Robot {
     }
 
     show() {
+
+        for (let i = this.particle.length - 1; i >= 0; i--) {
+            this.particle[i].update();
+            this.particle[i].show();
+            if (this.particle[i].isDead()) {
+                this.particle.splice(i, 1);
+            }
+        }
+
         push();
         const canvasX = this.x ;
         const canvasY = this.y ;
         translate((canvasX - window.cam.x)* window.cam.zx, (canvasY-window.cam.y)* window.cam.zy);
         rotate(this.angle + Math.PI/2);
 
-        // affiche this.sprite
         image(this.sprite, -this.width/2 * window.cam.zx, -this.height/2 * window.cam.zy, this.width * window.cam.zx, this.height * window.cam.zy);
         pop();
+
     }
   
 
@@ -44,16 +89,9 @@ class Robot {
         if(this.angle > Math.PI*2){
             this.angle -= Math.PI*2;
         }
-
-        /*if(this.angle<0){
-            this.angle += 360;
-        } else if (this.angle >= 360){
-            this.angle -= 360;
-        }*/
     }
 
     async move(dist){
-        //make the robot move slowly with delay towards the target
         this.trails.push( {x: this.x, y: this.y}); 
         let anglecos = cos(this.angle);
         let anglesin = sin(this.angle);
@@ -62,7 +100,12 @@ class Robot {
             this.y += anglesin;
             if(this.speed != 0){
                 await new Promise(r => setTimeout(r, this.speed));
+                if(i % this.particleCreationRate == 0){
+                    this.particle.push(new Particle(this.x, this.y));
+                }
             }
+
+            
         }
 
     }

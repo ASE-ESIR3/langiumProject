@@ -240,6 +240,35 @@ client.setWorker(lsWorker);
 // keep a reference to a promise for when the editor is finished starting, we'll use this to setup the canvas on load
 const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
 
+startingPromise.then(() => {
+    const editor = client.getEditor();
+
+    // Register the completion provider
+    monaco.languages.registerCompletionItemProvider('my-dsl', {
+        provideCompletionItems: function(model, position) {
+            // Trigger a request to your language server for completion items
+            return new Promise((resolve, reject) => {
+                client.getLanguageClient().sendRequest('textDocument/completion', {
+                    textDocument: { uri: model.uri.toString() },
+                    position: position
+                }).then((result) => {
+                    // Convert the response to Monaco's completion item format
+                    const completionItems = result.items.map(item => ({
+                        label: item.label,
+                        kind: monaco.languages.CompletionItemKind[item.kind] || monaco.languages.CompletionItemKind.Text,
+                        insertText: item.insertText || item.label,
+                        range: new monaco.Range(
+                            position.lineNumber, position.column,
+                            position.lineNumber, position.column
+                        )
+                    }));
+                    resolve({ suggestions: completionItems });
+                }, reject);
+            });
+        }
+    });
+});
+
 
 client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
     running = true;
