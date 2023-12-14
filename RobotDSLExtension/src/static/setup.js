@@ -255,6 +255,7 @@ client.getLanguageClient().onNotification('browser/sendValidationResults', async
 });
 
 function openValidationModal(params) {
+    document.getElementById("errorList").innerHTML = "";
     if(params.errorCount > 0){
         var modal = document.getElementById("errorModal");
         modal.style.display = "block";
