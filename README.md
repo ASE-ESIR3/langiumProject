@@ -14,6 +14,7 @@ This repository holds the complete code of the langium project. It contains a **
 This readme will explain how to use the different parts of the project, and the problems encountered during developpement.
 
 
+
 # How to use
 
 ## Running in the editor
@@ -41,6 +42,8 @@ Inside there is a main file, and a folder with the grammar files.
 When opening the new vscode instance, open the folder myRobotProject and you are ready to go.
 
 ## Running in the web
+
+![webSimuImage](./ReadmeImg/WebSimu1.png)
 
 The web simulator is oppening on ```localhost:3000``` after running the command ```npm run serve``` after building the project. (the latest verison is also avialable at https://robot.ronantremoureux.fr)
 
