@@ -261,7 +261,7 @@ function openValidationModal(params) {
         modal.style.display = "block";
         for(let i = 0; i < params.errors.length; i++){
             let errorDiv = document.createElement("div");
-            errorDiv.innerHTML = params.errors[i].line + " : " + params.errors[i].message;
+            errorDiv.innerHTML = "Line "+params.errors[i].line + " : " + params.errors[i].message;
             document.getElementById("errorList").appendChild(errorDiv);
         }
 
