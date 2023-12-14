@@ -185,7 +185,8 @@ export class InterpretorVisitor implements MyDslVisitor {
                 return this.ctx[i].variables.get(node.Name).value;
             }
         }
-        throw new Error(`Variable ${node.Name} not found`);
+        this.typeErrors.push(new MyError(node.$cstNode.range.start.line, "VariableError: "+node.Name+" has never been declared in this scop" , "Variable error"));
+        console.error("Line:" + node.$cstNode.range.start.line+". VariableError: "+node.Name+" has never been declared in this scop");
     }
 
     visitFunctionCall(node: functionCallNode){
