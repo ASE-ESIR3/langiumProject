@@ -4,21 +4,14 @@
 
 html,body {
     background: rgb(33,33,33);
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Roboto', sans-serif;
     color: white;
     margin: 0;
 }
 
 
 .collapse-button {
-    top: 5px; /* Adjust as needed */
-    right: 5px; /* Adjust as needed */
-    background-color: #262757;
-    border: none;
     cursor: pointer;
-    padding: 5px;
-
-    font-size: 10px;
   }
   
   .editor {

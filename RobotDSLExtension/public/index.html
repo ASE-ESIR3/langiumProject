@@ -11,9 +11,9 @@
     </head>
     <body class="h-screen overflow-hidden">
 
-        <div class="w-full">
+        <div class="w-full ">
 
-            <div id="buttons" class="flex flex-wrap gap-4 bg-zinc-700 p-2 hover:shadow-2xl hover:scale-[1.005]">
+            <div id="buttons" class="flex flex-wrap gap-4 bg-zinc-800 p-2 shadow-2xl border-b-2 border-gray-500">
                 
                 <div class ="my-auto">
                     <p class = "snap-center text-2xl">Roomba Simulator</p>
@@ -33,17 +33,19 @@
                 <button class="text-white bg-red-400 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.clearData()">
                     <i class="fa-solid fa-trash-can"></i>
                 </button>
-                <button id="pauseSimu" class="text-white bg-slate-500 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.pauseSimu()">
-                    <i class="fa-solid fa-pause"></i>
-                </button>
+
                 
                 <div class="bg-gray-400 w-px mx-2"></div>
 
-                <div id="speedManager" class="flex rounded-xl p-1 bg-slate-800 ml-2">
+                <button id="pauseSimu" class="text-white bg-slate-500 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.pauseSimu()">
+                    <i class="fa-solid fa-pause"></i>
+                </button>
+
+                <div id="speedManager" class="flex rounded-xl p-1 bg- ml-2">
                     <p class="text-2xl m-auto pr-2">Delay</p>
                     <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
                 </div>
-                <div class="flex rounded-xl bg-slate-800 ml-2 pr-2 pl-2">
+                <div class="flex rounded-xl  ml-2 pr-2 pl-2">
                     <p class="text-2xl m-auto mr-5 ">Follow</p>
                     <input type="checkbox" id="followRobot" class="scale-150 m-auto">
                 </div>
@@ -53,21 +55,17 @@
 
 
 
-        <div id="page-wrapper" class="flex flex-1 overflow-hidden p-3">
+        <div id="page-wrapper" class="flex flex-1 overflow-hidden">
             <div id="editor" class="editor flex-none">
                 <!-- Monaco Editor -->
                 <div class="wrapper">
                     <div id="monaco-editor-root"></div>
-
                 </div>
-
-
             </div>
-            <button id = collapse-button type="button" class="text-white collapse-button bg-slate-800 rounded-xl p-1 ml-10 hover:scale-[1.005] duration-100 shadow-sm hover:shadow-lg hover:opacity-90 ">
+            <button id = collapse-button type="button" class="text-white m-auto rounded-xl  bg-zinc-900 collapse-button p-2 ml-10 hover:scale-[1.005] duration-100 shadow-sm hover:shadow-lg hover:opacity-90 ">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
             <div id=canvaContainer>
-                <p class = "text-opacity-80">You can drag and zoom with the mouse.</p>
                 <canvas id="simulator" class="flex-1"></canvas>
             <div> 
 
