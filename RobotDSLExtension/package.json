@@ -31,6 +31,7 @@
         "langium": "~2.0.0",
         "monaco-editor-workers": "~0.34.2",
         "monaco-editor-wrapper": "~1.6.0",
+        "nocache": "^4.0.0",
         "PostCSS": "npm:postcss@^8.4.32",
         "vscode-languageclient": "~8.0.2"
     },
