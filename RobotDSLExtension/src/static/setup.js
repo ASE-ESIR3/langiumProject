@@ -168,10 +168,10 @@ window.canvaSizeHeight = 0;
 window.pauseSimu = function(){
     pausing = !pausing;
     if(pausing){
-        document.getElementById("pauseSimu").value = "Resume";
+        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-play"></i>';
         pausing = true;
     } else {
-        document.getElementById("pauseSimu").value = "Pause";
+        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-pause"></i>';
         pausing = false;
     }
 }
@@ -195,14 +195,6 @@ window.onclick = function(event) {
         errorModal.style.display = "none";
     }
 }
-
-let zoomSlider = document.getElementById('zoomSlider');
-zoomSlider.addEventListener('input', function() {
-    let zoomValue = parseFloat(this.value);
-    window.cam.zx = zoomValue;
-    window.cam.zy = zoomValue;
-});
-
 
 let speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', function() {
@@ -314,12 +306,10 @@ async function runStatments(params){
         }
         const statement = params[i];
         if (statement.type === "Forward") {
-            console.log("forward " + statement.Value);
             await window.p5robot.move(statement.Value);
         }
 
         if (statement.type === "Rotate") {
-            console.log("Rotate " + statement.Value);
             window.p5robot.turn(statement.Value * 1);
         }
         //await new Promise(r => setTimeout(r, 1000));
@@ -333,14 +323,19 @@ document.addEventListener("DOMContentLoaded", function() {
     collapseButton.addEventListener("click", function() {
         if (editorContent.style.display === "none") {
             editorContent.style.display = "block";
-            collapseButton.textContent = "v"; 
+
+
+            collapseButton.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
             window.canvaSizeWidth = windowWidth/2;
             window.canvaSizeHeight = windowHeight;
             resizeCanvas(windowWidth/2, windowHeight);
 
         } else {
             editorContent.style.display = "none";
-            collapseButton.textContent = ">";
+
+            collapseButton.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+
+
             window.canvaSizeWidth = windowWidth;
             window.canvaSizeHeight = windowHeight;
             resizeCanvas(windowWidth, windowHeight);

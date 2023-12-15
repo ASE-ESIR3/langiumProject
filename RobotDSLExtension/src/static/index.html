@@ -2,108 +2,109 @@
 <html>
     <head>
         <meta charset='utf-8'>
-        <!-- Page & Monaco styling -->
-
         <link href="output.css" rel="stylesheet">
-        <Title>Roomba Simulator</Title>
-
+        <title>Roomba Simulator</title>
         <script src="https://cdn.jsdelivr.net/npm/p5@1.7.0/lib/p5.js"></script>
-        <!-- <script src="simulator/libraries/p5.js"></script> -->
         <script src="simulator/libraries/p5.sound.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
     </head>
-    <body>
-        <h1 class = "font-bold text-5xl py-10" >Roomba Playground</h1>
-        
-        <div class = "flex">
-            <div id="buttons" class = "px-5 flex m-auto rounded-lg bg-zinc-700 p-5 hover:scale-[1.005] duration-100 shadow-2xl w-max">
+    <body class="h-screen overflow-hidden">
+
+        <div class="w-full">
+
+            <div id="buttons" class="flex flex-wrap gap-4 bg-zinc-700 p-2 hover:shadow-2xl hover:scale-[1.005]">
                 
-                <button type="button" class="collapse-button bg-blue-400 rounded-xl p-2 mx-5 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90">v</button>
-                <input class=" bg-blue-400 rounded-xl p-2 mx-5 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" type="button" value="Validate" onclick="window.parseAndValidate()">
-                <input class=" bg-green-500 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" type="button" value="Execute" onclick="window.execute()">
-                <input class=" bg-red-400 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" type="button" value="Restart" onclick="window.reset()">
-                <input class=" bg-orange-300 rounded-xl p-2  mx-5 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" type="button" value="Clear All" onclick="window.clearData()">
-                <input id = pauseSimu class=" bg-purple-400 rounded-xl p-2  mx-5 hover:scale-105 duration-100 hover:shadow-lg shadow-sm hover:opacity-90" type="button" value="Pause" onclick="window.pauseSimu()">
+                <div class ="my-auto">
+                    <p class = "snap-center text-2xl">Roomba Simulator</p>
+                </div>
+                <div class="bg-gray-400 w-px mx-2"></div>
+
                 
-                <div class = "block rounded-xl p-1 bg-slate-800 ">
-                    <div class = "flex" >
-                        <p class = "text-2xl m-auto">Zoom</p>
-                    </div>
-                    <input type="range" id="zoomSlider" min="0.1" max="5.0" value="1.0" step="0.1" class = "mx-2">
+                <button class="text-white bg-green-500 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.parseAndValidate()">
+                    <i class="fa-solid fa-check"></i>
+                </button>
+                <button class="text-white bg-green-500 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.execute()">
+                    <i class="fa-solid fa-play"></i>
+                </button>
+                <button class="text-white  bg-orange-300 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.reset()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button class="text-white bg-red-400 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.clearData()">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+                <button id="pauseSimu" class="text-white bg-slate-500 rounded-xl p-2 mx-2 hover:scale-105 duration-100 shadow-sm hover:shadow-lg hover:opacity-90" onclick="window.pauseSimu()">
+                    <i class="fa-solid fa-pause"></i>
+                </button>
+                
+                <div class="bg-gray-400 w-px mx-2"></div>
+
+                <div id="speedManager" class="flex rounded-xl p-1 bg-slate-800 ml-2">
+                    <p class="text-2xl m-auto pr-2">Delay</p>
+                    <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
                 </div>
-                <div id="speedManager" class = "flex rounded-xl p-1 bg-slate-800 ml-2">
-
-                    <div class ="block ">
-
-                        <div class = "flex " >
-                            <p class = "text-2xl m-auto"> Sim Delay</p>
-                        </div>
-                        <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
-                        
-                    </div>
-
-                </div>
-
-                <div class = "block rounded-xl p-1 bg-slate-800 ml-2">
-                    <div class = "flex" >
-                        <p class = "text-2xl m-auto">Follow</p>
-                        
-                    </div>
-                    <div class = flex>
-                        <input type="checkbox" id="followRobot" class = "scale-150 m-auto">
-                    </div>
-
+                <div class="flex rounded-xl bg-slate-800 ml-2 pr-2 pl-2">
+                    <p class="text-2xl m-auto mr-5 ">Follow</p>
+                    <input type="checkbox" id="followRobot" class="scale-150 m-auto">
                 </div>
             </div>
-        </div>
-        <div id="page-wrapper" class = "flex">
-            <div id = editor class="editor">
-                <div class="wrapper">
-                    <!-- Monaco Root -->
-                    <div id="monaco-editor-root"></div>
-                </div>
-            </div>
-
-            <canvas id="simulator"></canvas>
-
-        </div>
-
-        <div id="errorModal" class="modal shadow-2xl">
             
-            <!-- Modal content -->
+        </div>
+
+
+
+        <div id="page-wrapper" class="flex flex-1 overflow-hidden p-3">
+            <div id="editor" class="editor flex-none">
+                <!-- Monaco Editor -->
+                <div class="wrapper">
+                    <div id="monaco-editor-root"></div>
+
+                </div>
+
+
+            </div>
+            <button id = collapse-button type="button" class="text-white collapse-button bg-slate-800 rounded-xl p-1 ml-10 hover:scale-[1.005] duration-100 shadow-sm hover:shadow-lg hover:opacity-90 ">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <div id=canvaContainer>
+                <p class = "text-opacity-80">You can drag and zoom with the mouse.</p>
+                <canvas id="simulator" class="flex-1"></canvas>
+            <div> 
+
+        </div>
+
+
+
+        <!-- Modals -->
+        <!-- Error Modal -->
+        <div id="errorModal" class="modal shadow-2xl">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                
-                <div class="modal-header">
-                    
-                    <h2>Roomba Cleaner Type checking errors</h2>
-                </div>
-                <div id=errorList class="modal-body text-white"></div>
+                <h2 class = "bg-red-700">Roomba Cleaner Type checking errors</h2>
+                <div id="errorList" class="modal-body text-white"></div>
             </div>
         </div>
 
+        <!-- Validation Modal -->
         <div id="validModal" class="modal shadow-2xl">
-            <!-- Modal content -->
             <div class="modal-content">
                 <span class="close">&times;</span>
-                
-                <div class="modal-header">
-                    
-                    <h2>Roomba Cleaner Type checking validation</h2>
-                </div>
+                <h2 class = "bg-green-700">Roomba Cleaner Type checking validation</h2>
                 <div class="modal-body text-white">
                     Your code is correct.
                 </div>
             </div>
         </div>
-        
-        <footer class = "flex">
-            <div class = "block m-auto">
 
-                <p style="font-style:italic" class = "m-auto">Powered by</p>
+        <!-- Footer -->
+        <footer class="flex">
+            <div class="block m-auto">
+                <p style="font-style:italic" class="m-auto">Powered by</p>
                 <img width="125" src="https://langium.org/assets/langium_logo_w_nib.svg" alt="Langium" class="m-auto">
             </div>
         </footer>
-        <!-- Monaco Configuration -->
+
+        <!-- Scripts -->
         <script type="module" src="setup.js"></script>
         <script src="simulator/wall.js"></script>
         <script src="simulator/cam.js"></script>

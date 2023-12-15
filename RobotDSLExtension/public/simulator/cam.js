@@ -4,5 +4,9 @@ class Cam {
         this.y = y;
         this.zx = 3;
         this.zy = 3;
+        this.dx = 0;
+        this.dy = 0;
+        this.ox = 0;
+        this.oy = 0;
     }
 }

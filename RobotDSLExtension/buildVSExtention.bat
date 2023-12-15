@@ -4,3 +4,5 @@ call npm run build
 call npm run build:web
 
 call code --extensionDevelopmentPath=$PWD 
+
+call npm run serve
