@@ -35027,6 +35027,9 @@ function registerValidationChecks2(services) {
   registry.register(checks, validator);
 }
 var MyDslValidator = class {
+  constructor() {
+    this.funcnames = [];
+  }
   ensurefunctionName(fun, accept) {
     if (!fun.FunctionName.charAt(0).match(/[a-z]/)) {
       accept("warning", "Function name should not becapitalized.", { node: fun, property: "FunctionName" });
@@ -35039,6 +35042,11 @@ var MyDslValidator = class {
     }
     if (fun.FunctionName.toLowerCase() == "loop") {
       accept("error", "Function cant be named loop. it is a reserved word.", { node: fun, property: "FunctionName" });
+    }
+    if (this.funcnames.includes(fun.FunctionName)) {
+      accept("error", 'Function "' + fun.FunctionName + '" is already defined.', { node: fun, property: "FunctionName" });
+    } else {
+      this.funcnames.push(fun.FunctionName);
     }
   }
   ensurefunctionCalledExists(fun, accept) {
