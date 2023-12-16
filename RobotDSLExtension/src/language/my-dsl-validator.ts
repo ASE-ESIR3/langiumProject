@@ -69,6 +69,7 @@ export class MyDslValidator {
     
     ensureMainFunctionExists(prog: Program, accept: ValidationAcceptor): void {
         this.program = prog;
+        this.funcnames = [];
         if (!prog.function.find(fun => fun.FunctionName == "main")) {
             accept('error', 'Your program does not contain any main() function.', { node: prog, property: 'function' });
         }
