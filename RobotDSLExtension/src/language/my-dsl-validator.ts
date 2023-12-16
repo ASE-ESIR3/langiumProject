@@ -42,6 +42,7 @@ export class MyDslValidator {
         
         //if function is already defined in the funcnames then throw error
         if(this.funcnames.includes(fun.FunctionName)){
+            this.funcnames = [];
             accept('error', 'Function "' + fun.FunctionName + '" is already defined.', { node: fun, property: 'FunctionName' });
         }
         else{

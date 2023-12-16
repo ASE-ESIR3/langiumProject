@@ -35044,6 +35044,7 @@ var MyDslValidator = class {
       accept("error", "Function cant be named loop. it is a reserved word.", { node: fun, property: "FunctionName" });
     }
     if (this.funcnames.includes(fun.FunctionName)) {
+      this.funcnames = [];
       accept("error", 'Function "' + fun.FunctionName + '" is already defined.', { node: fun, property: "FunctionName" });
     } else {
       this.funcnames.push(fun.FunctionName);
@@ -35060,6 +35061,7 @@ var MyDslValidator = class {
   }
   ensureMainFunctionExists(prog, accept) {
     this.program = prog;
+    this.funcnames = [];
     if (!prog.function.find((fun) => fun.FunctionName == "main")) {
       accept("error", "Your program does not contain any main() function.", { node: prog, property: "function" });
     }
