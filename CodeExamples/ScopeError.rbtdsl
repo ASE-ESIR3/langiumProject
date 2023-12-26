@@ -1,0 +1,6 @@
+/* this code will throw a "undeclared variable" erorr */
+Void main() {
+    if( a){
+        return;
+    };
+}

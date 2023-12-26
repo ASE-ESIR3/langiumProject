@@ -1,0 +1,9 @@
+/* This code will throw a return type error*/
+Void main() {
+    returningFunction(5);
+}
+
+Boolean returningFunction(Number val)
+{
+    return (val*2);
+}

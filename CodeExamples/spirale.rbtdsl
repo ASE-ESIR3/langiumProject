@@ -1,0 +1,10 @@
+/* execute une spirale sur l'écran */
+Void main() {
+
+    for(Number i = 0;(i < 1000);i = (i + 1))
+    {
+    Forward (1 * i) CM;
+    Rotate -10;
+    };
+
+}

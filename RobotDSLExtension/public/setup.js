@@ -269,7 +269,6 @@ function openValidationModal(params) {
 
 async function runStatments(params){
     for (let i = 0; i < params.length; i++) {
-        await new Promise(r => setTimeout(r, 1));
         while(pausing){
             await new Promise(r => setTimeout(r, 100));
         }

@@ -13,7 +13,9 @@ This repository holds the complete code of the langium project. It contains a **
 
 This readme will explain how to use the different parts of the project, and the problems encountered during developpement.
 
+## Code examples
 
+You will find in the CodeExamples folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
 
 # How to use
 
@@ -50,6 +52,7 @@ The web simulator is oppening on ```localhost:3000``` after running the command 
 The web simulator is a simple web page that allows to write code in the editor, and see the result of the execution of the code in the simulator. You have some controll on the simulation such as follow the robot, pause the simulation, or change the speed of the simulation.
 
 The web simulator includes also some type checking features and error reporting.
+
 
 ## problems encountered during developpement
 
