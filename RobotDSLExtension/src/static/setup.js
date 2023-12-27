@@ -10,10 +10,6 @@ editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your pro
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
-let code = getCookie("code");
-
-
-if(code == ""){
 code = 
 `Void main() {
     for(Number i = 0;(i < 3);i = (i + 1))
@@ -51,7 +47,7 @@ Void flocon(Number max, Number size)
 
 
 }`
-}
+
 
 
 let replaceCode = `Void main() {
