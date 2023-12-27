@@ -12,7 +12,6 @@ export class interpreter{
         var scene:Scene = new BaseScene();
         const statments = visitor.visit(model,scene);
         this.typeErors = visitor.typeErrors;
-        console.log(this.typeErors);
         const endTime = Date.now();
         console.log(`Interpretation took ${endTime - startTime}ms`);
         return statments;

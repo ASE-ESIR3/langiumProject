@@ -1,9 +1,7 @@
 import { MonacoEditorLanguageClientWrapper, vscode } from './monaco-editor-wrapper/index.js';
 import { buildWorkerDefinition } from "./monaco-editor-workers/index.js";
 import monarchSyntax from "./syntaxes/syntaxes/my-dsl.monarch.js";
-
 buildWorkerDefinition('./monaco-editor-workers/workers', new URL('', window.location.href).href, false);
-
 MonacoEditorLanguageClientWrapper.addMonacoStyles('monaco-editor-styles');
 
 const client = new MonacoEditorLanguageClientWrapper();
@@ -13,7 +11,7 @@ editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your pro
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
 let code = getCookie("code");
-console.log("cookies" + document.cookie)
+
 
 if(code == ""){
 code = 
@@ -65,20 +63,6 @@ editorConfig.theme = 'vs-dark';
 editorConfig.useLanguageClient = true;
 editorConfig.useWebSocket = false;
 
-const typecheck = (async () => {
-    console.info('typechecking current code...');
-
-    // To implement (Bonus)
-    
-    if(errors.length > 0){
-        const modal = document.getElementById("errorModal");
-        modal.style.display = "block";
-    } else {
-        const modal = document.getElementById("validModal");
-        modal.style.display = "block";
-    }
-});
-
 const reset = (async () => {
     window.p5robot.reset();
     window.resetSimulation();
@@ -98,6 +82,21 @@ const parseAndValidate = (async () => {
     });
 });
 
+const compile = (async () => {
+    console.info('compiling current code...');
+    client.getLanguageClient().sendNotification('browser/compile', {
+        content: client.getEditor().getModel().getValue(),
+        uri: client.getEditor().getModel().uri.toString()
+    });
+});
+
+const copyCompiledCodeToClipboard = (async () => {
+    console.info('copying compiled code to clipboard...');
+    modalEditorInstance.focus();
+    let compiledCode = modalEditorInstance.getValue();
+    navigator.clipboard.writeText(compiledCode);
+});
+
 const clearData = (async () => {
     client.getEditor().getModel()?.setValue(replaceCode);
     reset();
@@ -108,8 +107,6 @@ var running = false;
 const execute = (async () => {
     if(!running){
         saveEditorCodeInCookie();
-        console.info('running current code...');
-        console.log(client.getEditor().getModel()?.getValue());
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
             uri: client.getEditor().getModel().uri.toString()
@@ -120,6 +117,8 @@ const execute = (async () => {
 function saveEditorCodeInCookie(){
     setCookie("code", client.getEditor().getModel().getValue(), 1);
 }
+
+
 
 const setupSimulator = (scene) => {
     const wideSide = max(scene.size.x, scene.size.y);
@@ -157,10 +156,11 @@ const setupSimulator = (scene) => {
 }
 
 window.execute = execute;
-window.typecheck = typecheck;
 window.reset = reset;
 window.clearData = clearData;
 window.parseAndValidate = parseAndValidate;
+window.compile = compile;
+window.copyCompiledCodeToClipboard = copyCompiledCodeToClipboard;
 
 window.canvaSizeWidth = 0;
 window.canvaSizeHeight = 0;
@@ -179,14 +179,20 @@ window.pauseSimu = function(){
 
 var errorModal = document.getElementById("errorModal");
 var validModal = document.getElementById("validModal");
+var compileModal = document.getElementById("compileModal");
 var closeError = document.querySelector("#errorModal .close");
 var closeValid = document.querySelector("#validModal .close");
+var closeCompile = document.querySelector("#compileModal .close");
 closeError.onclick = function() {
     errorModal.style.display = "none";
 }
 closeValid.onclick = function() {
     validModal.style.display = "none";
 }
+closeCompile.onclick = function() {
+    compileModal.style.display = "none";
+};
+
 window.onclick = function(event) {
     if (event.target == validModal) {
         validModal.style.display = "none";
@@ -194,6 +200,10 @@ window.onclick = function(event) {
     if (event.target == errorModal) {
         errorModal.style.display = "none";
     }
+    if (event.target == compileModal) {
+        compileModal.style.display = "none";
+    }
+
 }
 
 let speedSlider = document.getElementById('speedSlider');
@@ -219,7 +229,6 @@ function setSpeedDelay(speedValue){
 }
 
 const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
-console.log(workerURL.href);
 
 const lsWorker = new Worker(workerURL.href, {
     type: 'classic',
@@ -237,14 +246,48 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
     running = true;
     stopping = false;
     pausing = false;
-    console.log(params);
     runStatments(params);
 });
 
 client.getLanguageClient().onNotification('browser/sendValidationResults', async (params) => {
-    console.log(params);
     openValidationModal(params);
 });
+
+client.getLanguageClient().onNotification('browser/sendCompiledCode', async (params) => {
+    openCompileModal(params);
+});
+
+// Define a global variable to hold the modal editor instance
+var modalEditorInstance = null;
+
+function openCompileModal(params) {
+    var modal = document.getElementById("compileModal");
+    modal.style.display = "block";
+    var editorDiv = document.getElementById("compiledCodeEditor");
+    editorDiv.style.height = '400px'; 
+    editorDiv.style.width = '100%';
+
+    if (!modalEditorInstance) {
+        modalEditorInstance = monaco.editor.create(editorDiv, {
+            value: params,
+            language: 'c', 
+            readOnly: true 
+        });
+    } else {
+
+        modalEditorInstance.setValue(params);
+
+        modalEditorInstance.layout();
+    }
+}
+
+// You should call this function when the modal is closed to prevent the editor from holding onto the old state
+function disposeModalEditor() {
+    if (modalEditorInstance) {
+        modalEditorInstance.dispose();
+        modalEditorInstance = null;
+    }
+}
 
 function openValidationModal(params) {
     document.getElementById("errorList").innerHTML = "";
@@ -272,7 +315,6 @@ async function runStatments(params){
         while(pausing){
             await new Promise(r => setTimeout(r, 100));
         }
-        console.log(params[i]);
         if (stopping){
             break;
         }

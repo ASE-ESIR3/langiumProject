@@ -98,6 +98,7 @@ canvas {
 
 #errorModal .modal-header {background-color: #682929e4;}
 #validModal .modal-header {background-color: #276627;}
+#compileModal .modal-header {background-color: #2a32a3;}
 
 /* Modal Body */
 .modal-body {
@@ -119,8 +120,6 @@ canvas {
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
     cursor: pointer;
 } 
 

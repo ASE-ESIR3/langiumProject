@@ -31541,9 +31541,21 @@ function isStatementBlock(item) {
 var Throw = "Throw";
 var VariableDefinition = "VariableDefinition";
 var Boolean2 = "Boolean";
+function isBoolean(item) {
+  return reflection2.isInstance(item, Boolean2);
+}
 var Number_ = "Number_";
+function isNumber_(item) {
+  return reflection2.isInstance(item, Number_);
+}
 var Void = "Void";
+function isVoid(item) {
+  return reflection2.isInstance(item, Void);
+}
 var CM = "CM";
+function isCM(item) {
+  return reflection2.isInstance(item, CM);
+}
 var KM = "KM";
 function isKM(item) {
   return reflection2.isInstance(item, KM);
@@ -35170,7 +35182,6 @@ var MyDslAcceptWeaver = class {
     };
   }
   weaveFunction_(node, accept) {
-    console.log("weaveFunction_");
     node.accept = (visitor2) => {
       return visitor2.visitFunction_(node);
     };
@@ -35408,10 +35419,7 @@ var InterpretorVisitor = class {
   visit(model, scene) {
     this.scene = scene;
     this.progNode = model;
-    console.log(model);
     this.visitProgram(model);
-    console.log("Robot has been moving:");
-    console.log(this.robotinstruction);
     return this.robotinstruction;
   }
   visitProgram(node) {
@@ -35447,7 +35455,6 @@ var InterpretorVisitor = class {
       for (let i = 0; i < node_.statments.length; i++) {
         const element = node_.statments[i];
         ret = element.accept(this);
-        console.log("in statment block " + ret);
         if (this.getCurrentContext().isReturning) {
           return ret;
         }
@@ -35500,7 +35507,6 @@ var InterpretorVisitor = class {
   }
   visitFunctionCall(node) {
     if (node.functionName == "print") {
-      console.log(node.functionparameters.accept(this)[0]);
       return null;
     }
     if (node.functionName == "sqrt") {
@@ -35557,10 +35563,6 @@ var InterpretorVisitor = class {
     return node.Left.accept(this) == node.Right.accept(this);
   }
   visitif(node) {
-    console.log("if");
-    console.log(node.Condition.accept(this));
-    console.log("type of condition");
-    console.log(typeof node.Condition.accept(this));
     if (evalCondition(node.Condition.accept(this))) {
       return node.Body.accept(this);
     } else {
@@ -35580,7 +35582,6 @@ var InterpretorVisitor = class {
       if (this.getCurrentContext().isReturning) {
         return ret;
       }
-      console.log(ret);
       if (ret == "break") {
         return null;
       }
@@ -35826,13 +35827,229 @@ var interpreter = class {
     var scene = new BaseScene();
     const statments = visitor2.visit(model, scene);
     this.typeErors = visitor2.typeErrors;
-    console.log(this.typeErors);
     const endTime = Date.now();
     console.log(`Interpretation took ${endTime - startTime}ms`);
     return statments;
   }
 };
 interpreter.typeErors = [];
+
+// out/semantics/compilerVisitor.js
+var CompilerVisitor = class {
+  constructor() {
+    this.ctx = [/* @__PURE__ */ new Map()];
+  }
+  visit(model) {
+    this.progNode = model;
+    return this.visitProgram(model);
+  }
+  visitProgram(node) {
+    var ret = "";
+    for (let i = 0; i < node.function.length; i++) {
+      const element = node.function[i];
+      ret = ret.concat(element.accept(this));
+    }
+    return ret;
+  }
+  visitFunction_(node) {
+    var params = "";
+    if (node.functiondefinitionparameters != null) {
+      params = node.functiondefinitionparameters.accept(this);
+    }
+    var funcname = node.FunctionName;
+    if (funcname == "main") {
+      funcname = "mainrobot";
+    }
+    return node.type.accept(this) + funcname + "(" + params + ")" + node.Body.accept(this);
+  }
+  visitStatmentBlock(node) {
+    var ret = "{\n";
+    const node_ = node;
+    for (let i = 0; i < node_.statments.length; i++) {
+      const element = node_.statments[i];
+      ret = ret.concat(element.accept(this) + "\n");
+    }
+    ret.concat("}\n");
+  }
+  visitStatment(node) {
+    var ret = "";
+    if (isStatementBlock(node)) {
+      ret = "{\n";
+      const node_ = node;
+      for (let i = 0; i < node_.statments.length; i++) {
+        const element = node_.statments[i];
+        ret = ret.concat(element.accept(this) + ";\n");
+      }
+      ret = ret.concat("}\n");
+    }
+    return ret;
+  }
+  visitConstNumber(node) {
+    return node.Value;
+  }
+  visitConstBoolean(node) {
+    return node.Value.valueOf();
+  }
+  visitExpr(node) {
+    return node.accept(this);
+  }
+  visitVariableDefinition(node) {
+    var right = "";
+    if (node.left != null) {
+      right = " = " + node.left.accept(this);
+    }
+    return node.type.accept(this) + node.variable.Name + right;
+  }
+  visitAddition(node) {
+    return node.Left.accept(this) + "+" + node.Right.accept(this);
+  }
+  visitMultiplication(node) {
+    return node.Left.accept(this) + "*" + node.Right.accept(this);
+  }
+  visitSoustraction(node) {
+    return node.Left.accept(this) + "-" + node.Right.accept(this);
+  }
+  visitDivision(node) {
+    return node.Left.accept(this) + "/" + node.Right.accept(this);
+  }
+  visitVariable(node) {
+    return node.Name;
+  }
+  visitFunctionCall(node) {
+    if (node.functionName == "print") {
+      return 'printf("%d",' + node.functionparameters.accept(this) + ")";
+    }
+    if (node.functionName == "getDistance") {
+      return "getDistance()";
+    }
+    if (node.functionName == "setSpeed") {
+      return "setSpeed(" + node.functionparameters.accept(this) + ")";
+    }
+    var ret = "";
+    if (node.functionparameters) {
+      ret = node.functionparameters.accept(this);
+    }
+    return node.functionName + "(" + ret + ")";
+  }
+  visitFunctionCallParameters(node) {
+    var ret = "";
+    node.expr.forEach((element, i) => {
+      if (i == node.expr.length - 1) {
+        ret = ret.concat(element.accept(this));
+      } else {
+        ret = ret.concat(element.accept(this) + ",");
+      }
+    });
+    return ret;
+  }
+  visitAffectation(node) {
+    return node.variable.Name + " = " + node.Right.accept(this);
+  }
+  visitAnd(node) {
+    return node.Left.accept(this) + "&&" + node.Right.accept(this);
+  }
+  visitOr(node) {
+    return node.Left.accept(this) + "||" + node.Right.accept(this);
+  }
+  visitNot(node) {
+    return "!" + node.right.accept(this);
+  }
+  visitEquals(node) {
+    return node.Left.accept(this) + "==" + node.Right.accept(this);
+  }
+  visitif(node) {
+    var ret = "if (" + node.Condition.accept(this) + ")\n" + node.Body.accept(this) + "\n\n";
+    node.Elsez.forEach((element) => {
+      ret = ret.concat("else" + element.accept(this));
+    });
+    return ret;
+  }
+  visitWhile(node) {
+    const ret = "while (" + node.Condition.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+    return ret;
+  }
+  visitFor(node) {
+    return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+  }
+  visitMoreThan(node) {
+    return parseInt(node.Left.accept(this)) + ">" + parseInt(node.Right.accept(this));
+  }
+  visitLessThan(node) {
+    return node.Left.accept(this) + "<" + node.Right.accept(this);
+  }
+  visitFunctionDefinitionParameters(node) {
+    var ret = "";
+    node.variabledefinition.forEach((element, i) => {
+      if (i == node.variabledefinition.length - 1) {
+        ret = ret.concat(element.accept(this));
+      } else {
+        ret = ret.concat(element.accept(this) + ",");
+      }
+    });
+    return ret;
+  }
+  visitReturn(node) {
+    var retExpr = "";
+    if (node.returnedExpr != null) {
+      retExpr = node.returnedExpr.accept(this);
+    }
+    return "return " + retExpr;
+  }
+  visitBoolean(node) {
+    return "bool";
+  }
+  visitNumber(node) {
+    return "int";
+  }
+  visitType(node) {
+    if (isNumber_(node)) {
+      return "int ";
+    } else if (isBoolean(node)) {
+      return "bool ";
+    } else if (isVoid(node)) {
+      return "void ";
+    } else {
+      return "void ";
+    }
+  }
+  visitUnit(node) {
+    if (isMM(node)) {
+      return "*0.1";
+    }
+    if (isKM(node)) {
+      return "*0.01";
+    }
+    if (isCM(node)) {
+      return "*1";
+    }
+    return "*1";
+  }
+  visitForward(node) {
+    return "forward(" + node.Value.accept(this) + node.unit.accept(this) + ")";
+  }
+  visitRotate(node) {
+    return "rotate(" + node.Value.accept(this) + ")";
+  }
+  visitThrow(node) {
+    return "exit(0)";
+  }
+  visitConstString(node) {
+    return '"' + node.Value + '"';
+  }
+  visitBreak(node) {
+    return "break";
+  }
+};
+
+// out/semantics/compiler.js
+var compiler = class {
+  static compile(model) {
+    const visitor2 = new CompilerVisitor();
+    var compiledCode = "";
+    compiledCode = compiledCode.concat(visitor2.visit(model));
+    return compiledCode;
+  }
+};
 
 // out/language/main-browser.js
 async function extractAstNodeFromString(content, services) {
@@ -35846,7 +36063,6 @@ function validate(document) {
   var errors = [];
   if (validationErrors.length > 0) {
     for (const validationError of validationErrors) {
-      console.log(validationError);
       errors.push(new MyError(validationError.range.start.line + 1, validationError.message, document.textDocument.getText(validationError.range)));
     }
   }
@@ -35867,8 +36083,6 @@ connection.onNotification("browser/execute", async (params) => {
       connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
       return;
     }
-    console.log("starting interpretation");
-    console.log(params);
     var statements = [];
     statements = interpreter.interpret(parsevalue);
     var typeerrors = interpreter.typeErors;
@@ -35891,8 +36105,6 @@ connection.onNotification("browser/Validate", async (params) => {
       connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
       return;
     }
-    console.log("starting validation");
-    console.log(params);
     interpreter.interpret(parsevalue);
     var typeerrors = interpreter.typeErors;
     if (typeerrors.length > 0) {
@@ -35900,6 +36112,28 @@ connection.onNotification("browser/Validate", async (params) => {
       return;
     }
     connection.sendNotification("browser/sendValidationResults", { errorCount: 0, errors: null });
+  } catch (e) {
+    connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+  }
+});
+connection.onNotification("browser/compile", async (params) => {
+  var _a;
+  try {
+    const doc = await extractAstNodeFromString(params.content, MyDsl);
+    var parsevalue = (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+    var errors = validate(doc);
+    if (errors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
+      return;
+    }
+    interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if (typeerrors.length > 0) {
+      connection.sendNotification("browser/sendValidationResults", { errorCount: typeerrors.length, errors: typeerrors });
+      return;
+    }
+    var compiledCode = compiler.compile(parsevalue);
+    connection.sendNotification("browser/sendCompiledCode", compiledCode);
   } catch (e) {
     connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
   }

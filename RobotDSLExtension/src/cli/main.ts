@@ -6,6 +6,7 @@ import { extractAstNode } from './cli-util.js';
 import { NodeFileSystem } from 'langium/node';
 import { interpreter } from '../semantics/interpreter.js';
 import { compiler } from '../semantics/compiler.js';
+import { readFileSync, writeFile } from 'fs';
 
 export type GenerateOptions = {
     destination?: string;
@@ -22,7 +23,24 @@ export default function(): void {
         .action(async (fileName: string,destination:string) => {
             const services = createMyDslServices(NodeFileSystem).MyDsl;
             const model = await extractAstNode<programNode>(fileName, services);
-            compiler.compile(model,destination);
+            var startTime = Date.now();
+            var compiledCode = compiler.compile(model);
+            console.log("the compiled code is : " + compiledCode);
+            
+            var arduinoBoilerCode = "";
+            var file = "src/compiler/ArduinoCode/program/RB0021_Omni4WD_PID/RB0021_Omni4WD_PID.ino";
+            readFileSync(file, 'utf8').split(/\r?\n/).forEach(function (line) {
+                arduinoBoilerCode = arduinoBoilerCode.concat(line + "\n");
+            });
+            compiledCode = arduinoBoilerCode.concat(compiledCode);
+            
+            //write to file
+            writeFile(destination + "outArduino.ino", compiledCode, function (err: any) {
+                if (err) return console.log(err);
+            });
+            const endTime = Date.now();
+            console.log(`compilation took ${endTime - startTime}ms`);
+            console.log("Compiled code at " + destination);
 
         });
 

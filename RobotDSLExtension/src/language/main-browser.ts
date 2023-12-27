@@ -4,6 +4,7 @@ import { MyDslServices, createMyDslServices } from './my-dsl-module.js';
 import { interpreter } from '../semantics/interpreter.js';
 import { programNode } from '../semantics/nodes/programNode.js';
 import { MyError } from '../semantics/errors.js';
+import { compiler } from '../semantics/compiler.js';
 //import { interpreter } from '../semantics/interpreter.js';
 
 // additional imports
@@ -23,7 +24,6 @@ function validate(document){
   var errors = [];
   if (validationErrors.length > 0) {
       for (const validationError of validationErrors) {
-        console.log(validationError);
         errors.push(new MyError(validationError.range.start.line + 1, validationError.message, document.textDocument.getText(validationError.range)));
         
       }
@@ -52,8 +52,6 @@ connection.onNotification('browser/execute', async params => {
       connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
       return;
     }
-    console.log("starting interpretation");
-    console.log(params);
     var statements = []
     statements = interpreter.interpret(parsevalue);
     var typeerrors = interpreter.typeErors;
@@ -79,8 +77,6 @@ connection.onNotification('browser/Validate', async params => {
       connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
       return;
     }
-    console.log("starting validation");
-    console.log(params);
     interpreter.interpret(parsevalue);
     var typeerrors = interpreter.typeErors;
     if(typeerrors.length > 0){
@@ -93,8 +89,28 @@ connection.onNotification('browser/Validate', async params => {
     connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
   }
   
+});
 
+connection.onNotification('browser/compile', async params => {
 
-
-
+  try{
+    const doc = await extractAstNodeFromString(params.content,MyDsl);
+    var parsevalue = doc.parseResult?.value as programNode;
+    var errors = validate(doc);
+    if(errors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+      return;
+    }
+    interpreter.interpret(parsevalue);
+    var typeerrors = interpreter.typeErors;
+    if(typeerrors.length > 0){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:typeerrors.length,errors:typeerrors});
+      return;
+    }
+    var compiledCode = compiler.compile(parsevalue);
+    connection.sendNotification('browser/sendCompiledCode', compiledCode);
+    }
+    catch(e){
+      connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
+    }
 });

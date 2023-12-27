@@ -93,10 +93,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     visit(model: programNode,scene:Scene): any {
         this.scene = scene;
         this.progNode = model;
-        console.log(model);
         this.visitProgram(model);
-        console.log("Robot has been moving:");
-        console.log(this.robotinstruction)
         return this.robotinstruction;
     }
 
@@ -138,7 +135,6 @@ export class InterpretorVisitor implements MyDslVisitor {
             for (let i = 0; i < node_.statments.length; i++) {
                 const element = node_.statments[i];
                 ret = element.accept(this);
-                console.log("in statment block " + ret);
                 if (this.getCurrentContext().isReturning){
                     return ret;
                 }
@@ -201,7 +197,6 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitFunctionCall(node: functionCallNode){
         if(node.functionName == "print"){
-            console.log(node.functionparameters.accept(this)[0]);
             return null;
         }
 
@@ -274,11 +269,6 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitif(node: IfNode) {
-        console.log("if");
-        console.log(node.Condition.accept(this));
-        console.log("type of condition")
-        console.log(typeof node.Condition.accept(this));
-
         if (evalCondition(node.Condition.accept(this))){
             return node.Body.accept(this);
         }
@@ -303,7 +293,6 @@ export class InterpretorVisitor implements MyDslVisitor {
             if(this.getCurrentContext().isReturning){
                 return ret;
             }
-            console.log(ret);
             if (ret == "break"){
                 return null;
             }
