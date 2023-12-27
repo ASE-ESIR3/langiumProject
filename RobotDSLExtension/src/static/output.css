@@ -794,6 +794,16 @@ video {
   animation: bounce 1s infinite;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
 .select-all {
   -webkit-user-select: all;
      -moz-user-select: all;

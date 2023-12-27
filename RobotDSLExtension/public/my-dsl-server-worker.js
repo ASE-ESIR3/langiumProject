@@ -35965,11 +35965,11 @@ var CompilerVisitor = class {
     return ret;
   }
   visitWhile(node) {
-    const ret = "while (" + node.Condition.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+    const ret = "while (" + node.Condition.accept(this) + ")\n" + node.Body.accept(this) + "\n\n";
     return ret;
   }
   visitFor(node) {
-    return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+    return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + ")\n" + node.Body.accept(this) + "\n\n";
   }
   visitMoreThan(node) {
     return parseInt(node.Left.accept(this)) + ">" + parseInt(node.Right.accept(this));

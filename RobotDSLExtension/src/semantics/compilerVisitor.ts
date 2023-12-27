@@ -204,12 +204,12 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitWhile(node: WhileNode) {
-        const ret = "while (" + node.Condition.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+        const ret = "while (" + node.Condition.accept(this) + ")\n" + node.Body.accept(this) + "\n\n";
         return ret;
     }
 
     visitFor(node: ForNode) {
-        return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + "){\n" + node.Body.accept(this) + "\n}\n";
+        return "for (" + node.Initialization.accept(this) + "; " + node.Condition.accept(this) + "; " + node.Increment.accept(this) + ")\n" + node.Body.accept(this) + "\n\n";
     }
 
     visitMoreThan(node: MoreThanNode) {

@@ -71,6 +71,9 @@ const reset = (async () => {
     running = false;
     //clear the code
     setSpeedDelay( parseFloat(document.getElementById('speedSlider').value));
+    document.getElementById("btplay").innerHTML = '<i class=" text-green-500 fa-solid fa-play"></i>';
+    document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-pause"></i>';
+    pausing = false;
 
 });
 
@@ -105,11 +108,17 @@ var stopping = false;
 var running = false;
 const execute = (async () => {
     if(!running){
+        document.getElementById("btplay").innerHTML = '<i class="text-orange-300 fa-solid fa-rotate-right hover:animate-spin"></i>';
+        
         saveEditorCodeInCookie();
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
             uri: client.getEditor().getModel().uri.toString()
         });
+    }
+    else{
+
+        reset();
     }
 });
 
@@ -280,13 +289,6 @@ function openCompileModal(params) {
     }
 }
 
-// You should call this function when the modal is closed to prevent the editor from holding onto the old state
-function disposeModalEditor() {
-    if (modalEditorInstance) {
-        modalEditorInstance.dispose();
-        modalEditorInstance = null;
-    }
-}
 
 function openValidationModal(params) {
     document.getElementById("errorList").innerHTML = "";
