@@ -1,0 +1,31 @@
+Void main() {
+    Number i = 0 ;
+    while(getTheMainCondition()){
+        if((i == 3)){
+        break;
+        };
+        Forward 50 CM;
+        i = increment(i);
+    };
+
+    for(Number i = 0; (i<4); i = (i+1)){
+        spiraleRoutine();
+        Rotate 90;
+    };
+
+}
+
+Number increment( Number i ){
+    return (i+1);
+}
+
+Void spiraleRoutine(){
+        for(Number i = 0; (i<100); i = (i+1)){
+        Forward i MM;
+        Rotate 10;
+    };
+}
+
+Boolean getTheMainCondition(){
+    return true;
+}

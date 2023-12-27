@@ -38,6 +38,7 @@ import { ForwardNode } from './nodes/ForwardNode.js';
 import { RotateNode } from './nodes/RotateNode.js';
 import { ThrowNode } from './nodes/ThrowNode.js';
 import { ConstStringNode } from './nodes/ConstStringNode.js';
+import { BreakNode } from './nodes/BreakNode.js';
 
 /**
  * Register custom validation checks.
@@ -56,7 +57,8 @@ export function weaveAcceptMethods(services: MyDslServices) {
  */
 export class MyDslAcceptWeaver {
     weaveProgram(node : InterfaceAST.Program, accept : ValidationAcceptor) : void{
-        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitProgram(node as programNode);}
+        (<any> node).accept = (visitor: MyDslVisitor) => {
+            return visitor.visitProgram(node as programNode);}
     }
 
     weaveFunction_(node : InterfaceAST.Function_, accept : ValidationAcceptor) : void{
@@ -197,6 +199,9 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitConstString(node as ConstStringNode);}
     }
 
+    weaveBreak(node : InterfaceAST.Break, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitBreak(node as BreakNode);}
+    }
     
     
 

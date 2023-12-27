@@ -17,6 +17,9 @@ interface StatementBlock extends Statment {
 interface Statment {
 }
 
+interface Break extends Statment{
+}
+
 interface Type {
 }
 

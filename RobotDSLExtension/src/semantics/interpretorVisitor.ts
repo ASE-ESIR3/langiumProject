@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isKM, isMM, isStatementBlock } from "../language/generated/ast.js";
+import { isBreak, isKM, isMM, isStatementBlock } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -37,6 +37,7 @@ import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { Scene } from "../web/simulator/scene.js";
 import { MyError } from "./errors.js";
 import { AstNode } from "langium";
+import { BreakNode } from "./nodes/BreakNode.js";
 //import { MyError } from "./errors.js";
 //import { integer } from "vscode-languageclient";
 
@@ -123,6 +124,9 @@ export class InterpretorVisitor implements MyDslVisitor {
             if (this.getCurrentContext().isReturning) {
                 return ret;
             }
+            if (ret == "break"){
+                return ret;
+            }
         }
         return null;
     }
@@ -132,13 +136,19 @@ export class InterpretorVisitor implements MyDslVisitor {
         if (isStatementBlock(node)){
             const node_ = ( node as StatementBlockNode);
             for (let i = 0; i < node_.statments.length; i++) {
-                 const element = node_.statments[i];
-
-                    ret = element.accept(this);
-                    if (this.getCurrentContext().isReturning){
-                        return ret;
-                    }
+                const element = node_.statments[i];
+                ret = element.accept(this);
+                console.log("in statment block " + ret);
+                if (this.getCurrentContext().isReturning){
+                    return ret;
                 }
+                if (ret == "break"){
+                    return ret;
+                }
+            }
+        }
+        if (isBreak(node)){
+            return "break";
         }
         return ret;
     }
@@ -148,7 +158,7 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitConstBoolean(node: ConstBooleanNode):boolean {
-        return node.Value.valueOf();
+        return node.Value;
     }
 
     visitExpr(node: ExprNode){
@@ -264,9 +274,15 @@ export class InterpretorVisitor implements MyDslVisitor {
     }
 
     visitif(node: IfNode) {
-        if (node.Condition.accept(this)){
+        console.log("if");
+        console.log(node.Condition.accept(this));
+        console.log("type of condition")
+        console.log(typeof node.Condition.accept(this));
+
+        if (evalCondition(node.Condition.accept(this))){
             return node.Body.accept(this);
         }
+
         else{
             var ret = null;
             for (let i = 0; i < node.Elsez.length; i++) {
@@ -282,10 +298,14 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitWhile(node: WhileNode) {
         
-        while ( node.Condition.accept(this)){
+        while ( evalCondition(node.Condition.accept(this))){
             const ret = node.Body.accept(this);
             if(this.getCurrentContext().isReturning){
                 return ret;
+            }
+            console.log(ret);
+            if (ret == "break"){
+                return null;
             }
         }
     }
@@ -298,6 +318,9 @@ export class InterpretorVisitor implements MyDslVisitor {
             const ret = node.Body.accept(this);
             if(this.getCurrentContext().isReturning){
                 return ret;
+            }
+            if(ret == "break"){
+                return null;
             }
         }
         this.ctx.pop();
@@ -377,8 +400,21 @@ export class InterpretorVisitor implements MyDslVisitor {
     visitConstString(node: ConstStringNode):string {
         return node.Value;
     }
+
+    visitBreak(node: BreakNode) {
+        return "break";
+    }
+
 }
 
+function evalCondition(val:any):boolean{
+    if (typeof val == "boolean")
+        return val;
+    if (typeof val == "string")
+        return val == "true";
+    else
+        return val != 0;
+}
 
 function convertExprStringToNode(str:string){
     var val = parseInt(str);

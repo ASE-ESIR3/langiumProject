@@ -33,6 +33,7 @@ import { RotateNode } from "./nodes/RotateNode.js";
 import { ForwardNode } from "./nodes/ForwardNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
+import { BreakNode } from "./nodes/BreakNode.js";
 
 
 export class CompilerVisitor implements MyDslVisitor {
@@ -292,6 +293,10 @@ export class CompilerVisitor implements MyDslVisitor {
 
     visitConstString(node: ConstStringNode) {
         return '"' + node.Value + '"';
+    }
+
+    visitBreak(node: BreakNode) {
+        return "break";
     }
 
 }
