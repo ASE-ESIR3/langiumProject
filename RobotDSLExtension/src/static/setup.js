@@ -1,16 +1,27 @@
-import { MonacoEditorLanguageClientWrapper, vscode } from './monaco-editor-wrapper/index.js';
+import { MonacoEditorLanguageClientWrapper } from './monaco-editor-wrapper/index.js';
 import { buildWorkerDefinition } from "./monaco-editor-workers/index.js";
 import monarchSyntax from "./syntaxes/syntaxes/my-dsl.monarch.js";
+import {arduinoCode} from "./boilerplateArduinoCode.js";
+
 buildWorkerDefinition('./monaco-editor-workers/workers', new URL('', window.location.href).href, false);
 MonacoEditorLanguageClientWrapper.addMonacoStyles('monaco-editor-styles');
 
 const client = new MonacoEditorLanguageClientWrapper();
+
+const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
+
+const lsWorker = new Worker(workerURL.href, {
+    type: 'classic',
+    name: 'RoboMl Language Server'
+});
+client.setWorker(lsWorker);
+
 const editorConfig = client.getEditorConfig();
 editorConfig.setMainLanguageId('my-dsl');       // WARNING Dependent of your project
 
 editorConfig.setMonarchTokensProvider(monarchSyntax);
 
-code = 
+var code = 
 `Void main() {
     for(Number i = 0;(i < 3);i = (i + 1))
     {
@@ -51,11 +62,46 @@ Void flocon(Number max, Number size)
 let replaceCode = `Void main() {
 }`
 
+
+
 editorConfig.setMainCode(code);
 
 editorConfig.theme = 'vs-dark';
 editorConfig.useLanguageClient = true;
 editorConfig.useWebSocket = false;
+
+var pausing = false;
+var stopping = false;
+var running = false;
+
+//modal setup 
+var errorModal = document.getElementById("errorModal");
+var validModal = document.getElementById("validModal");
+var compileModal = document.getElementById("compileModal");
+var closeError = document.querySelector("#errorModal .close");
+var closeValid = document.querySelector("#validModal .close");
+var closeCompile = document.querySelector("#compileModal .close");
+
+var modalEditorInstance = null;
+
+function setupWindowVar(){
+    window.execute = execute;
+    window.reset = reset;
+    window.clearData = clearData;
+    window.parseAndValidate = parseAndValidate;
+    window.compile = compile;
+    window.copyCompiledCodeToClipboard = copyCompiledCodeToClipboard;
+    window.pauseSimu = pauseSimu;
+    window.copyErrorsToClipBoard = copyErrorsToClipBoard;
+    
+    window.canvaSizeWidth = 0;
+    window.canvaSizeHeight = 0;
+    window.followRobot= true;
+    
+    document.getElementById('followRobot').checked = true;
+}
+
+
 
 const reset = (async () => {
     window.p5robot.reset();
@@ -93,16 +139,19 @@ const copyCompiledCodeToClipboard = (async () => {
     navigator.clipboard.writeText(compiledCode);
 });
 
+const copyErrorsToClipBoard = (async () => {
+    let errors = document.getElementById("errorList").innerHTML;
+    navigator.clipboard.writeText(errors);
+});
+
 const clearData = (async () => {
     client.getEditor().getModel()?.setValue(replaceCode);
     reset();
 });
-var pausing = false;
-var stopping = false;
-var running = false;
+
 const execute = (async () => {
     if(!running){
-        saveEditorCodeInCookie();
+        saveEditorCodeInCookie(client.getEditor().getModel().getValue());
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
             uri: client.getEditor().getModel().uri.toString()
@@ -114,11 +163,16 @@ const execute = (async () => {
     }
 });
 
-function saveEditorCodeInCookie(){
-    setCookie("code", client.getEditor().getModel().getValue(), 1);
-}
-
-
+const pauseSimu = (async () => {
+    pausing = !pausing;
+    if(pausing){
+        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-play"></i>';
+        pausing = true;
+    } else {
+        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-pause"></i>';
+        pausing = false;
+    }
+});
 
 const setupSimulator = (scene) => {
     const wideSide = max(scene.size.x, scene.size.y);
@@ -155,34 +209,8 @@ const setupSimulator = (scene) => {
     );
 }
 
-window.execute = execute;
-window.reset = reset;
-window.clearData = clearData;
-window.parseAndValidate = parseAndValidate;
-window.compile = compile;
-window.copyCompiledCodeToClipboard = copyCompiledCodeToClipboard;
+setupWindowVar();
 
-window.canvaSizeWidth = 0;
-window.canvaSizeHeight = 0;
-
-window.pauseSimu = function(){
-    pausing = !pausing;
-    if(pausing){
-        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-play"></i>';
-        pausing = true;
-    } else {
-        document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-pause"></i>';
-        pausing = false;
-    }
-}
-
-
-var errorModal = document.getElementById("errorModal");
-var validModal = document.getElementById("validModal");
-var compileModal = document.getElementById("compileModal");
-var closeError = document.querySelector("#errorModal .close");
-var closeValid = document.querySelector("#validModal .close");
-var closeCompile = document.querySelector("#compileModal .close");
 closeError.onclick = function() {
     errorModal.style.display = "none";
 }
@@ -206,14 +234,12 @@ window.onclick = function(event) {
 
 }
 
+
 let speedSlider = document.getElementById('speedSlider');
 speedSlider.addEventListener('input', function() {
     let speedValue = parseFloat(this.value);
     setSpeedDelay(speedValue);
 });
-
-document.getElementById('followRobot').checked = true;
-window.followRobot= true;
 
 document.getElementById('followRobot').addEventListener('change', function() {
     if (this.checked) {
@@ -228,40 +254,9 @@ function setSpeedDelay(speedValue){
     speedValue = parseInt(speedValue);
 }
 
-const workerURL = new URL('./my-dsl-server-worker.js', import.meta.url); // WARNING Dependent of your project
-
-const lsWorker = new Worker(workerURL.href, {
-    type: 'classic',
-    name: 'RoboMl Language Server'
-});
-client.setWorker(lsWorker);
-
-
-
-// keep a reference to a promise for when the editor is finished starting, we'll use this to setup the canvas on load
-const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
-
-
-client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
-    running = true;
-    stopping = false;
-    pausing = false;
-    document.getElementById("btplay").innerHTML = '<i class="text-orange-300 fa-solid fa-rotate-right hover:animate-spin"></i>';
-    runStatments(params);
-});
-
-client.getLanguageClient().onNotification('browser/sendValidationResults', async (params) => {
-    openValidationModal(params);
-});
-
-client.getLanguageClient().onNotification('browser/sendCompiledCode', async (params) => {
-    openCompileModal(params);
-});
-
-// Define a global variable to hold the modal editor instance
-var modalEditorInstance = null;
 
 function openCompileModal(params) {
+    var val = arduinoCode.boilerplate + params;
     var modal = document.getElementById("compileModal");
     modal.style.display = "block";
     var editorDiv = document.getElementById("compiledCodeEditor");
@@ -270,13 +265,13 @@ function openCompileModal(params) {
 
     if (!modalEditorInstance) {
         modalEditorInstance = monaco.editor.create(editorDiv, {
-            value: params,
+            value: val,
             language: 'c', 
             readOnly: true 
         });
     } else {
 
-        modalEditorInstance.setValue(params);
+        modalEditorInstance.setValue(val);
 
         modalEditorInstance.layout();
     }
@@ -348,4 +343,24 @@ document.addEventListener("DOMContentLoaded", function() {
             resizeCanvas(windowWidth, windowHeight);
         }
     });
+});
+
+// keep a reference to a promise for when the editor is finished starting, we'll use this to setup the canvas on load
+const startingPromise = client.startEditor(document.getElementById("monaco-editor-root"));
+
+
+client.getLanguageClient().onNotification('browser/sendStatements', async (params) => {
+    running = true;
+    stopping = false;
+    pausing = false;
+    document.getElementById("btplay").innerHTML = '<i class="text-orange-300 fa-solid fa-rotate-right hover:animate-spin"></i>';
+    runStatments(params);
+});
+
+client.getLanguageClient().onNotification('browser/sendValidationResults', async (params) => {
+    openValidationModal(params);
+});
+
+client.getLanguageClient().onNotification('browser/sendCompiledCode', async (params) => {
+    openCompileModal(params);
 });

@@ -23,3 +23,7 @@ function getCookie(cname) {
     let expires = "expires="+ d.toUTCString();
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
   }
+
+  function saveEditorCodeInCookie(content){
+    setCookie("code", content, 1);
+  }

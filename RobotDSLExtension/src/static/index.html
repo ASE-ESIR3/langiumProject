@@ -43,8 +43,11 @@
                     <p class="text-2xl m-auto pr-2">Delay</p>
                     <input type="range" id="speedSlider" min="0" max="50" value="10.0" step="0.1">
                 </div>
+                <div class="bg-gray-400 w-px mx-2"></div>
                 <div class="flex rounded-xl  ml-2 pr-2 pl-2">
-                    <p class="text-2xl m-auto mr-5 ">Follow</p>
+                    <div class = "block m-auto">
+                        <p class="text-2xl m-auto mr-5 ">Follow robot</p>
+                    </div>
                     <input type="checkbox" id="followRobot" class="scale-150 m-auto">
                 </div>
                 <div class="bg-gray-400 w-px mx-2"></div>
@@ -54,13 +57,14 @@
                     </button>
                     <p class = "m-auto opacity-80"> <i class = "pr-2 fa-solid fas fa-arrow-left "></i>get the compiled arduino code Here </p>
                 </div>
+                
 
             </div>
             
         </div>
 
 
-        <div id="page-wrapper" class="flex flex-1 sm:overflow-hidden">
+        <div id="page-wrapper" class="flex flex-1 sm:overflow-hidden overflow-auto">
             <div id="editor" class="editor sm:flex-none ">
                 <!-- Monaco Editor -->
                 <div class="wrapper">
@@ -70,26 +74,35 @@
             <button id = collapse-button type="button" class="text-white m-auto rounded-xl  bg-zinc-900 collapse-button p-2 ml-10 hover:scale-[1.005] duration-100 shadow-sm hover:shadow-lg hover:opacity-90">
                 <i class="fa-solid fa-chevron-left"></i>
             </button>
+            <div class = "text-[12px] absolute rounded-lg bg-slate-800 p-2 bg-opacity-75 hover:opacity-0">
+                <p class = "m-auto opacity-80 ">Uncheck Follow robot to go free-camera mode !</p>
+
+            </div>
             <div id=canvaContainer>
-                <canvas id="simulator" class="flex-1 rounded-lg"></canvas>
+                <canvas id="simulator" class="flex-1 rounded-lg">
+                </canvas>
+
             <div> 
 
         </div>
 
         <!-- Modals -->
         <!-- Error Modal -->
-        <div id="errorModal" class="modal shadow-2xl p-5">
+        <div id="errorModal" class="modal shadow-2xl p-5 rounded-lg hidden">
             <div class="modal-content">
                 <span class="close text-2xl font-bold hover:text-white">&times;</span>
+                <p class = "p-1 hover:cursor-pointer" onclick="window.copyErrorsToClipBoard()"><i class = "pr-2 fa-solid fa-clipboard text-white animate-bounce" ></i>Copy to clipboard</p>
+
                 <h2 class = "bg-red-700 text-center text-lg">Roomba Cleaner Type checking errors</h2>
                 <div id="errorList" class="modal-body text-white"></div>
             </div>
         </div>
 
         <!-- Validation Modal -->
-        <div id="validModal" class="modal shadow-2xl p-5">
+        <div id="validModal" class="modal drop-shadow p-5 rounded-lg ">
             <div class="modal-content">
                 <span class="close text-2xl font-bold hover:text-white">&times;</span>
+                <p class = "p-1 hover:cursor-pointer" onclick="window.copyErrorsToClipboard()"><i class = "pr-2 fa-solid fa-clipboard text-white animate-bounce" ></i>Copy to clipboard</p>
 
                 <h2 class = "bg-green-700 text-center text-lg">Roomba Cleaner Type checking validation </h2>
                 <div class="modal-body text-white">
@@ -99,7 +112,7 @@
         </div>
 
         <!-- compilation Modal-->
-        <div id="compileModal" class="modal shadow-2xl p-5">
+        <div id="compileModal" class="modal shadow-2xl p-5 rounded-lg hidden">
             <div class="modal-content">
                 <span class="close text-2xl font-bold hover:text-white">&times;</span>
                 <p class = "p-1 hover:cursor-pointer" onclick="window.copyCompiledCodeToClipboard()"><i class = " pr-2 fa-solid fa-clipboard text-white animate-bounce" ></i>Copy to clipboard</p>
@@ -130,6 +143,7 @@
         <script src="simulator/block.js"></script>
         <script src="simulator/robot.js"></script>
         <script src="simulator/sketch.js"></script>
+        <script src="boilerplateArduinoCode.js"></script>
         <script src="cookies.js"></script>
     </body>
 </html>
