@@ -48,8 +48,6 @@ Void flocon(Number max, Number size)
 
 }`
 
-
-
 let replaceCode = `Void main() {
 }`
 
@@ -104,8 +102,6 @@ var stopping = false;
 var running = false;
 const execute = (async () => {
     if(!running){
-        document.getElementById("btplay").innerHTML = '<i class="text-orange-300 fa-solid fa-rotate-right hover:animate-spin"></i>';
-        
         saveEditorCodeInCookie();
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
@@ -250,6 +246,7 @@ client.getLanguageClient().onNotification('browser/sendStatements', async (param
     running = true;
     stopping = false;
     pausing = false;
+    document.getElementById("btplay").innerHTML = '<i class="text-orange-300 fa-solid fa-rotate-right hover:animate-spin"></i>';
     runStatments(params);
 });
 
