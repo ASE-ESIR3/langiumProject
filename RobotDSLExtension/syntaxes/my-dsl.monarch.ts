@@ -12,7 +12,7 @@ export default {
         initial: [
             { regex: /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/, action: { cases: { '@keywords': {"token":"keyword"}, '@default': {"token":"string"} }} },
             { regex: /[0-9]+/, action: {"token":"number"} },
-            { regex: /(("((\\([\s\S]))|((?!(((\\|")|\n)|\r))[\s\S]*?))*(("|\n)|\r))|('((\\([\s\S]))|((?!(((\\|')|\n)|\r))[\s\S]*?))*(('|\n)|\r)))/, action: {"token":"string"} },
+            { regex: /("((\\([\s\S]))|((?!(((\\|")|\n)|\r))[\s\S]*?))*(("|\n)|\r))/, action: {"token":"string"} },
             { include: '@whitespace' },
             { regex: /@symbols/, action: { cases: { '@operators': {"token":"operator"}, '@default': {"token":""} }} },
         ],

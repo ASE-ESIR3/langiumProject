@@ -10,7 +10,7 @@ import { AbstractAstReflection } from 'langium';
 export const MyDslTerminals = {
     ID: /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/,
     INT: /[0-9]+/,
-    STRING: /(("((\\([\s\S]))|((?!(((\\|")|\n)|\r))[\s\S]*?))*(("|\n)|\r))|('((\\([\s\S]))|((?!(((\\|')|\n)|\r))[\s\S]*?))*(('|\n)|\r)))/,
+    STRING: /("((\\([\s\S]))|((?!(((\\|")|\n)|\r))[\s\S]*?))*(("|\n)|\r))/,
     ML_COMMENT: /(\/\*([\s\S]*?\*\/))/,
     SL_COMMENT: /(\/\/((?!(\n|\r))[\s\S]*?)(\r?\n)?)/,
     WS: /((( |	)|\r)|\n)+/,

@@ -2267,178 +2267,56 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "name": "string"
       },
       "definition": {
-        "$type": "TerminalAlternatives",
+        "$type": "TerminalGroup",
         "elements": [
           {
-            "$type": "TerminalGroup",
-            "elements": [
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\""
-                }
-              },
-              {
-                "$type": "TerminalAlternatives",
-                "elements": [
-                  {
-                    "$type": "TerminalGroup",
-                    "elements": [
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "\\\\"
-                        }
-                      },
-                      {
-                        "$type": "Wildcard"
-                      }
-                    ]
-                  },
-                  {
-                    "$type": "NegatedToken",
-                    "terminal": {
-                      "$type": "TerminalAlternatives",
-                      "elements": [
-                        {
-                          "$type": "TerminalAlternatives",
-                          "elements": [
-                            {
-                              "$type": "TerminalAlternatives",
-                              "elements": [
-                                {
-                                  "$type": "CharacterRange",
-                                  "left": {
-                                    "$type": "Keyword",
-                                    "value": "\\\\"
-                                  }
-                                },
-                                {
-                                  "$type": "CharacterRange",
-                                  "left": {
-                                    "$type": "Keyword",
-                                    "value": "\\""
-                                  }
-                                }
-                              ]
-                            },
-                            {
-                              "$type": "CharacterRange",
-                              "left": {
-                                "$type": "Keyword",
-                                "value": "\\n"
-                              }
-                            }
-                          ]
-                        },
-                        {
-                          "$type": "CharacterRange",
-                          "left": {
-                            "$type": "Keyword",
-                            "value": "\\r"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                ],
-                "cardinality": "*"
-              },
-              {
-                "$type": "TerminalAlternatives",
-                "elements": [
-                  {
-                    "$type": "TerminalAlternatives",
-                    "elements": [
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "\\""
-                        }
-                      },
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "\\n"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "$type": "CharacterRange",
-                    "left": {
-                      "$type": "Keyword",
-                      "value": "\\r"
-                    }
-                  }
-                ]
-              }
-            ]
+            "$type": "CharacterRange",
+            "left": {
+              "$type": "Keyword",
+              "value": "\\""
+            }
           },
           {
-            "$type": "TerminalGroup",
+            "$type": "TerminalAlternatives",
             "elements": [
               {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "'"
-                }
-              },
-              {
-                "$type": "TerminalAlternatives",
+                "$type": "TerminalGroup",
                 "elements": [
                   {
-                    "$type": "TerminalGroup",
-                    "elements": [
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "\\\\"
-                        }
-                      },
-                      {
-                        "$type": "Wildcard"
-                      }
-                    ]
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\\\"
+                    }
                   },
                   {
-                    "$type": "NegatedToken",
-                    "terminal": {
+                    "$type": "Wildcard"
+                  }
+                ]
+              },
+              {
+                "$type": "NegatedToken",
+                "terminal": {
+                  "$type": "TerminalAlternatives",
+                  "elements": [
+                    {
                       "$type": "TerminalAlternatives",
                       "elements": [
                         {
                           "$type": "TerminalAlternatives",
                           "elements": [
                             {
-                              "$type": "TerminalAlternatives",
-                              "elements": [
-                                {
-                                  "$type": "CharacterRange",
-                                  "left": {
-                                    "$type": "Keyword",
-                                    "value": "\\\\"
-                                  }
-                                },
-                                {
-                                  "$type": "CharacterRange",
-                                  "left": {
-                                    "$type": "Keyword",
-                                    "value": "'"
-                                  }
-                                }
-                              ]
+                              "$type": "CharacterRange",
+                              "left": {
+                                "$type": "Keyword",
+                                "value": "\\\\"
+                              }
                             },
                             {
                               "$type": "CharacterRange",
                               "left": {
                                 "$type": "Keyword",
-                                "value": "\\n"
+                                "value": "\\""
                               }
                             }
                           ]
@@ -2447,45 +2325,52 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                           "$type": "CharacterRange",
                           "left": {
                             "$type": "Keyword",
-                            "value": "\\r"
+                            "value": "\\n"
                           }
                         }
                       ]
+                    },
+                    {
+                      "$type": "CharacterRange",
+                      "left": {
+                        "$type": "Keyword",
+                        "value": "\\r"
+                      }
                     }
-                  }
-                ],
-                "cardinality": "*"
-              },
+                  ]
+                }
+              }
+            ],
+            "cardinality": "*"
+          },
+          {
+            "$type": "TerminalAlternatives",
+            "elements": [
               {
                 "$type": "TerminalAlternatives",
                 "elements": [
                   {
-                    "$type": "TerminalAlternatives",
-                    "elements": [
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "'"
-                        }
-                      },
-                      {
-                        "$type": "CharacterRange",
-                        "left": {
-                          "$type": "Keyword",
-                          "value": "\\n"
-                        }
-                      }
-                    ]
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\""
+                    }
                   },
                   {
                     "$type": "CharacterRange",
                     "left": {
                       "$type": "Keyword",
-                      "value": "\\r"
+                      "value": "\\n"
                     }
                   }
                 ]
+              },
+              {
+                "$type": "CharacterRange",
+                "left": {
+                  "$type": "Keyword",
+                  "value": "\\r"
+                }
               }
             ]
           }

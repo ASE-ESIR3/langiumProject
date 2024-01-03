@@ -1,7 +1,7 @@
 
 terminal ID returns string:'^'? ('a' ..'z' | 'A' ..'Z' | '_' )('a' ..'z' | 'A' ..'Z' | '_' | '0' ..'9' )* ;
 terminal INT returns number:'0' ..'9' +;
-terminal STRING returns string:'"' ('\\' . |  !('\\' | '"' | '\n' | '\r'))* ('"' | '\n' | '\r') | "'" ('\\' . |  !('\\' | "'" | '\n' | '\r'))* ("'" | '\n' | '\r') ;
+terminal STRING returns string:'"' ('\\' . |  !('\\' | '"' | '\n' | '\r'))* ('"' | '\n' | '\r');
 
 hidden terminal ML_COMMENT returns string:'/*'  -> '*/'  ;
 hidden terminal SL_COMMENT returns string:'//'  !('\n' | '\r' )('\r'? '\n' )?  ;

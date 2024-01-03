@@ -15,7 +15,7 @@
     {
       "name": "string.quoted.double.my-dsl",
       "begin": "\"",
-      "end": "'\n\r",
+      "end": "\"\n\r",
       "patterns": [
         {
           "include": "#string-character-escape"
