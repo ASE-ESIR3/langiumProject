@@ -401,7 +401,6 @@ export class InterpretorVisitor implements MyDslVisitor {
         for (var i = 0; i < node.msg.length; i++){
             val = val.concat( node.msg[i].accept(this) as string);
         }
-        console.log(val);
         var action = {type: "Say", Value: val };
         this.robotinstruction.push(action);
     }

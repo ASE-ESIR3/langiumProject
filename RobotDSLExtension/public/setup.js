@@ -26,11 +26,11 @@ var code =
     Say 'hello world !';
     for(Number i = 0;(i < 3);i = (i + 1))
     {
-    Say ('step '+i);
+    Say 'step ', i;
     flocon(5, 1000);
     Rotate -120;
     };
-    Say 'finish';
+    Say 'finish <3';
 }
 
 Void flocon(Number max, Number size)
