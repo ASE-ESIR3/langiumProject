@@ -151,8 +151,10 @@ const clearData = (async () => {
 });
 
 const execute = (async () => {
+
     if(!running){
-        saveEditorCodeInCookie(client.getEditor().getModel().getValue());
+        console.log("execute 1");
+        console.log(client.getEditor().getModel().getValue());
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
             uri: client.getEditor().getModel().uri.toString()
@@ -368,4 +370,25 @@ client.getLanguageClient().onNotification('browser/sendValidationResults', async
 
 client.getLanguageClient().onNotification('browser/sendCompiledCode', async (params) => {
     openCompileModal(params);
+});
+
+
+// debuuugggg
+
+// Ensure the editor has started before adding event listeners
+startingPromise.then(() => {
+    const editor = client.getEditor();
+    const model = editor.getModel();
+
+    // Listening to content changes
+    model.onDidChangeContent((event) => {
+        console.log("Content Change Event:", event);
+        // Log the current value of the editor
+        console.log("Current Editor Value:", model.getValue());
+    });
+
+    // Optionally, listen for other events like cursor position changes, if relevant
+    editor.onDidChangeCursorPosition((event) => {
+        console.log("Cursor Position Change:", event);
+    });
 });

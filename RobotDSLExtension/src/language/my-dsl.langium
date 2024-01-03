@@ -32,7 +32,7 @@ StatementBlock returns StatementBlock:
 ;
 
 EString returns string:
-    STRING | ID 
+     ID 
 ;
 
 ConstString returns ConstString:
@@ -41,7 +41,7 @@ ConstString returns ConstString:
 
 
 FunctionDefinitionParameters returns FunctionDefinitionParameters:
-    ( variabledefinition+=VariableDefinition ","? )*
+    (variabledefinition+=VariableDefinition)? (',' variabledefinition+=VariableDefinition)*
 ;
 
 And returns And:
@@ -98,11 +98,11 @@ VariableDefinition returns VariableDefinition:
 ;
 
 Function_ returns Function_:
-    ^type=Type FunctionName=EString '('  functiondefinitionparameters=FunctionDefinitionParameters ')' Body=StatementBlock  
+    ^type=Type FunctionName=ID '('  functiondefinitionparameters=FunctionDefinitionParameters ')' Body=StatementBlock  
 ;
 
 FunctionCall returns FunctionCall:
-    functionName=EString '(' functionparameters=FunctionCallParameters  ')'  
+    functionName=ID '(' functionparameters=FunctionCallParameters  ')'  
 ;
 
 LessThan returns LessThan:
@@ -175,10 +175,11 @@ Variable returns Variable:
 ;
 
 Throw returns Throw:
-    'Throw' err=ConstString
+    'Throw<' err=ConstString '>' 
 ;
 
 Say returns Say:
         
-    'Say' (msg+=Expr ","? )*
+    'Say' ( msg+=Expr ','?)+
 ;
+

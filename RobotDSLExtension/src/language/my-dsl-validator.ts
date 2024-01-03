@@ -54,7 +54,6 @@ export class MyDslValidator {
 
 
 
-
     ensurefunctionCalledExists(fun: FunctionCall, accept: ValidationAcceptor): void {
         for (const element of this.program.function) {
             const functionElement = element as Function_;

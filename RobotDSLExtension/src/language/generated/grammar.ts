@@ -528,23 +528,11 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "EString",
       "dataType": "string",
       "definition": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@46"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@44"
-            },
-            "arguments": []
-          }
-        ]
+        "$type": "RuleCall",
+        "rule": {
+          "$ref": "#/rules@44"
+        },
+        "arguments": []
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -597,15 +585,32 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 "$ref": "#/rules@22"
               },
               "arguments": []
-            }
+            },
+            "cardinality": "?"
           },
           {
-            "$type": "Keyword",
-            "value": ",",
-            "cardinality": "?"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": ","
+              },
+              {
+                "$type": "Assignment",
+                "feature": "variabledefinition",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@22"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "*"
           }
-        ],
-        "cardinality": "*"
+        ]
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -1240,7 +1245,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@7"
+                "$ref": "#/rules@44"
               },
               "arguments": []
             }
@@ -1302,7 +1307,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@7"
+                "$ref": "#/rules@44"
               },
               "arguments": []
             }
@@ -2042,7 +2047,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Throw"
+            "value": "Throw<"
           },
           {
             "$type": "Assignment",
@@ -2055,6 +2060,10 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               },
               "arguments": []
             }
+          },
+          {
+            "$type": "Keyword",
+            "value": ">"
           }
         ]
       },
@@ -2099,7 +2108,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 "cardinality": "?"
               }
             ],
-            "cardinality": "*"
+            "cardinality": "+"
           }
         ]
       },
@@ -2294,17 +2303,41 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                       "$type": "TerminalAlternatives",
                       "elements": [
                         {
-                          "$type": "CharacterRange",
-                          "left": {
-                            "$type": "Keyword",
-                            "value": "\\\\"
-                          }
+                          "$type": "TerminalAlternatives",
+                          "elements": [
+                            {
+                              "$type": "TerminalAlternatives",
+                              "elements": [
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\\\"
+                                  }
+                                },
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\""
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "$type": "CharacterRange",
+                              "left": {
+                                "$type": "Keyword",
+                                "value": "\\n"
+                              }
+                            }
+                          ]
                         },
                         {
                           "$type": "CharacterRange",
                           "left": {
                             "$type": "Keyword",
-                            "value": "\\""
+                            "value": "\\r"
                           }
                         }
                       ]
@@ -2314,11 +2347,35 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 "cardinality": "*"
               },
               {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\""
-                }
+                "$type": "TerminalAlternatives",
+                "elements": [
+                  {
+                    "$type": "TerminalAlternatives",
+                    "elements": [
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\""
+                        }
+                      },
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\n"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\r"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -2356,17 +2413,41 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                       "$type": "TerminalAlternatives",
                       "elements": [
                         {
-                          "$type": "CharacterRange",
-                          "left": {
-                            "$type": "Keyword",
-                            "value": "\\\\"
-                          }
+                          "$type": "TerminalAlternatives",
+                          "elements": [
+                            {
+                              "$type": "TerminalAlternatives",
+                              "elements": [
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\\\"
+                                  }
+                                },
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "'"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "$type": "CharacterRange",
+                              "left": {
+                                "$type": "Keyword",
+                                "value": "\\n"
+                              }
+                            }
+                          ]
                         },
                         {
                           "$type": "CharacterRange",
                           "left": {
                             "$type": "Keyword",
-                            "value": "'"
+                            "value": "\\r"
                           }
                         }
                       ]
@@ -2376,11 +2457,35 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 "cardinality": "*"
               },
               {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "'"
-                }
+                "$type": "TerminalAlternatives",
+                "elements": [
+                  {
+                    "$type": "TerminalAlternatives",
+                    "elements": [
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "'"
+                        }
+                      },
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\n"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\r"
+                    }
+                  }
+                ]
               }
             ]
           }

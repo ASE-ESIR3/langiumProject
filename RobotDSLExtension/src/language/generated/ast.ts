@@ -10,7 +10,7 @@ import { AbstractAstReflection } from 'langium';
 export const MyDslTerminals = {
     ID: /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/,
     INT: /[0-9]+/,
-    STRING: /(("((\\([\s\S]))|((?!(\\|"))[\s\S]*?))*")|('((\\([\s\S]))|((?!(\\|'))[\s\S]*?))*'))/,
+    STRING: /(("((\\([\s\S]))|((?!(((\\|")|\n)|\r))[\s\S]*?))*(("|\n)|\r))|('((\\([\s\S]))|((?!(((\\|')|\n)|\r))[\s\S]*?))*(('|\n)|\r)))/,
     ML_COMMENT: /(\/\*([\s\S]*?\*\/))/,
     SL_COMMENT: /(\/\/((?!(\n|\r))[\s\S]*?)(\r?\n)?)/,
     WS: /((( |	)|\r)|\n)+/,
@@ -31,7 +31,7 @@ export function isEInt(item: unknown): item is EInt {
 export type EString = string;
 
 export function isEString(item: unknown): item is EString {
-    return (typeof item === 'string' && (/(("((\\([\s\S]))|((?!(\\|"))[\s\S]*?))*")|('((\\([\s\S]))|((?!(\\|'))[\s\S]*?))*'))/.test(item) || /(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/.test(item)));
+    return (typeof item === 'string' && (/(\^?(([a-z]|[A-Z])|_)((([a-z]|[A-Z])|_)|[0-9])*)/.test(item)));
 }
 
 export interface Function_ extends AstNode {

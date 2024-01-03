@@ -11,10 +11,13 @@ import { compiler } from '../semantics/compiler.js';
 
 async function extractAstNodeFromString(content: string, services: MyDslServices): Promise<any> {
   // create a document from a string instead of a file
+  console.log("extractAstNodeFromString");
   const doc = services.shared.workspace.LangiumDocumentFactory.fromString(content, URI.parse('memory://minilogo.document'));
   // proceed with build & validation
+  console.log("proceed with build & validation");
   await services.shared.workspace.DocumentBuilder.build([doc], { validation: true});
   // get the parse result (root of our AST)
+  console.log("get the parse result (root of our AST)");
   return doc;
 }
 
@@ -45,9 +48,13 @@ startLanguageServer(shared);
 
 connection.onNotification('browser/execute', async params => {
     try{
+      console.log("execute 2");
     const doc = await extractAstNodeFromString(params.content,MyDsl);
+    console.log("execute 3");
     var parsevalue = doc.parseResult?.value as programNode;
+    console.log("execute 4");
     var errors = validate(doc);
+    console.log("execute 5");
     if(errors.length > 0){
       connection.sendNotification('browser/sendValidationResults', {errorCount:errors.length,errors:errors});
       return;

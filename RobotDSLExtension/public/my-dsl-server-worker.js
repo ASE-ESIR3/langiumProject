@@ -32260,23 +32260,11 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "EString",
       "dataType": "string",
       "definition": {
-        "$type": "Alternatives",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@46"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@44"
-            },
-            "arguments": []
-          }
-        ]
+        "$type": "RuleCall",
+        "rule": {
+          "$ref": "#/rules@44"
+        },
+        "arguments": []
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -32329,15 +32317,32 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "$ref": "#/rules@22"
               },
               "arguments": []
-            }
+            },
+            "cardinality": "?"
           },
           {
-            "$type": "Keyword",
-            "value": ",",
-            "cardinality": "?"
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Keyword",
+                "value": ","
+              },
+              {
+                "$type": "Assignment",
+                "feature": "variabledefinition",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@22"
+                  },
+                  "arguments": []
+                }
+              }
+            ],
+            "cardinality": "*"
           }
-        ],
-        "cardinality": "*"
+        ]
       },
       "definesHiddenTokens": false,
       "entry": false,
@@ -32972,7 +32977,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@7"
+                "$ref": "#/rules@44"
               },
               "arguments": []
             }
@@ -33034,7 +33039,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@7"
+                "$ref": "#/rules@44"
               },
               "arguments": []
             }
@@ -33774,7 +33779,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Throw"
+            "value": "Throw<"
           },
           {
             "$type": "Assignment",
@@ -33787,6 +33792,10 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               },
               "arguments": []
             }
+          },
+          {
+            "$type": "Keyword",
+            "value": ">"
           }
         ]
       },
@@ -33831,7 +33840,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "cardinality": "?"
               }
             ],
-            "cardinality": "*"
+            "cardinality": "+"
           }
         ]
       },
@@ -34026,17 +34035,41 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                       "$type": "TerminalAlternatives",
                       "elements": [
                         {
-                          "$type": "CharacterRange",
-                          "left": {
-                            "$type": "Keyword",
-                            "value": "\\\\"
-                          }
+                          "$type": "TerminalAlternatives",
+                          "elements": [
+                            {
+                              "$type": "TerminalAlternatives",
+                              "elements": [
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\\\"
+                                  }
+                                },
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\""
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "$type": "CharacterRange",
+                              "left": {
+                                "$type": "Keyword",
+                                "value": "\\n"
+                              }
+                            }
+                          ]
                         },
                         {
                           "$type": "CharacterRange",
                           "left": {
                             "$type": "Keyword",
-                            "value": "\\""
+                            "value": "\\r"
                           }
                         }
                       ]
@@ -34046,11 +34079,35 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "cardinality": "*"
               },
               {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\""
-                }
+                "$type": "TerminalAlternatives",
+                "elements": [
+                  {
+                    "$type": "TerminalAlternatives",
+                    "elements": [
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\""
+                        }
+                      },
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\n"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\r"
+                    }
+                  }
+                ]
               }
             ]
           },
@@ -34088,17 +34145,41 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                       "$type": "TerminalAlternatives",
                       "elements": [
                         {
-                          "$type": "CharacterRange",
-                          "left": {
-                            "$type": "Keyword",
-                            "value": "\\\\"
-                          }
+                          "$type": "TerminalAlternatives",
+                          "elements": [
+                            {
+                              "$type": "TerminalAlternatives",
+                              "elements": [
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "\\\\"
+                                  }
+                                },
+                                {
+                                  "$type": "CharacterRange",
+                                  "left": {
+                                    "$type": "Keyword",
+                                    "value": "'"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "$type": "CharacterRange",
+                              "left": {
+                                "$type": "Keyword",
+                                "value": "\\n"
+                              }
+                            }
+                          ]
                         },
                         {
                           "$type": "CharacterRange",
                           "left": {
                             "$type": "Keyword",
-                            "value": "'"
+                            "value": "\\r"
                           }
                         }
                       ]
@@ -34108,11 +34189,35 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "cardinality": "*"
               },
               {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "'"
-                }
+                "$type": "TerminalAlternatives",
+                "elements": [
+                  {
+                    "$type": "TerminalAlternatives",
+                    "elements": [
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "'"
+                        }
+                      },
+                      {
+                        "$type": "CharacterRange",
+                        "left": {
+                          "$type": "Keyword",
+                          "value": "\\n"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "$type": "CharacterRange",
+                    "left": {
+                      "$type": "Keyword",
+                      "value": "\\r"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -35759,7 +35864,6 @@ var InterpretorVisitor = class {
     for (var i = 0; i < node.msg.length; i++) {
       val = val.concat(node.msg[i].accept(this));
     }
-    console.log(val);
     var action = { type: "Say", Value: val };
     this.robotinstruction.push(action);
   }
@@ -36164,8 +36268,11 @@ var compiler = class {
 
 // out/language/main-browser.js
 async function extractAstNodeFromString(content, services) {
+  console.log("extractAstNodeFromString");
   const doc = services.shared.workspace.LangiumDocumentFactory.fromString(content, URI2.parse("memory://minilogo.document"));
+  console.log("proceed with build & validation");
   await services.shared.workspace.DocumentBuilder.build([doc], { validation: true });
+  console.log("get the parse result (root of our AST)");
   return doc;
 }
 function validate(document) {
@@ -36187,9 +36294,13 @@ startLanguageServer(shared);
 connection.onNotification("browser/execute", async (params) => {
   var _a;
   try {
+    console.log("execute 2");
     const doc = await extractAstNodeFromString(params.content, MyDsl);
+    console.log("execute 3");
     var parsevalue = (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
+    console.log("execute 4");
     var errors = validate(doc);
+    console.log("execute 5");
     if (errors.length > 0) {
       connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
       return;
