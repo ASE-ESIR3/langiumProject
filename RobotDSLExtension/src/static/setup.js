@@ -62,8 +62,6 @@ Void flocon(Number max, Number size)
 let replaceCode = `Void main() {
 }`
 
-
-
 editorConfig.setMainCode(code);
 
 editorConfig.theme = 'vs-dark';

@@ -2,22 +2,28 @@
 
 Try out the simulator ! : https://robot.ronantremoureux.fr
 
-In this project, we created a DSL.
+In this project, we created a DSL for a robot. To add more context and real-life example, we assumed it is a DSL to program roomba (https://fr.wikipedia.org/wiki/Roomba).
+
 This DSL is here to help with creating programs controlling robots.
 The use of a external DSL here is very powerfull, as it allows to create a language that is very close to the problem domain.
 
-First we developped a model thanks to Eclipse Ecore and Xtext.
-We then migrate the grammar outputed by Xtext to langium.
+First we developped a model thanks to Eclipse Ecore and Xtext. It helped us to develop only the needed component while having a good vision on what are the connection between them.
+
+We then migrate the grammar outputed by Xtext to langium, to move on to the interpretation/compilation part. 
 
 This repository holds the complete code of the langium project. It contains a **compiler**, an **interpretor**, a **web simulator** and a vscode extension.
 
-This readme will explain how to use the different parts of the project, and the problems encountered during developpement.
+This readme will explain how to use, and how has been developed the different parts of the project.
+
+As asked during practical session, at the end will be found a section about the problems encountered during development.
 
 ## Code examples
 
-You will find in the CodeExamples folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
+You will find in the `CodeExamples` folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
 
 # How to use
+
+This section is about how to use the different parts of the project.
 
 ## Running in the editor
 
@@ -25,15 +31,17 @@ You will find in the CodeExamples folder at the root of this repository, some co
 
 1. Clone the repository
 
-2. run `npm install` in the root folder
+2. place yourself in the `RobotDSLExtension` folder. It is the root of all the project. Can be done with a `cd RobotDSLExtension` from the root
 
-3. run `sh buildAll.sh` script to build the editor and web engine. It will also open the development instance of vscode.
+2. run `npm install` to install the node dependencies needed.
+
+3. run `sh buildAll.sh` (`./buildAll.bat` if on windows) script to build the editor and web engine. It will also open the development instance of vscode.
 
 4. run `sh interpret` will interpret the code present in the test project at the root of this repository
 
 5. run `sh compile` to try the compiler 
 
-6. run `npm run serve` after building to open the web server and try the web simulator at ```localhost:3000```.
+6. run `npm run serve` after building ( point 3 ) to open the web server and try the web simulator at ```localhost:3000```.
 
 ## modify the test project
 
@@ -51,7 +59,35 @@ The web simulator is oppening on ```localhost:3000``` after running the command 
 
 The web simulator is a simple web page that allows to write code in the editor, and see the result of the execution of the code in the simulator. You have some controll on the simulation such as follow the robot, pause the simulation, or change the speed of the simulation.
 
-The web simulator includes also some type checking features and error reporting.
+It includes also some type checking features and error reporting.
+
+Some added feature are the possibility to get the compiled code from the editor with the same logic as the interpretor, relying on the backend with some message calls.
+
+### Features explanation
+
+Most of the important features are located in the menu bar on the top of the application.
+
+#### Simulation
+1. The simulation can be paused and restarted thanks to the play/pause button.
+
+2. Delay can be added thanks to the slider 
+
+3. The editor can be folded thanks to the middle button, leading to a better view of the robot scene.
+
+4. Zoom on the scene can be done with the mouse wheel.
+
+5. By default the camera follows the robot. It can be change to free camera mode by unchecking the "follow robot" button. It will allow user to look around the scene with mouse drag&drop.
+
+
+#### Development
+
+1. Before any action on the simulaton, the code is checked/type-validated.
+
+2. The editor will autocomplete your code and hightlight it with colors.  
+
+3. The compiled code can be retrieved from the editor thanks to the button with a robot head :)
+
+4. The use of the monaco editor offers a realy great experience.
 
 
 ## problems encountered during developpement

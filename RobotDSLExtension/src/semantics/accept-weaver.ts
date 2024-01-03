@@ -37,6 +37,10 @@ import { UnitNode } from './nodes/UnitNode.js';
 import { ForwardNode } from './nodes/ForwardNode.js';
 import { RotateNode } from './nodes/RotateNode.js';
 import { ThrowNode } from './nodes/ThrowNode.js';
+/**
+ * Imports the ConstStringNode class from the ConstStringNode.js file.
+ * This allows the ConstStringNode class to be used in the current file.
+*/
 import { ConstStringNode } from './nodes/ConstStringNode.js';
 import { BreakNode } from './nodes/BreakNode.js';
 
