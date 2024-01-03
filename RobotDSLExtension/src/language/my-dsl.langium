@@ -11,7 +11,7 @@ Type returns Type:
 ;
 
 Statment returns Statment:
-    (ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
+    (ConstString | Say |And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
 ;
 
 Expr returns Expr:
@@ -178,3 +178,7 @@ Throw returns Throw:
     'Throw' err=ConstString
 ;
 
+Say returns Say:
+        
+    'Say' (msg+=Expr ","? )*
+;

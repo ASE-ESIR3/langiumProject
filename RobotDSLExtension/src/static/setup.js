@@ -23,11 +23,14 @@ editorConfig.setMonarchTokensProvider(monarchSyntax);
 
 var code = 
 `Void main() {
+    Say 'hello world !';
     for(Number i = 0;(i < 3);i = (i + 1))
     {
+    Say 'step ', i;
     flocon(5, 1000);
     Rotate -120;
     };
+    Say 'finish <3';
 }
 
 Void flocon(Number max, Number size)
@@ -313,6 +316,10 @@ async function runStatments(params){
         if (statement.type === "Rotate") {
             window.p5robot.turn(statement.Value * 1);
         }
+        if(statement.type === "Say"){
+            await window.p5robot.say(statement.Value);
+        }
+
     }
 
 }

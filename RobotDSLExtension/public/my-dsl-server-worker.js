@@ -31534,6 +31534,7 @@ var ConditionnalStructure = "ConditionnalStructure";
 var Expr = "Expr";
 var Rbreturn = "Rbreturn";
 var RobotInstruction = "RobotInstruction";
+var Say = "Say";
 var StatementBlock = "StatementBlock";
 function isStatementBlock(item) {
   return reflection2.isInstance(item, StatementBlock);
@@ -31590,7 +31591,7 @@ var UnaryRightExpr = "UnaryRightExpr";
 var Not = "Not";
 var MyDslAstReflection = class extends AbstractAstReflection {
   getAllTypes() {
-    return ["Addition", "Affectation", "And", "BinaryExpr", "Boolean", "Break", "CM", "ConditionnalStructure", "ConstBoolean", "ConstNumber", "ConstString", "ConstantExpr", "Division", "Equals", "Expr", "For", "Forward", "FunctionCall", "FunctionCallParameters", "FunctionDefinitionParameters", "Function_", "Ifz", "KM", "LessThan", "MM", "MoreThan", "Multiplication", "Not", "Number_", "Or", "Program", "RbLoop", "Rbreturn", "RobotInstruction", "Rotate", "Soustraction", "StatementBlock", "Statment", "Throw", "Type", "UnaryExpr", "UnaryRightExpr", "Unit", "Variable", "VariableDefinition", "Void"];
+    return ["Addition", "Affectation", "And", "BinaryExpr", "Boolean", "Break", "CM", "ConditionnalStructure", "ConstBoolean", "ConstNumber", "ConstString", "ConstantExpr", "Division", "Equals", "Expr", "For", "Forward", "FunctionCall", "FunctionCallParameters", "FunctionDefinitionParameters", "Function_", "Ifz", "KM", "LessThan", "MM", "MoreThan", "Multiplication", "Not", "Number_", "Or", "Program", "RbLoop", "Rbreturn", "RobotInstruction", "Rotate", "Say", "Soustraction", "StatementBlock", "Statment", "Throw", "Type", "UnaryExpr", "UnaryRightExpr", "Unit", "Variable", "VariableDefinition", "Void"];
   }
   computeIsSubtype(subtype, supertype) {
     switch (subtype) {
@@ -31611,6 +31612,7 @@ var MyDslAstReflection = class extends AbstractAstReflection {
       case Expr:
       case Rbreturn:
       case RobotInstruction:
+      case Say:
       case StatementBlock:
       case Throw:
       case VariableDefinition: {
@@ -31689,6 +31691,14 @@ var MyDslAstReflection = class extends AbstractAstReflection {
           name: "Program",
           mandatory: [
             { name: "function", type: "array" }
+          ]
+        };
+      }
+      case "Say": {
+        return {
+          name: "Say",
+          mandatory: [
+            { name: "msg", type: "array" }
           ]
         };
       }
@@ -31816,6 +31826,13 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "$type": "RuleCall",
                 "rule": {
                   "$ref": "#/rules@8"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@43"
                 },
                 "arguments": []
               },
@@ -32248,14 +32265,14 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@45"
+              "$ref": "#/rules@46"
             },
             "arguments": []
           },
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@43"
+              "$ref": "#/rules@44"
             },
             "arguments": []
           }
@@ -32281,7 +32298,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@45"
+            "$ref": "#/rules@46"
           },
           "arguments": []
         }
@@ -33480,7 +33497,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@44"
+              "$ref": "#/rules@45"
             },
             "arguments": []
           }
@@ -33770,6 +33787,51 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               },
               "arguments": []
             }
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Say",
+      "returnType": {
+        "$ref": "#/interfaces@46"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "Say"
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "msg",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@3"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": ",",
+                "cardinality": "?"
+              }
+            ],
+            "cardinality": "*"
           }
         ]
       },
@@ -35056,6 +35118,31 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           "$ref": "#/interfaces@21"
         }
       ]
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "msg",
+          "type": {
+            "$type": "ArrayType",
+            "elementType": {
+              "$type": "SimpleType",
+              "typeRef": {
+                "$ref": "#/interfaces@8"
+              }
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "Say",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@3"
+        }
+      ]
     }
   ],
   "types": [],
@@ -35173,7 +35260,9 @@ var MyDslAcceptWeaver = class {
       Forward: this.weaveForward,
       Rotate: this.weaveRotate,
       Throw: this.weaveThrow,
-      ConstString: this.weaveConstString
+      ConstString: this.weaveConstString,
+      Break: this.weaveBreak,
+      Say: this.weaveSay
     };
   }
   weaveProgram(node, accept) {
@@ -35354,6 +35443,11 @@ var MyDslAcceptWeaver = class {
   weaveBreak(node, accept) {
     node.accept = (visitor2) => {
       return visitor2.visitBreak(node);
+    };
+  }
+  weaveSay(node, accept) {
+    node.accept = (visitor2) => {
+      return visitor2.visitSay(node);
     };
   }
 };
@@ -35658,6 +35752,16 @@ var InterpretorVisitor = class {
   }
   visitBreak(node) {
     return "break";
+  }
+  visitSay(node) {
+    var val = "";
+    var val = "";
+    for (var i = 0; i < node.msg.length; i++) {
+      val = val.concat(node.msg[i].accept(this));
+    }
+    console.log(val);
+    var action = { type: "Say", Value: val };
+    this.robotinstruction.push(action);
   }
 };
 function evalCondition(val) {
@@ -36038,6 +36142,13 @@ var CompilerVisitor = class {
   }
   visitBreak(node) {
     return "break";
+  }
+  visitSay(node) {
+    var val = "";
+    for (var i = 0; i < node.msg.length; i++) {
+      val = val.concat(node.msg[i].accept(this));
+    }
+    return 'printf("%d",' + val + ")";
   }
 };
 

@@ -38,6 +38,7 @@ import { Scene } from "../web/simulator/scene.js";
 import { MyError } from "./errors.js";
 import { AstNode } from "langium";
 import { BreakNode } from "./nodes/BreakNode.js";
+import { SayNode } from "./nodes/SayNode.js";
 //import { MyError } from "./errors.js";
 //import { integer } from "vscode-languageclient";
 
@@ -392,6 +393,17 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitBreak(node: BreakNode) {
         return "break";
+    }
+
+    visitSay(node: SayNode) {
+        var val = "";
+        var val = "";
+        for (var i = 0; i < node.msg.length; i++){
+            val = val.concat( node.msg[i].accept(this) as string);
+        }
+        console.log(val);
+        var action = {type: "Say", Value: val };
+        this.robotinstruction.push(action);
     }
 
 }

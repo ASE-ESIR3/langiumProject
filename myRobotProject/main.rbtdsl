@@ -8,6 +8,7 @@ Void main() {
         };
         Forward 50 CM;
         i = (i+1);
+        Say i;
 
     };
 }

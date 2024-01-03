@@ -43,6 +43,7 @@ import { ThrowNode } from './nodes/ThrowNode.js';
 */
 import { ConstStringNode } from './nodes/ConstStringNode.js';
 import { BreakNode } from './nodes/BreakNode.js';
+import { SayNode } from './nodes/SayNode.js';
 
 /**
  * Register custom validation checks.
@@ -206,6 +207,9 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitBreak(node as BreakNode);}
     }
     
+    weaveSay(node : InterfaceAST.Say, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitSay(node as SayNode);}
+    }
     
 
     checks: ValidationChecks<MyDslAstType> = {
@@ -244,7 +248,8 @@ export class MyDslAcceptWeaver {
         Rotate: this.weaveRotate,
         Throw: this.weaveThrow,
         ConstString: this.weaveConstString,
-
+        Break: this.weaveBreak,
+        Say: this.weaveSay,
     };
 
 }

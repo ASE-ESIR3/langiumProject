@@ -13,6 +13,10 @@
 //#include <fuzzy_table.h>
 //#include <PID_Beta6.h>
 
+#define PI 3.1415926545
+
+
+int speed = 0;
 /*
 
             \                    /
@@ -86,13 +90,21 @@ void loop() {
 }
 
 void mainrobot(){
-int a = 10;
-for (int i = 0; i<3; i = i+1){
+int i = 0;
+while (true==true)
 {
-forward(a*1);
-rotate(120);
+if (i==3)
+{
+break;
 }
 
+
+;
+forward(50*1);
+i = i+1;
+printf("%d",i);
 }
+
+
 ;
 }

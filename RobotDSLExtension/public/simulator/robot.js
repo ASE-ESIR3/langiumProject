@@ -52,6 +52,8 @@ class Robot {
         this.sprite = loadImage("./Roomba.png");
         this.scale = 1;
         this.particleCreationRate = 10;
+        this.curentText = "";
+        
     }
   
     reset(){
@@ -62,7 +64,7 @@ class Robot {
     }
 
     show() {
-
+        push();
         for (let i = this.particle.length - 1; i >= 0; i--) {
             this.particle[i].update();
             this.particle[i].show();
@@ -70,15 +72,22 @@ class Robot {
                 this.particle.splice(i, 1);
             }
         }
+        pop();
 
         push();
         const canvasX = this.x ;
         const canvasY = this.y ;
         translate((canvasX - window.cam.x)* window.cam.zx, (canvasY-window.cam.y)* window.cam.zy);
+                
+        textSize(20);
+        text(this.curentText, -this.width/2 * window.cam.zx, -this.height/2 * window.cam.zy - 10);
+
         rotate(this.angle + Math.PI/2);
 
         image(this.sprite, -this.width/2 * window.cam.zx, -this.height/2 * window.cam.zy, this.width * window.cam.zx, this.height * window.cam.zy);
+
         pop();
+        
 
     }
   
@@ -89,6 +98,10 @@ class Robot {
         if(this.angle > Math.PI*2){
             this.angle -= Math.PI*2;
         }
+    }
+
+    say(text){
+        this.curentText = text;
     }
 
     async move(dist){

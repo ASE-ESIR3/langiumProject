@@ -34,6 +34,7 @@ import { ForwardNode } from "./nodes/ForwardNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { BreakNode } from "./nodes/BreakNode.js";
+import { SayNode } from "./nodes/SayNode.js";
 
 
 export class CompilerVisitor implements MyDslVisitor {
@@ -297,6 +298,14 @@ export class CompilerVisitor implements MyDslVisitor {
 
     visitBreak(node: BreakNode) {
         return "break";
+    }
+
+    visitSay(node: SayNode) {
+        var val = "";
+        for (var i = 0; i < node.msg.length; i++){
+            val = val.concat(node.msg[i].accept(this) as string);
+        }
+        return 'printf("%d",' + val + ")";
     }
 
 }

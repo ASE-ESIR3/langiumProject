@@ -85,7 +85,7 @@ export function isProgram(item: unknown): item is Program {
 }
 
 export interface Statment extends AstNode {
-    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'Break' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'Throw' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
+    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'Break' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Say' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'Throw' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition';
 }
 
 export const Statment = 'Statment';
@@ -178,6 +178,17 @@ export const RobotInstruction = 'RobotInstruction';
 
 export function isRobotInstruction(item: unknown): item is RobotInstruction {
     return reflection.isInstance(item, RobotInstruction);
+}
+
+export interface Say extends Statment {
+    readonly $type: 'Say';
+    msg: Array<Expr>
+}
+
+export const Say = 'Say';
+
+export function isSay(item: unknown): item is Say {
+    return reflection.isInstance(item, Say);
 }
 
 export interface StatementBlock extends Statment {
@@ -570,6 +581,7 @@ export type MyDslAstType = {
     Rbreturn: Rbreturn
     RobotInstruction: RobotInstruction
     Rotate: Rotate
+    Say: Say
     Soustraction: Soustraction
     StatementBlock: StatementBlock
     Statment: Statment
@@ -586,7 +598,7 @@ export type MyDslAstType = {
 export class MyDslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'Break', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstString', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Soustraction', 'StatementBlock', 'Statment', 'Throw', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
+        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'Break', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstString', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Say', 'Soustraction', 'StatementBlock', 'Statment', 'Throw', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -608,6 +620,7 @@ export class MyDslAstReflection extends AbstractAstReflection {
             case Expr:
             case Rbreturn:
             case RobotInstruction:
+            case Say:
             case StatementBlock:
             case Throw:
             case VariableDefinition: {
@@ -688,6 +701,14 @@ export class MyDslAstReflection extends AbstractAstReflection {
                     name: 'Program',
                     mandatory: [
                         { name: 'function', type: 'array' }
+                    ]
+                };
+            }
+            case 'Say': {
+                return {
+                    name: 'Say',
+                    mandatory: [
+                        { name: 'msg', type: 'array' }
                     ]
                 };
             }

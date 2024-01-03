@@ -168,3 +168,7 @@ interface Throw extends Statment {
 interface ConstString extends ConstantExpr {
 	Value: string
 }
+
+interface Say extends Statment {
+	msg: Expr[]
+}

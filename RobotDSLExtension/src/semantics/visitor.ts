@@ -29,6 +29,7 @@ import { RotateNode } from "./nodes/RotateNode.js";
 import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { BreakNode } from "./nodes/BreakNode.js";
+import { SayNode } from "./nodes/SayNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -67,4 +68,5 @@ export interface MyDslVisitor {
     visitThrow(node:ThrowNode):any;
     visitConstString(node: ConstStringNode):any;
     visitBreak(node: BreakNode):any;
+    visitSay(node:SayNode):any;
 }
