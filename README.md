@@ -1,6 +1,10 @@
 # ASE Project - Robot DSL project
 
-Try out the simulator ! : https://robot.ronantremoureux.fr
+Try out the simulator : https://robot.ronantremoureux.fr !
+
+## Description
+
+> based on the subject proposed at https://github.com/selabs-ur1/dsl
 
 In this project, we created a DSL for a robot. To add more context and real-life example, we assumed it is a DSL to program roomba (https://fr.wikipedia.org/wiki/Roomba).
 
@@ -20,6 +24,74 @@ As asked during practical session, at the end will be found a section about the 
 ## Code examples
 
 You will find in the `CodeExamples` folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
+
+# Development
+
+## Ecore modeling
+
+The full ecore project is stored at https://github.com/ASE-ESIR3/RobotML.git.
+
+Here is an overview of the ecore model representing our language. 
+![ecore](./ReadmeImg/robotMLClassDiagram.jpg)
+
+We can divide this diagram in subsection that will be explained one by one.
+
+I will keep it simple as possible, and will not explain the meaning of each class as some are repetitive.
+
+### Program
+
+The program is the entry point of our grammar. Not very visual for the user, it represents the entire file that will be interpreted.
+
+Conceptually, it is a list of functions, mandatory to contain a function named main.
+
+### Functions
+
+A function is a block of 'code', with a name and some parameters.It can return things thanks to a return statment. It is as simple as that is our ecore model.
+
+
+### Statments 
+The statment is the basic building block of our language. It can be as simple as a variable declaration, or as complex as a loop. It is a main concept of the language and can hold anything that can be written in the body of a function.
+
+Concepts like break and return are directly extending the statment concept.
+
+
+### Statment block
+
+A statment block is a statment that is composed of multiple statments.
+
+It is used to represent the body of a function, or the body of a 'if', 'for' or 'while' statment.
+
+
+### Expressions
+
+Expressions in a language are a main concept. They can be as simple as a value, but can take diferent forms.
+
+- a constant value : a number, a string, a boolean, a null
+
+- a function call : a function name and a list of arguments
+- a binary expression : a binary operator and two operands. Note that binary expressions can be nested, and can be of any type. For example, true + 25, at a grammar level is ok
+- a unary expression : a unary operator and an operand
+- a variable reference : a variable name
+
+the expression can be anything if it can simplify to a single value thanks to operators at the end. 
+
+In our ecore modeling, the expression is called Expr and is extended by all of the previous concepts.
+
+### Robot Instruction
+
+As our language is a DSL for robots, we need to be able to represent the instructions that can be given to the robot to be as close as possible to the probleme space.
+
+There are few robot instruction in our language. It could be extended to more instructions.
+
+- Forward: composed of an expression and a unit. ( MM, CM or KM)
+- Rotate: only takes an expression (degrees)
+
+These instructions extend a main concept called Robot Instruction that is itself a statment.
+
+### Function Call
+
+The function call holds a reference to a function, allowing later in the interpretor to just access the code of the function easily.
+
 
 # How to use
 
@@ -90,7 +162,7 @@ Most of the important features are located in the menu bar on the top of the app
 4. The use of the monaco editor offers a realy great experience.
 
 
-## problems encountered during developpement
+# problems encountered during developpement
 
 ### Ecore modeling
 
