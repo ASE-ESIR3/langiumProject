@@ -1,8 +1,9 @@
 /* execute une spirale sur l'écran */
 Void main() {
-
-    for(Number i = 0;(i < 1000);i = (i + 1))
+    Number size = 1000;
+    for(Number i = 0;(i < size);i = (i + 1))
     {
+    Say "spiral setp ", i, " / ",size ;
     Forward (1 * i) CM;
     Rotate -10;
     };

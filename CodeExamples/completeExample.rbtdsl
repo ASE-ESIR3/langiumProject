@@ -1,6 +1,7 @@
 Void main() {
     Number i = 0 ;
     while(getTheMainCondition()){
+        Say "line ", i;
         if((i == 3)){
         break;
         };
@@ -9,9 +10,11 @@ Void main() {
     };
 
     for(Number i = 0; (i<4); i = (i+1)){
+    Say "spiral ", i;
         spiraleRoutine();
         Rotate 90;
     };
+    Say "finish ", " :D";
 
 }
 
