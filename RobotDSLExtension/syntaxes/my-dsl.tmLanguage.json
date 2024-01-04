@@ -10,7 +10,7 @@
     },
     {
       "name": "keyword.control.my-dsl",
-      "match": "\\b(Boolean|CM|Forward|KM|MM|Number|Rotate|Say|Void|and|break|else|false|not|or|return|true)\\b|\\b(Throw<|for\\(|if\\(|while\\()\\B"
+      "match": "\\b(Boolean|CM|Forward|KM|MM|Number|Rotate|Say|Void|Wait|and|break|else|false|not|null|or|return|true)\\b|\\b(Throw<|for\\(|if\\(|while\\()\\B"
     },
     {
       "name": "string.quoted.double.my-dsl",

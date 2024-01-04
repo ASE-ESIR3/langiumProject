@@ -86,6 +86,7 @@ There are few robot instruction in our language. It could be extended to more in
 - Forward: composed of an expression and a unit. ( MM, CM or KM)
 - Rotate: only takes an expression (degrees)
 - Say: composed of a list of expressions that will be concatenate and printed.
+- Wait: composed of an expression (miliseconds)
 
 These instructions extend a main concept called Robot Instruction that is itself a statment.
 

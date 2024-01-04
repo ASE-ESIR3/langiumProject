@@ -83,6 +83,10 @@ interface ConstBoolean extends ConstantExpr {
 	Value: boolean
 }
 
+interface ConstVoid extends ConstantExpr {
+}
+
+
 interface Forward extends RobotInstruction {
 	Value: Expr
 	unit: Unit
@@ -161,6 +165,10 @@ interface Boolean extends Type {
 interface Void extends Type {
 }
 
+interface String_ extends Type {
+}
+
+
 interface Throw extends Statment {
 	err: ConstString
 }
@@ -171,4 +179,8 @@ interface ConstString extends ConstantExpr {
 
 interface Say extends Statment {
 	msg: Expr[]
+}
+
+interface Wait extends Statment {
+	time: Expr
 }

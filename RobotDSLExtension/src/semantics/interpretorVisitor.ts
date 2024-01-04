@@ -39,6 +39,7 @@ import { MyError } from "./errors.js";
 import { AstNode } from "langium";
 import { BreakNode } from "./nodes/BreakNode.js";
 import { SayNode } from "./nodes/SayNode.js";
+import { WaitNode } from "./nodes/WaitNode.js";
 //import { MyError } from "./errors.js";
 //import { integer } from "vscode-languageclient";
 
@@ -354,7 +355,7 @@ export class InterpretorVisitor implements MyDslVisitor {
             return 0.1;
         }
         if (isKM(node)){
-            return 0.01;
+            return 100;
         }
         return 1;
         
@@ -402,6 +403,12 @@ export class InterpretorVisitor implements MyDslVisitor {
             val = val.concat( node.msg[i].accept(this) as string);
         }
         var action = {type: "Say", Value: val };
+        this.robotinstruction.push(action);
+    }
+    visitWait(node: WaitNode) {
+        var val = node.time.accept(this);
+        this.ensureType(node,"Number_",val);
+        var action = {type: "Wait", Value: val };
         this.robotinstruction.push(action);
     }
 

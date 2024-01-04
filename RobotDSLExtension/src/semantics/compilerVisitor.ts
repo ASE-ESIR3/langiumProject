@@ -35,6 +35,7 @@ import { ThrowNode } from "./nodes/ThrowNode.js";
 import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { BreakNode } from "./nodes/BreakNode.js";
 import { SayNode } from "./nodes/SayNode.js";
+import { WaitNode } from "./nodes/WaitNode.js";
 
 
 export class CompilerVisitor implements MyDslVisitor {
@@ -314,6 +315,10 @@ export class CompilerVisitor implements MyDslVisitor {
 
         }
         return "Serial.print(" + val + ")";
+    }
+
+    visitWait(node: WaitNode) {
+        return "delay(" + node.time.accept(this) + ")";
     }
 
 }

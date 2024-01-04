@@ -302,6 +302,7 @@ function openValidationModal(params) {
 
 async function runStatments(params){
     for (let i = 0; i < params.length; i++) {
+        
         while(pausing){
             await new Promise(r => setTimeout(r, 100));
         }
@@ -319,10 +320,21 @@ async function runStatments(params){
         if(statement.type === "Say"){
             await window.p5robot.say(statement.Value);
         }
+        if (statement.type === "Wait") {
+            for (let i = 0; i < statement.Value/10; i++) {
+                await new Promise(r => setTimeout(r, 10));
+                if (stopping){
+                    break;
+                }
+            }
+            
 
+        }
     }
-
 }
+
+
+
 
 document.addEventListener("DOMContentLoaded", function() {
     var collapseButton = document.querySelector(".collapse-button");

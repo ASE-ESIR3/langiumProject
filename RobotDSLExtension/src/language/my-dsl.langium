@@ -11,11 +11,11 @@ Type returns Type:
 ;
 
 Statment returns Statment:
-    (ConstString | Say |And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
+    (Wait | ConstString | ConstVoid | Say |And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
 ;
 
 Expr returns Expr:
-   ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
+   ConstVoid | ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
 ;
 
 Break returns Break:
@@ -34,11 +34,6 @@ StatementBlock returns StatementBlock:
 EString returns string:
      ID 
 ;
-
-ConstString returns ConstString:
-   Value=STRING 
-;
-
 
 FunctionDefinitionParameters returns FunctionDefinitionParameters:
     (variabledefinition+=VariableDefinition)? (',' variabledefinition+=VariableDefinition)*
@@ -79,6 +74,14 @@ ConstNumber returns ConstNumber:
 
 ConstBoolean returns ConstBoolean:
     Value=EBoolean
+;
+
+ConstString returns ConstString:
+   Value=STRING 
+;
+
+ConstVoid returns ConstVoid:
+    {ConstVoid} 'null'
 ;
 
 Forward returns Forward:
@@ -170,6 +173,10 @@ Void returns Void:
     {Void} 'Void'  
 ;
 
+String_ returns String_:
+    {String_} 'String'
+;
+
 Variable returns Variable:
     Name=EString
 ;
@@ -183,3 +190,6 @@ Say returns Say:
     'Say' ( msg+=Expr ','?)+
 ;
 
+Wait returns Wait:
+    'Wait' time=Expr
+;
