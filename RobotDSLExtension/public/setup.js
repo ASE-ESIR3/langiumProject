@@ -24,6 +24,7 @@ editorConfig.setMonarchTokensProvider(monarchSyntax);
 var code = 
 `Void main() {
     Say "hello world !";
+    Wait 1000;
     for(Number i = 0;(i < 3);i = (i + 1))
     {
     Say "step ", i;
