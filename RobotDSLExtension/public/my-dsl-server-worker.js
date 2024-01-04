@@ -22359,10 +22359,10 @@ function PRINT_WARNING(msg) {
 // node_modules/@chevrotain/utils/lib/src/timer.js
 function timer(func) {
   const start = (/* @__PURE__ */ new Date()).getTime();
-  const val = func();
+  const val2 = func();
   const end = (/* @__PURE__ */ new Date()).getTime();
   const total = end - start;
-  return { time: total, value: val };
+  return { time: total, value: val2 };
 }
 
 // node_modules/@chevrotain/utils/lib/src/to-fast-properties.js
@@ -23493,8 +23493,8 @@ function findUnreachablePatterns(tokenTypes) {
     return result;
   }, []);
   forEach_default(tokenTypes, (tokType, testIdx) => {
-    forEach_default(canBeTested, ({ str, idx, tokenType }) => {
-      if (testIdx < idx && testTokenType(str, tokType.PATTERN)) {
+    forEach_default(canBeTested, ({ str: str2, idx, tokenType }) => {
+      if (testIdx < idx && testTokenType(str2, tokType.PATTERN)) {
         const msg = `Token: ->${tokenType.name}<- can never be matched.
 Because it appears AFTER the Token Type ->${tokType.name}<-in the lexer's definition.
 See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
@@ -23508,16 +23508,16 @@ See https://chevrotain.io/docs/guide/resolving_lexer_errors.html#UNREACHABLE`;
   });
   return errors;
 }
-function testTokenType(str, pattern) {
+function testTokenType(str2, pattern) {
   if (isRegExp_default(pattern)) {
-    const regExpArray = pattern.exec(str);
+    const regExpArray = pattern.exec(str2);
     return regExpArray !== null && regExpArray.index === 0;
   } else if (isFunction_default(pattern)) {
-    return pattern(str, 0, [], {});
+    return pattern(str2, 0, [], {});
   } else if (has_default(pattern, "exec")) {
-    return pattern.exec(str, 0, [], {});
+    return pattern.exec(str2, 0, [], {});
   } else if (typeof pattern === "string") {
-    return pattern === str;
+    return pattern === str2;
   } else {
     throw Error("non exhaustive match");
   }
@@ -23819,7 +23819,7 @@ function assignTokenDefaultProps(tokenTypes) {
 function assignCategoriesTokensProp(tokenTypes) {
   forEach_default(tokenTypes, (currTokType) => {
     currTokType.categoryMatches = [];
-    forEach_default(currTokType.categoryMatchesMap, (val, key) => {
+    forEach_default(currTokType.categoryMatchesMap, (val2, key) => {
       currTokType.categoryMatches.push(tokenIdxToClass[key].tokenTypeIdx);
     });
   });
@@ -31546,6 +31546,7 @@ var Boolean2 = "Boolean";
 function isBoolean(item) {
   return reflection2.isInstance(item, Boolean2);
 }
+var ListType = "ListType";
 var Number_ = "Number_";
 function isNumber_(item) {
   return reflection2.isInstance(item, Number_);
@@ -31573,8 +31574,15 @@ var RbLoop = "RbLoop";
 var BinaryExpr = "BinaryExpr";
 var ConstantExpr = "ConstantExpr";
 var FunctionCall = "FunctionCall";
+var ListAccess = "ListAccess";
+function isListAccess(item) {
+  return reflection2.isInstance(item, ListAccess);
+}
 var UnaryExpr = "UnaryExpr";
 var Variable = "Variable";
+function isVariable(item) {
+  return reflection2.isInstance(item, Variable);
+}
 var Forward = "Forward";
 var Rotate = "Rotate";
 var Addition = "Addition";
@@ -31587,6 +31595,7 @@ var Multiplication = "Multiplication";
 var Or = "Or";
 var Soustraction = "Soustraction";
 var ConstBoolean = "ConstBoolean";
+var ConstList = "ConstList";
 var ConstNumber = "ConstNumber";
 var ConstString = "ConstString";
 var ConstVoid = "ConstVoid";
@@ -31594,7 +31603,7 @@ var UnaryRightExpr = "UnaryRightExpr";
 var Not = "Not";
 var MyDslAstReflection = class extends AbstractAstReflection {
   getAllTypes() {
-    return ["Addition", "Affectation", "And", "BinaryExpr", "Boolean", "Break", "CM", "ConditionnalStructure", "ConstBoolean", "ConstNumber", "ConstString", "ConstVoid", "ConstantExpr", "Division", "Equals", "Expr", "For", "Forward", "FunctionCall", "FunctionCallParameters", "FunctionDefinitionParameters", "Function_", "Ifz", "KM", "LessThan", "MM", "MoreThan", "Multiplication", "Not", "Number_", "Or", "Program", "RbLoop", "Rbreturn", "RobotInstruction", "Rotate", "Say", "Soustraction", "StatementBlock", "Statment", "String_", "Throw", "Type", "UnaryExpr", "UnaryRightExpr", "Unit", "Variable", "VariableDefinition", "Void", "Wait"];
+    return ["Addition", "Affectation", "And", "BinaryExpr", "Boolean", "Break", "CM", "ConditionnalStructure", "ConstBoolean", "ConstList", "ConstNumber", "ConstString", "ConstVoid", "ConstantExpr", "Division", "Equals", "Expr", "For", "Forward", "FunctionCall", "FunctionCallParameters", "FunctionDefinitionParameters", "Function_", "Ifz", "KM", "LessThan", "ListAccess", "ListType", "MM", "MoreThan", "Multiplication", "Not", "Number_", "Or", "Program", "RbLoop", "Rbreturn", "RobotInstruction", "Rotate", "Say", "Soustraction", "StatementBlock", "Statment", "String_", "Throw", "Type", "UnaryExpr", "UnaryRightExpr", "Unit", "Variable", "VariableDefinition", "Void", "Wait"];
   }
   computeIsSubtype(subtype, supertype) {
     switch (subtype) {
@@ -31625,11 +31634,13 @@ var MyDslAstReflection = class extends AbstractAstReflection {
       case BinaryExpr:
       case ConstantExpr:
       case FunctionCall:
+      case ListAccess:
       case UnaryExpr:
       case Variable: {
         return this.isSubtype(Expr, supertype);
       }
       case Boolean2:
+      case ListType:
       case Number_:
       case String_:
       case Void: {
@@ -31641,6 +31652,7 @@ var MyDslAstReflection = class extends AbstractAstReflection {
         return this.isSubtype(Unit, supertype);
       }
       case ConstBoolean:
+      case ConstList:
       case ConstNumber:
       case ConstString:
       case ConstVoid: {
@@ -31732,6 +31744,14 @@ var MyDslAstReflection = class extends AbstractAstReflection {
           ]
         };
       }
+      case "ConstList": {
+        return {
+          name: "ConstList",
+          mandatory: [
+            { name: "Values", type: "array" }
+          ]
+        };
+      }
       default: {
         return {
           name: type,
@@ -31765,7 +31785,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@24"
+            "$ref": "#/rules@26"
           },
           "arguments": []
         },
@@ -31789,21 +31809,28 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@39"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@40"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@41"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@42"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@43"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@45"
             },
             "arguments": []
           }
@@ -31831,14 +31858,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@46"
+                  "$ref": "#/rules@14"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@18"
+                  "$ref": "#/rules@21"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@49"
                 },
                 "arguments": []
               },
@@ -31852,7 +31886,14 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@45"
+                  "$ref": "#/rules@20"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@48"
                 },
                 "arguments": []
               },
@@ -31894,13 +31935,6 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@14"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
                   "$ref": "#/rules@15"
                 },
                 "arguments": []
@@ -31922,28 +31956,14 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
+                  "$ref": "#/rules@18"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
                   "$ref": "#/rules@6"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@20"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@21"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@4"
                 },
                 "arguments": []
               },
@@ -31964,14 +31984,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@25"
+                  "$ref": "#/rules@4"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@26"
+                  "$ref": "#/rules@24"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@25"
                 },
                 "arguments": []
               },
@@ -31999,6 +32026,13 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
+                  "$ref": "#/rules@30"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
                   "$ref": "#/rules@31"
                 },
                 "arguments": []
@@ -32006,7 +32040,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@30"
+                  "$ref": "#/rules@33"
                 },
                 "arguments": []
               },
@@ -32020,14 +32054,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@43"
+                  "$ref": "#/rules@34"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@44"
+                  "$ref": "#/rules@46"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@47"
                 },
                 "arguments": []
               }
@@ -32058,14 +32099,28 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@19"
+              "$ref": "#/rules@14"
             },
             "arguments": []
           },
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@18"
+              "$ref": "#/rules@21"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@20"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@19"
             },
             "arguments": []
           },
@@ -32107,13 +32162,6 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@14"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@15"
             },
             "arguments": []
@@ -32135,14 +32183,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@25"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@26"
+              "$ref": "#/rules@18"
             },
             "arguments": []
           },
@@ -32163,7 +32204,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@43"
+              "$ref": "#/rules@29"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@30"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@46"
             },
             "arguments": []
           }
@@ -32216,21 +32271,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@35"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@36"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@37"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@38"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@39"
             },
             "arguments": []
           }
@@ -32289,7 +32344,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "definition": {
         "$type": "RuleCall",
         "rule": {
-          "$ref": "#/rules@47"
+          "$ref": "#/rules@50"
         },
         "arguments": []
       },
@@ -32316,7 +32371,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@23"
+                "$ref": "#/rules@25"
               },
               "arguments": []
             },
@@ -32336,7 +32391,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@23"
+                    "$ref": "#/rules@25"
                   },
                   "arguments": []
                 }
@@ -32625,6 +32680,56 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
     },
     {
       "$type": "ParserRule",
+      "name": "ListAccess",
+      "returnType": {
+        "$ref": "#/interfaces@18"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "variable",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@46"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "["
+          },
+          {
+            "$type": "Assignment",
+            "feature": "index",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@3"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Soustraction",
       "returnType": {
         "$ref": "#/interfaces@16"
@@ -32715,7 +32820,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "ConstNumber",
       "returnType": {
-        "$ref": "#/interfaces@20"
+        "$ref": "#/interfaces@21"
       },
       "definition": {
         "$type": "Assignment",
@@ -32724,7 +32829,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@33"
+            "$ref": "#/rules@35"
           },
           "arguments": []
         }
@@ -32740,7 +32845,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "ConstBoolean",
       "returnType": {
-        "$ref": "#/interfaces@22"
+        "$ref": "#/interfaces@23"
       },
       "definition": {
         "$type": "Assignment",
@@ -32749,7 +32854,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@34"
+            "$ref": "#/rules@36"
           },
           "arguments": []
         }
@@ -32765,7 +32870,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "ConstString",
       "returnType": {
-        "$ref": "#/interfaces@47"
+        "$ref": "#/interfaces@48"
       },
       "definition": {
         "$type": "Assignment",
@@ -32774,7 +32879,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@49"
+            "$ref": "#/rules@52"
           },
           "arguments": []
         }
@@ -32790,7 +32895,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "ConstVoid",
       "returnType": {
-        "$ref": "#/interfaces@23"
+        "$ref": "#/interfaces@24"
       },
       "definition": {
         "$type": "Group",
@@ -32798,7 +32903,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@23"
+              "$ref": "#/interfaces@24"
             }
           },
           {
@@ -32816,9 +32921,75 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
     },
     {
       "$type": "ParserRule",
+      "name": "ConstList",
+      "returnType": {
+        "$ref": "#/interfaces@49"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "["
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "Values",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@3"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ","
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "Values",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "rule": {
+                        "$ref": "#/rules@3"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "cardinality": "*"
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Forward",
       "returnType": {
-        "$ref": "#/interfaces@24"
+        "$ref": "#/interfaces@25"
       },
       "definition": {
         "$type": "Group",
@@ -32864,7 +33035,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Rotate",
       "returnType": {
-        "$ref": "#/interfaces@26"
+        "$ref": "#/interfaces@27"
       },
       "definition": {
         "$type": "Group",
@@ -32898,7 +33069,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Affectation",
       "returnType": {
-        "$ref": "#/interfaces@27"
+        "$ref": "#/interfaces@28"
       },
       "definition": {
         "$type": "Group",
@@ -32908,11 +33079,23 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "feature": "variable",
             "operator": "=",
             "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@43"
-              },
-              "arguments": []
+              "$type": "Alternatives",
+              "elements": [
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@46"
+                  },
+                  "arguments": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@14"
+                  },
+                  "arguments": []
+                }
+              ]
             }
           },
           {
@@ -32968,7 +33151,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@43"
+                "$ref": "#/rules@46"
               },
               "arguments": []
             }
@@ -33032,7 +33215,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@47"
+                "$ref": "#/rules@50"
               },
               "arguments": []
             }
@@ -33082,7 +33265,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "FunctionCall",
       "returnType": {
-        "$ref": "#/interfaces@29"
+        "$ref": "#/interfaces@30"
       },
       "definition": {
         "$type": "Group",
@@ -33094,7 +33277,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@47"
+                "$ref": "#/rules@50"
               },
               "arguments": []
             }
@@ -33110,7 +33293,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@38"
+                "$ref": "#/rules@40"
               },
               "arguments": []
             }
@@ -33132,7 +33315,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "LessThan",
       "returnType": {
-        "$ref": "#/interfaces@31"
+        "$ref": "#/interfaces@32"
       },
       "definition": {
         "$type": "Group",
@@ -33186,7 +33369,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Equals",
       "returnType": {
-        "$ref": "#/interfaces@32"
+        "$ref": "#/interfaces@33"
       },
       "definition": {
         "$type": "Group",
@@ -33240,7 +33423,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "MoreThan",
       "returnType": {
-        "$ref": "#/interfaces@33"
+        "$ref": "#/interfaces@34"
       },
       "definition": {
         "$type": "Group",
@@ -33294,14 +33477,18 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "RbLoop",
       "returnType": {
-        "$ref": "#/interfaces@34"
+        "$ref": "#/interfaces@35"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "while("
+            "value": "while"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -33344,14 +33531,18 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "For",
       "returnType": {
-        "$ref": "#/interfaces@35"
+        "$ref": "#/interfaces@36"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "for("
+            "value": "for"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -33363,14 +33554,14 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@23"
+                    "$ref": "#/rules@25"
                   },
                   "arguments": []
                 },
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@43"
+                    "$ref": "#/rules@46"
                   },
                   "arguments": []
                 }
@@ -33404,7 +33595,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@24"
               },
               "arguments": []
             }
@@ -33438,14 +33629,18 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Ifz",
       "returnType": {
-        "$ref": "#/interfaces@37"
+        "$ref": "#/interfaces@38"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "if("
+            "value": "if"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -33511,7 +33706,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Rbreturn",
       "returnType": {
-        "$ref": "#/interfaces@38"
+        "$ref": "#/interfaces@39"
       },
       "definition": {
         "$type": "Group",
@@ -33557,7 +33752,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@48"
+              "$ref": "#/rules@51"
             },
             "arguments": []
           }
@@ -33598,7 +33793,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "MM",
       "returnType": {
-        "$ref": "#/interfaces@39"
+        "$ref": "#/interfaces@40"
       },
       "definition": {
         "$type": "Group",
@@ -33606,7 +33801,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@39"
+              "$ref": "#/interfaces@40"
             }
           },
           {
@@ -33626,7 +33821,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "CM",
       "returnType": {
-        "$ref": "#/interfaces@40"
+        "$ref": "#/interfaces@41"
       },
       "definition": {
         "$type": "Group",
@@ -33634,7 +33829,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@40"
+              "$ref": "#/interfaces@41"
             }
           },
           {
@@ -33654,7 +33849,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "KM",
       "returnType": {
-        "$ref": "#/interfaces@41"
+        "$ref": "#/interfaces@42"
       },
       "definition": {
         "$type": "Group",
@@ -33662,7 +33857,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@41"
+              "$ref": "#/interfaces@42"
             }
           },
           {
@@ -33682,7 +33877,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "FunctionCallParameters",
       "returnType": {
-        "$ref": "#/interfaces@30"
+        "$ref": "#/interfaces@31"
       },
       "definition": {
         "$type": "Group",
@@ -33718,7 +33913,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Number_",
       "returnType": {
-        "$ref": "#/interfaces@42"
+        "$ref": "#/interfaces@43"
       },
       "definition": {
         "$type": "Group",
@@ -33726,7 +33921,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@42"
+              "$ref": "#/interfaces@43"
             }
           },
           {
@@ -33746,7 +33941,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Boolean",
       "returnType": {
-        "$ref": "#/interfaces@43"
+        "$ref": "#/interfaces@44"
       },
       "definition": {
         "$type": "Group",
@@ -33754,7 +33949,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@43"
+              "$ref": "#/interfaces@44"
             }
           },
           {
@@ -33774,7 +33969,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Void",
       "returnType": {
-        "$ref": "#/interfaces@44"
+        "$ref": "#/interfaces@45"
       },
       "definition": {
         "$type": "Group",
@@ -33782,7 +33977,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@44"
+              "$ref": "#/interfaces@45"
             }
           },
           {
@@ -33802,7 +33997,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "String_",
       "returnType": {
-        "$ref": "#/interfaces@45"
+        "$ref": "#/interfaces@46"
       },
       "definition": {
         "$type": "Group",
@@ -33810,7 +34005,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@45"
+              "$ref": "#/interfaces@46"
             }
           },
           {
@@ -33828,9 +34023,57 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
     },
     {
       "$type": "ParserRule",
+      "name": "ListType",
+      "returnType": {
+        "$ref": "#/interfaces@52"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Action",
+            "type": {
+              "$ref": "#/interfaces@52"
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "List"
+          },
+          {
+            "$type": "Keyword",
+            "value": "<"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "type",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@1"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": ">"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Variable",
       "returnType": {
-        "$ref": "#/interfaces@28"
+        "$ref": "#/interfaces@29"
       },
       "definition": {
         "$type": "Assignment",
@@ -33855,14 +34098,18 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Throw",
       "returnType": {
-        "$ref": "#/interfaces@46"
+        "$ref": "#/interfaces@47"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Throw<"
+            "value": "Throw"
+          },
+          {
+            "$type": "Keyword",
+            "value": "<"
           },
           {
             "$type": "Assignment",
@@ -33871,7 +34118,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@18"
+                "$ref": "#/rules@19"
               },
               "arguments": []
             }
@@ -33893,7 +34140,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Say",
       "returnType": {
-        "$ref": "#/interfaces@48"
+        "$ref": "#/interfaces@50"
       },
       "definition": {
         "$type": "Group",
@@ -33938,7 +34185,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "$type": "ParserRule",
       "name": "Wait",
       "returnType": {
-        "$ref": "#/interfaces@49"
+        "$ref": "#/interfaces@51"
       },
       "definition": {
         "$type": "Group",
@@ -34565,7 +34812,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@28"
+              "$ref": "#/interfaces@29"
             }
           },
           "isOptional": false
@@ -34692,10 +34939,43 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "Not",
       "superTypes": [
         {
-          "$ref": "#/interfaces@18"
+          "$ref": "#/interfaces@19"
         }
       ],
       "attributes": []
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "variable",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@29"
+            }
+          },
+          "isOptional": false
+        },
+        {
+          "$type": "TypeAttribute",
+          "name": "index",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@8"
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ListAccess",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@8"
+        }
+      ]
     },
     {
       "$type": "Interface",
@@ -34715,7 +34995,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "UnaryRightExpr",
       "superTypes": [
         {
-          "$ref": "#/interfaces@19"
+          "$ref": "#/interfaces@20"
         }
       ]
     },
@@ -34745,7 +35025,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "ConstNumber",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -34775,7 +35055,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "ConstBoolean",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -34784,7 +35064,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "ConstVoid",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ],
       "attributes": []
@@ -34818,7 +35098,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "Forward",
       "superTypes": [
         {
-          "$ref": "#/interfaces@25"
+          "$ref": "#/interfaces@26"
         }
       ]
     },
@@ -34850,7 +35130,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "Rotate",
       "superTypes": [
         {
-          "$ref": "#/interfaces@25"
+          "$ref": "#/interfaces@26"
         }
       ]
     },
@@ -34872,10 +35152,21 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           "$type": "TypeAttribute",
           "name": "variable",
           "type": {
-            "$type": "SimpleType",
-            "typeRef": {
-              "$ref": "#/interfaces@28"
-            }
+            "$type": "UnionType",
+            "types": [
+              {
+                "$type": "SimpleType",
+                "typeRef": {
+                  "$ref": "#/interfaces@29"
+                }
+              },
+              {
+                "$type": "SimpleType",
+                "typeRef": {
+                  "$ref": "#/interfaces@18"
+                }
+              }
+            ]
           },
           "isOptional": false
         }
@@ -34916,7 +35207,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@30"
+              "$ref": "#/interfaces@31"
             }
           },
           "isOptional": false
@@ -34994,7 +35285,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "RbLoop",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ],
       "attributes": []
@@ -35011,7 +35302,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "SimpleType",
                 "typeRef": {
-                  "$ref": "#/interfaces@27"
+                  "$ref": "#/interfaces@28"
                 }
               },
               {
@@ -35039,7 +35330,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
               {
                 "$type": "SimpleType",
                 "typeRef": {
-                  "$ref": "#/interfaces@28"
+                  "$ref": "#/interfaces@29"
                 }
               }
             ]
@@ -35050,7 +35341,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "For",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ]
     },
@@ -35108,7 +35399,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "Ifz",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ]
     },
@@ -35213,7 +35504,7 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@47"
+              "$ref": "#/interfaces@48"
             }
           },
           "isOptional": false
@@ -35242,7 +35533,32 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "name": "ConstString",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
+        }
+      ]
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "Values",
+          "type": {
+            "$type": "ArrayType",
+            "elementType": {
+              "$type": "SimpleType",
+              "typeRef": {
+                "$ref": "#/interfaces@8"
+              }
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ConstList",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -35290,6 +35606,28 @@ var MyDslGrammar = () => loadedMyDslGrammar !== null && loadedMyDslGrammar !== v
       "superTypes": [
         {
           "$ref": "#/interfaces@3"
+        }
+      ]
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "type",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@5"
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ListType",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@5"
         }
       ]
     }
@@ -35412,7 +35750,10 @@ var MyDslAcceptWeaver = class {
       ConstString: this.weaveConstString,
       Break: this.weaveBreak,
       Say: this.weaveSay,
-      Wait: this.weaveWait
+      Wait: this.weaveWait,
+      ListAccess: this.weaveListAcces,
+      ConstList: this.weaveConstList,
+      ListType: this.weaveListType
     };
   }
   weaveProgram(node, accept) {
@@ -35605,6 +35946,21 @@ var MyDslAcceptWeaver = class {
       return visitor2.visitWait(node);
     };
   }
+  weaveListAcces(node, accept) {
+    node.accept = (visitor2) => {
+      return visitor2.visitListAccess(node);
+    };
+  }
+  weaveConstList(node, accept) {
+    node.accept = (visitor2) => {
+      return visitor2.visitConstList(node);
+    };
+  }
+  weaveListType(node, accept) {
+    node.accept = (visitor2) => {
+      return visitor2.visitListType(node);
+    };
+  }
 };
 
 // out/language/my-dsl-module.js
@@ -35652,6 +36008,14 @@ var InterpretorVisitor = class {
       var line = ((_a = node.$cstNode) === null || _a === void 0 ? void 0 : _a.range.start.line) + 1;
       this.typeErrors.push(new MyError(line, "Type error: expect type " + type + " bug got " + typeOfExp, "Type error"));
       console.error("Type error: expect type " + type + " bug got " + typeOfExp + "at line " + line);
+    }
+  }
+  ensureLength(node, length, index) {
+    var _a;
+    if (index > length - 1) {
+      var line = ((_a = node.$cstNode) === null || _a === void 0 ? void 0 : _a.range.start.line) + 1;
+      this.typeErrors.push(new MyError(line, "List Length Error: index of " + index + " for a length of " + length, "LengthError"));
+      console.error("List Length Error: index of" + index + "for a length of " + length + " at line " + line);
     }
   }
   getCurrentContext() {
@@ -35795,9 +36159,17 @@ var InterpretorVisitor = class {
   }
   visitAffectation(node) {
     const value = node.Right.accept(this);
-    var type = this.getCurrentContext().variables.get(node.variable.Name).type;
-    this.ensureType(node, type, value);
-    this.getCurrentContext().variables.get(node.variable.Name).value = value;
+    if (isVariable(node.variable)) {
+      var type = this.getCurrentContext().variables.get(node.variable.Name).type;
+      this.ensureType(node, type, value);
+      this.getCurrentContext().variables.get(node.variable.Name).value = value;
+    }
+    if (isListAccess(node.variable)) {
+      var type = this.getCurrentContext().variables.get(node.variable.variable.Name).type;
+      var index = node.variable.index.accept(this);
+      this.ensureLength(node, this.getCurrentContext().variables.get(node.variable.variable.Name).value.length, index);
+      this.getCurrentContext().variables.get(node.variable.variable.Name).value[index] = value;
+    }
   }
   visitAnd(node) {
     return node.Left.accept(this) && node.Right.accept(this);
@@ -35840,7 +36212,6 @@ var InterpretorVisitor = class {
     this.ctx.push(new Context2());
     node.Initialization.accept(this);
     while (node.Condition.accept(this)) {
-      node.Increment.accept(this);
       const ret = node.Body.accept(this);
       if (this.getCurrentContext().isReturning) {
         return ret;
@@ -35848,6 +36219,7 @@ var InterpretorVisitor = class {
       if (ret == "break") {
         return null;
       }
+      node.Increment.accept(this);
     }
     this.ctx.pop();
   }
@@ -35871,6 +36243,9 @@ var InterpretorVisitor = class {
   }
   visitNumber(node) {
     return Number;
+  }
+  visitListType(node) {
+    return Array;
   }
   visitType(node) {
   }
@@ -35909,30 +36284,49 @@ var InterpretorVisitor = class {
     return "break";
   }
   visitSay(node) {
-    var val = "";
-    var val = "";
+    var val2 = "";
+    var val2 = "";
     for (var i = 0; i < node.msg.length; i++) {
-      val = val.concat(node.msg[i].accept(this));
+      val2 = val2.concat(node.msg[i].accept(this));
     }
-    var action = { type: "Say", Value: val };
+    var action = { type: "Say", Value: val2 };
     this.robotinstruction.push(action);
   }
   visitWait(node) {
-    var val = node.time.accept(this);
-    this.ensureType(node, "Number_", val);
-    var action = { type: "Wait", Value: val };
+    var val2 = node.time.accept(this);
+    this.ensureType(node, "Number_", val2);
+    var action = { type: "Wait", Value: val2 };
     this.robotinstruction.push(action);
   }
+  visitConstList(node) {
+    var val2 = [];
+    for (var i = 0; i < node.Values.length; i++) {
+      val2.push(node.Values[i].accept(this));
+    }
+    return val2;
+  }
+  visitListAccess(node) {
+    var list = node.variable.accept(this);
+    var index = node.index.accept(this);
+    this.ensureLength(node, list.length, index);
+    this.ensureType(node, "ListType", list);
+    this.ensureType(node, "Number_", index);
+    return list[index];
+  }
 };
-function evalCondition(val) {
-  if (typeof val == "boolean")
-    return val;
-  if (typeof val == "string")
-    return val == "true";
+function evalCondition(val2) {
+  if (typeof val2 == "boolean")
+    return val2;
+  if (typeof val2 == "string")
+    return val2 == "true";
   else
-    return val != 0;
+    return val2 != 0;
 }
 function convertExprStringToNode(str) {
+  var evaluated = eval(str);
+  if (Object.prototype.toString.call(evaluated) == "[object Array]") {
+    return "ListType";
+  }
   var val = parseInt(str);
   if (!Number.isNaN(val)) {
     return "Number_";
@@ -36207,7 +36601,10 @@ var CompilerVisitor = class {
     return ret;
   }
   visitAffectation(node) {
-    return node.variable.Name + " = " + node.Right.accept(this);
+    if (isVariable(node.variable)) {
+      return node.variable.Name + " = " + node.Right.accept(this);
+    }
+    return "";
   }
   visitAnd(node) {
     return node.Left.accept(this) + "&&" + node.Right.accept(this);
@@ -36304,18 +36701,24 @@ var CompilerVisitor = class {
     return "break";
   }
   visitSay(node) {
-    var val = "";
+    var val2 = "";
     for (var i = 0; i < node.msg.length; i++) {
       if (i < node.msg.length - 1) {
-        val = val.concat("String(" + node.msg[i].accept(this) + ")+");
+        val2 = val2.concat("String(" + node.msg[i].accept(this) + ")+");
       } else {
-        val = val.concat("String(" + node.msg[i].accept(this) + ")");
+        val2 = val2.concat("String(" + node.msg[i].accept(this) + ")");
       }
     }
-    return "Serial.print(" + val + ")";
+    return "Serial.print(" + val2 + ")";
   }
   visitWait(node) {
     return "delay(" + node.time.accept(this) + ")";
+  }
+  visitConstList(node) {
+  }
+  visitListAccess(node) {
+  }
+  visitListType(node) {
   }
 };
 

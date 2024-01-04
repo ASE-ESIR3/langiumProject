@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isBreak, isKM, isMM, isStatementBlock } from "../language/generated/ast.js";
+import { isBreak, isKM, isListAccess, isMM, isStatementBlock, isVariable } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -40,6 +40,9 @@ import { AstNode } from "langium";
 import { BreakNode } from "./nodes/BreakNode.js";
 import { SayNode } from "./nodes/SayNode.js";
 import { WaitNode } from "./nodes/WaitNode.js";
+import { ConstListNode } from "./nodes/ConstListNode.js";
+import { ListAccessNode } from "./nodes/ListAccessNode.js";
+import { ListTypeNode } from "./nodes/ListTypeNode.js";
 //import { MyError } from "./errors.js";
 //import { integer } from "vscode-languageclient";
 
@@ -78,6 +81,15 @@ export class InterpretorVisitor implements MyDslVisitor {
             console.error("Type error: expect type "+type+" bug got "+typeOfExp+ "at line "+line);
         }
     
+    }
+
+    ensureLength(node:AstNode,length:number, index:any){
+        if(index > length-1){
+            var line = node.$cstNode?.range.start.line+1;
+            this.typeErrors.push(new MyError(line, "List Length Error: index of " + index + " for a length of "+length, "LengthError"));
+            console.error("List Length Error: index of" + index + "for a length of "+length + " at line "+line);
+        }
+            
     }
 
     getCurrentContext() {
@@ -248,9 +260,18 @@ export class InterpretorVisitor implements MyDslVisitor {
 
     visitAffectation(node: AffectationNode) {
         const value = (node.Right as ExprNode).accept(this);
-        var type = this.getCurrentContext().variables.get(node.variable.Name).type;
-        this.ensureType(node,type,value);
-        this.getCurrentContext().variables.get(node.variable.Name).value = value;
+        if(isVariable(node.variable)){
+            var type = this.getCurrentContext().variables.get(node.variable.Name).type;
+            this.ensureType(node,type,value);
+            this.getCurrentContext().variables.get(node.variable.Name).value = value;
+        }
+        if(isListAccess(node.variable)){
+            var type = this.getCurrentContext().variables.get(node.variable.variable.Name).type;
+            var index = (node.variable.index as ExprNode).accept(this);
+            this.ensureLength(node,this.getCurrentContext().variables.get(node.variable.variable.Name).value.length,index);
+            this.getCurrentContext().variables.get(node.variable.variable.Name).value[index] = value;
+        }
+
     }
 
     visitAnd(node: AndNode):boolean {
@@ -305,7 +326,7 @@ export class InterpretorVisitor implements MyDslVisitor {
         this.ctx.push(new Context());
         node.Initialization.accept(this);
         while ( node.Condition.accept(this)){
-            node.Increment.accept(this);
+            
             const ret = node.Body.accept(this);
             if(this.getCurrentContext().isReturning){
                 return ret;
@@ -313,6 +334,7 @@ export class InterpretorVisitor implements MyDslVisitor {
             if(ret == "break"){
                 return null;
             }
+            node.Increment.accept(this);
         }
         this.ctx.pop();
     }
@@ -345,6 +367,11 @@ export class InterpretorVisitor implements MyDslVisitor {
     visitNumber(node: NumberNode) {
         return Number;
     }
+
+    visitListType(node: ListTypeNode) {
+        return Array;
+    }
+    
 
     visitType(node: TypeNode) {
         
@@ -412,6 +439,25 @@ export class InterpretorVisitor implements MyDslVisitor {
         this.robotinstruction.push(action);
     }
 
+    visitConstList(node: ConstListNode) {
+        var val = [];
+
+        for (var i = 0; i < node.Values.length; i++){
+            val.push(node.Values[i].accept(this));
+        }
+        return val;
+    }
+
+    visitListAccess(node: ListAccessNode) {
+        var list = node.variable.accept(this);
+        var index = node.index.accept(this);
+        this.ensureLength(node,list.length,index);
+        this.ensureType(node,"ListType",list);
+        this.ensureType(node,"Number_",index);
+        return list[index];
+    }
+
+
 }
 
 function evalCondition(val:any):boolean{
@@ -424,6 +470,12 @@ function evalCondition(val:any):boolean{
 }
 
 function convertExprStringToNode(str:string){
+    var evaluated = eval(str);
+
+    if(Object.prototype.toString.call(evaluated) == "[object Array]"){
+        return "ListType";
+    }
+
     var val = parseInt(str);
     if(!Number.isNaN(val)){
         return "Number_";

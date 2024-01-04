@@ -45,6 +45,9 @@ import { ConstStringNode } from './nodes/ConstStringNode.js';
 import { BreakNode } from './nodes/BreakNode.js';
 import { SayNode } from './nodes/SayNode.js';
 import { WaitNode } from './nodes/WaitNode.js';
+import { ListTypeNode } from './nodes/ListTypeNode.js';
+import { ConstListNode } from './nodes/ConstListNode.js';
+import { ListAccessNode } from './nodes/ListAccessNode.js';
 
 /**
  * Register custom validation checks.
@@ -216,6 +219,20 @@ export class MyDslAcceptWeaver {
         (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitWait(node as WaitNode);}
     }
     
+    
+    weaveListAcces(node : InterfaceAST.ListAccess, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitListAccess(node as ListAccessNode);}
+    }
+
+    
+    weaveConstList(node : InterfaceAST.ConstList, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitConstList(node as ConstListNode);}
+    }
+
+    
+    weaveListType(node : InterfaceAST.ListType, accept : ValidationAcceptor) : void{
+        (<any> node).accept = (visitor: MyDslVisitor) => {return visitor.visitListType(node as ListTypeNode);}
+    }
 
     checks: ValidationChecks<MyDslAstType> = {
         Program : this.weaveProgram,
@@ -256,6 +273,9 @@ export class MyDslAcceptWeaver {
         Break: this.weaveBreak,
         Say: this.weaveSay,
         Wait: this.weaveWait,
+        ListAccess: this.weaveListAcces,
+        ConstList: this.weaveConstList,
+        ListType: this.weaveListType,
     };
 
 }

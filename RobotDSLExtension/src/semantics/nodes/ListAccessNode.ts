@@ -3,16 +3,14 @@ import { AstNode, CstNode, LangiumDocument } from 'langium';
 import { MyDslVisitor } from '../visitor.js';
 import { ExprNode } from './ExprNode.js';
 import { VariableNode } from './VariableNode.js';
-import { ListAccessNode } from './ListAccessNode.js';
 
 
-export class AffectationNode implements ASTInterfaces.Affectation {
-    constructor(public $type: 'Affectation'
-    
-    ){}
-    $container!: ASTInterfaces.For;
-    Right!: ExprNode;
-    variable!: VariableNode | ListAccessNode;
+export class ListAccessNode implements ASTInterfaces.ListAccess {
+    constructor(public $type: 'ListAccess',
+                public $container: undefined){}
+    variable!: VariableNode;
+    index!: ExprNode;
+
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;
     $cstNode?: CstNode | undefined;

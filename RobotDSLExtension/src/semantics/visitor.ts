@@ -31,6 +31,9 @@ import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { BreakNode } from "./nodes/BreakNode.js";
 import { SayNode } from "./nodes/SayNode.js";
 import { WaitNode } from "./nodes/WaitNode.js";
+import { ListTypeNode } from "./nodes/ListTypeNode.js";
+import { ConstListNode } from "./nodes/ConstListNode.js";
+import { ListAccessNode } from "./nodes/ListAccessNode.js";
 
 export interface MyDslVisitor {
     visitProgram(node: programNode): any;
@@ -71,4 +74,7 @@ export interface MyDslVisitor {
     visitBreak(node: BreakNode):any;
     visitSay(node:SayNode):any;
     visitWait(node:WaitNode):any;
+    visitListType(node:ListTypeNode):any;
+    visitConstList(node:ConstListNode):any;
+    visitListAccess(node:ListAccessNode):any;
 }

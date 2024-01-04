@@ -85,7 +85,7 @@ export function isProgram(item: unknown): item is Program {
 }
 
 export interface Statment extends AstNode {
-    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'Break' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Say' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'Throw' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition' | 'Wait';
+    readonly $type: 'Addition' | 'Affectation' | 'And' | 'BinaryExpr' | 'Break' | 'ConditionnalStructure' | 'ConstBoolean' | 'ConstList' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'For' | 'Forward' | 'FunctionCall' | 'Ifz' | 'LessThan' | 'ListAccess' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'RbLoop' | 'Rbreturn' | 'RobotInstruction' | 'Rotate' | 'Say' | 'Soustraction' | 'StatementBlock' | 'Statment' | 'Throw' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable' | 'VariableDefinition' | 'Wait';
 }
 
 export const Statment = 'Statment';
@@ -95,7 +95,7 @@ export function isStatment(item: unknown): item is Statment {
 }
 
 export interface Type extends AstNode {
-    readonly $type: 'Boolean' | 'Number_' | 'String_' | 'Type' | 'Void';
+    readonly $type: 'Boolean' | 'ListType' | 'Number_' | 'String_' | 'Type' | 'Void';
 }
 
 export const Type = 'Type';
@@ -118,7 +118,7 @@ export interface Affectation extends Statment {
     readonly $container: For;
     readonly $type: 'Affectation';
     Right: Expr
-    variable: Variable
+    variable: ListAccess | Variable
 }
 
 export const Affectation = 'Affectation';
@@ -150,7 +150,7 @@ export function isConditionnalStructure(item: unknown): item is ConditionnalStru
 }
 
 export interface Expr extends Statment {
-    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'FunctionCall' | 'LessThan' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'Soustraction' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable';
+    readonly $type: 'Addition' | 'And' | 'BinaryExpr' | 'ConstBoolean' | 'ConstList' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr' | 'Division' | 'Equals' | 'Expr' | 'FunctionCall' | 'LessThan' | 'ListAccess' | 'MoreThan' | 'Multiplication' | 'Not' | 'Or' | 'Soustraction' | 'UnaryExpr' | 'UnaryRightExpr' | 'Variable';
 }
 
 export const Expr = 'Expr';
@@ -247,6 +247,17 @@ export const Boolean = 'Boolean';
 
 export function isBoolean(item: unknown): item is Boolean {
     return reflection.isInstance(item, Boolean);
+}
+
+export interface ListType extends Type {
+    readonly $type: 'ListType';
+    type: Type
+}
+
+export const ListType = 'ListType';
+
+export function isListType(item: unknown): item is ListType {
+    return reflection.isInstance(item, ListType);
 }
 
 export interface Number_ extends Type {
@@ -355,7 +366,7 @@ export function isBinaryExpr(item: unknown): item is BinaryExpr {
 }
 
 export interface ConstantExpr extends Expr {
-    readonly $type: 'ConstBoolean' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr';
+    readonly $type: 'ConstBoolean' | 'ConstList' | 'ConstNumber' | 'ConstString' | 'ConstVoid' | 'ConstantExpr';
 }
 
 export const ConstantExpr = 'ConstantExpr';
@@ -376,6 +387,19 @@ export function isFunctionCall(item: unknown): item is FunctionCall {
     return reflection.isInstance(item, FunctionCall);
 }
 
+export interface ListAccess extends Expr {
+    readonly $container: Affectation;
+    readonly $type: 'ListAccess';
+    index: Expr
+    variable: Variable
+}
+
+export const ListAccess = 'ListAccess';
+
+export function isListAccess(item: unknown): item is ListAccess {
+    return reflection.isInstance(item, ListAccess);
+}
+
 export interface UnaryExpr extends Expr {
     readonly $type: 'Not' | 'UnaryExpr' | 'UnaryRightExpr';
 }
@@ -387,7 +411,7 @@ export function isUnaryExpr(item: unknown): item is UnaryExpr {
 }
 
 export interface Variable extends Expr {
-    readonly $container: Affectation | For | VariableDefinition;
+    readonly $container: Affectation | For | ListAccess | VariableDefinition;
     readonly $type: 'Variable';
     Name: string
 }
@@ -522,6 +546,17 @@ export function isConstBoolean(item: unknown): item is ConstBoolean {
     return reflection.isInstance(item, ConstBoolean);
 }
 
+export interface ConstList extends ConstantExpr {
+    readonly $type: 'ConstList';
+    Values: Array<Expr>
+}
+
+export const ConstList = 'ConstList';
+
+export function isConstList(item: unknown): item is ConstList {
+    return reflection.isInstance(item, ConstList);
+}
+
 export interface ConstNumber extends ConstantExpr {
     readonly $type: 'ConstNumber';
     Value: number
@@ -586,6 +621,7 @@ export type MyDslAstType = {
     CM: CM
     ConditionnalStructure: ConditionnalStructure
     ConstBoolean: ConstBoolean
+    ConstList: ConstList
     ConstNumber: ConstNumber
     ConstString: ConstString
     ConstVoid: ConstVoid
@@ -602,6 +638,8 @@ export type MyDslAstType = {
     Ifz: Ifz
     KM: KM
     LessThan: LessThan
+    ListAccess: ListAccess
+    ListType: ListType
     MM: MM
     MoreThan: MoreThan
     Multiplication: Multiplication
@@ -632,7 +670,7 @@ export type MyDslAstType = {
 export class MyDslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'Break', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstNumber', 'ConstString', 'ConstVoid', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Say', 'Soustraction', 'StatementBlock', 'Statment', 'String_', 'Throw', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void', 'Wait'];
+        return ['Addition', 'Affectation', 'And', 'BinaryExpr', 'Boolean', 'Break', 'CM', 'ConditionnalStructure', 'ConstBoolean', 'ConstList', 'ConstNumber', 'ConstString', 'ConstVoid', 'ConstantExpr', 'Division', 'Equals', 'Expr', 'For', 'Forward', 'FunctionCall', 'FunctionCallParameters', 'FunctionDefinitionParameters', 'Function_', 'Ifz', 'KM', 'LessThan', 'ListAccess', 'ListType', 'MM', 'MoreThan', 'Multiplication', 'Not', 'Number_', 'Or', 'Program', 'RbLoop', 'Rbreturn', 'RobotInstruction', 'Rotate', 'Say', 'Soustraction', 'StatementBlock', 'Statment', 'String_', 'Throw', 'Type', 'UnaryExpr', 'UnaryRightExpr', 'Unit', 'Variable', 'VariableDefinition', 'Void', 'Wait'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -664,11 +702,13 @@ export class MyDslAstReflection extends AbstractAstReflection {
             case BinaryExpr:
             case ConstantExpr:
             case FunctionCall:
+            case ListAccess:
             case UnaryExpr:
             case Variable: {
                 return this.isSubtype(Expr, supertype);
             }
             case Boolean:
+            case ListType:
             case Number_:
             case String_:
             case Void: {
@@ -680,6 +720,7 @@ export class MyDslAstReflection extends AbstractAstReflection {
                 return this.isSubtype(Unit, supertype);
             }
             case ConstBoolean:
+            case ConstList:
             case ConstNumber:
             case ConstString:
             case ConstVoid: {
@@ -770,6 +811,14 @@ export class MyDslAstReflection extends AbstractAstReflection {
                     name: 'ConstBoolean',
                     mandatory: [
                         { name: 'Value', type: 'boolean' }
+                    ]
+                };
+            }
+            case 'ConstList': {
+                return {
+                    name: 'ConstList',
+                    mandatory: [
+                        { name: 'Values', type: 'array' }
                     ]
                 };
             }

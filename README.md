@@ -61,12 +61,25 @@ A statment block is a statment that is composed of multiple statments.
 
 It is used to represent the body of a function, or the body of a 'if', 'for' or 'while' statment.
 
+### Types
+
+The language features four types and a void.
+
+- Number: Number is an integer, note that the language does no feature floats for now :(
+
+- Boolean: Boolean is a boolean value.
+
+- String: String is a constant character sequence, note that no operations are possible on them for now
+
+- List<type>: Hold a sequence of a single type. can be defined, accessed and modified.
+
+- Void: specify that your function does not return anything.
 
 ### Expressions
 
 Expressions in a language are a main concept. They can be as simple as a value, but can take diferent forms.
 
-- a constant value : a number, a string, a boolean, a null
+- a constant value : a number, a string, a boolean, a list ,a null
 
 - a function call : a function name and a list of arguments
 - a binary expression : a binary operator and two operands. Note that binary expressions can be nested, and can be of any type. For example, true + 25, at a grammar level is ok

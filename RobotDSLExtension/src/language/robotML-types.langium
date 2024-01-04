@@ -65,6 +65,11 @@ interface Soustraction extends BinaryExpr {
 interface Not extends UnaryRightExpr {
 }
 
+interface ListAccess extends Expr {
+	variable: Variable
+	index: Expr
+}
+
 interface UnaryRightExpr extends UnaryExpr {
 	right: Expr
 }
@@ -101,7 +106,7 @@ interface Rotate extends RobotInstruction {
 
 interface Affectation extends Statment {
 	Right: Expr
-	variable: Variable
+	variable: Variable | ListAccess
 }
 
 interface Variable extends Expr {
@@ -177,10 +182,18 @@ interface ConstString extends ConstantExpr {
 	Value: string
 }
 
+interface ConstList extends ConstantExpr {
+	Values: Expr[]
+}
+
 interface Say extends Statment {
 	msg: Expr[]
 }
 
 interface Wait extends Statment {
 	time: Expr
+}
+
+interface ListType extends Type {
+	^type: Type
 }

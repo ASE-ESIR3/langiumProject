@@ -27,7 +27,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@24"
+            "$ref": "#/rules@26"
           },
           "arguments": []
         },
@@ -51,21 +51,28 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@39"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@40"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@41"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@42"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@43"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@45"
             },
             "arguments": []
           }
@@ -93,14 +100,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@46"
+                  "$ref": "#/rules@14"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@18"
+                  "$ref": "#/rules@21"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@49"
                 },
                 "arguments": []
               },
@@ -114,7 +128,14 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@45"
+                  "$ref": "#/rules@20"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@48"
                 },
                 "arguments": []
               },
@@ -156,13 +177,6 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@14"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
                   "$ref": "#/rules@15"
                 },
                 "arguments": []
@@ -184,28 +198,14 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
+                  "$ref": "#/rules@18"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
                   "$ref": "#/rules@6"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@20"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@21"
-                },
-                "arguments": []
-              },
-              {
-                "$type": "RuleCall",
-                "rule": {
-                  "$ref": "#/rules@4"
                 },
                 "arguments": []
               },
@@ -226,14 +226,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@25"
+                  "$ref": "#/rules@4"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@26"
+                  "$ref": "#/rules@24"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@25"
                 },
                 "arguments": []
               },
@@ -261,6 +268,13 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
+                  "$ref": "#/rules@30"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
                   "$ref": "#/rules@31"
                 },
                 "arguments": []
@@ -268,7 +282,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@30"
+                  "$ref": "#/rules@33"
                 },
                 "arguments": []
               },
@@ -282,14 +296,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@43"
+                  "$ref": "#/rules@34"
                 },
                 "arguments": []
               },
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@44"
+                  "$ref": "#/rules@46"
+                },
+                "arguments": []
+              },
+              {
+                "$type": "RuleCall",
+                "rule": {
+                  "$ref": "#/rules@47"
                 },
                 "arguments": []
               }
@@ -320,14 +341,28 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@19"
+              "$ref": "#/rules@14"
             },
             "arguments": []
           },
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@18"
+              "$ref": "#/rules@21"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@20"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@19"
             },
             "arguments": []
           },
@@ -369,13 +404,6 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@14"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@15"
             },
             "arguments": []
@@ -397,14 +425,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@25"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@26"
+              "$ref": "#/rules@18"
             },
             "arguments": []
           },
@@ -425,7 +446,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@43"
+              "$ref": "#/rules@29"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@30"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@46"
             },
             "arguments": []
           }
@@ -478,21 +513,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@35"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@36"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
               "$ref": "#/rules@37"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@38"
+            },
+            "arguments": []
+          },
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@39"
             },
             "arguments": []
           }
@@ -551,7 +586,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "definition": {
         "$type": "RuleCall",
         "rule": {
-          "$ref": "#/rules@47"
+          "$ref": "#/rules@50"
         },
         "arguments": []
       },
@@ -578,7 +613,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@23"
+                "$ref": "#/rules@25"
               },
               "arguments": []
             },
@@ -598,7 +633,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@23"
+                    "$ref": "#/rules@25"
                   },
                   "arguments": []
                 }
@@ -887,6 +922,56 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
     },
     {
       "$type": "ParserRule",
+      "name": "ListAccess",
+      "returnType": {
+        "$ref": "#/interfaces@18"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Assignment",
+            "feature": "variable",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@46"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "["
+          },
+          {
+            "$type": "Assignment",
+            "feature": "index",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@3"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Soustraction",
       "returnType": {
         "$ref": "#/interfaces@16"
@@ -977,7 +1062,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "ConstNumber",
       "returnType": {
-        "$ref": "#/interfaces@20"
+        "$ref": "#/interfaces@21"
       },
       "definition": {
         "$type": "Assignment",
@@ -986,7 +1071,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@33"
+            "$ref": "#/rules@35"
           },
           "arguments": []
         }
@@ -1002,7 +1087,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "ConstBoolean",
       "returnType": {
-        "$ref": "#/interfaces@22"
+        "$ref": "#/interfaces@23"
       },
       "definition": {
         "$type": "Assignment",
@@ -1011,7 +1096,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@34"
+            "$ref": "#/rules@36"
           },
           "arguments": []
         }
@@ -1027,7 +1112,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "ConstString",
       "returnType": {
-        "$ref": "#/interfaces@47"
+        "$ref": "#/interfaces@48"
       },
       "definition": {
         "$type": "Assignment",
@@ -1036,7 +1121,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@49"
+            "$ref": "#/rules@52"
           },
           "arguments": []
         }
@@ -1052,7 +1137,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "ConstVoid",
       "returnType": {
-        "$ref": "#/interfaces@23"
+        "$ref": "#/interfaces@24"
       },
       "definition": {
         "$type": "Group",
@@ -1060,7 +1145,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@23"
+              "$ref": "#/interfaces@24"
             }
           },
           {
@@ -1078,9 +1163,75 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
     },
     {
       "$type": "ParserRule",
+      "name": "ConstList",
+      "returnType": {
+        "$ref": "#/interfaces@49"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Keyword",
+            "value": "["
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "Values",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@3"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ","
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "Values",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "rule": {
+                        "$ref": "#/rules@3"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "cardinality": "*"
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "]"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Forward",
       "returnType": {
-        "$ref": "#/interfaces@24"
+        "$ref": "#/interfaces@25"
       },
       "definition": {
         "$type": "Group",
@@ -1126,7 +1277,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Rotate",
       "returnType": {
-        "$ref": "#/interfaces@26"
+        "$ref": "#/interfaces@27"
       },
       "definition": {
         "$type": "Group",
@@ -1160,7 +1311,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Affectation",
       "returnType": {
-        "$ref": "#/interfaces@27"
+        "$ref": "#/interfaces@28"
       },
       "definition": {
         "$type": "Group",
@@ -1170,11 +1321,23 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "feature": "variable",
             "operator": "=",
             "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@43"
-              },
-              "arguments": []
+              "$type": "Alternatives",
+              "elements": [
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@46"
+                  },
+                  "arguments": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@14"
+                  },
+                  "arguments": []
+                }
+              ]
             }
           },
           {
@@ -1230,7 +1393,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@43"
+                "$ref": "#/rules@46"
               },
               "arguments": []
             }
@@ -1294,7 +1457,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@47"
+                "$ref": "#/rules@50"
               },
               "arguments": []
             }
@@ -1344,7 +1507,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "FunctionCall",
       "returnType": {
-        "$ref": "#/interfaces@29"
+        "$ref": "#/interfaces@30"
       },
       "definition": {
         "$type": "Group",
@@ -1356,7 +1519,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@47"
+                "$ref": "#/rules@50"
               },
               "arguments": []
             }
@@ -1372,7 +1535,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@38"
+                "$ref": "#/rules@40"
               },
               "arguments": []
             }
@@ -1394,7 +1557,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "LessThan",
       "returnType": {
-        "$ref": "#/interfaces@31"
+        "$ref": "#/interfaces@32"
       },
       "definition": {
         "$type": "Group",
@@ -1448,7 +1611,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Equals",
       "returnType": {
-        "$ref": "#/interfaces@32"
+        "$ref": "#/interfaces@33"
       },
       "definition": {
         "$type": "Group",
@@ -1502,7 +1665,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "MoreThan",
       "returnType": {
-        "$ref": "#/interfaces@33"
+        "$ref": "#/interfaces@34"
       },
       "definition": {
         "$type": "Group",
@@ -1556,14 +1719,18 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "RbLoop",
       "returnType": {
-        "$ref": "#/interfaces@34"
+        "$ref": "#/interfaces@35"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "while("
+            "value": "while"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -1606,14 +1773,18 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "For",
       "returnType": {
-        "$ref": "#/interfaces@35"
+        "$ref": "#/interfaces@36"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "for("
+            "value": "for"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -1625,14 +1796,14 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@23"
+                    "$ref": "#/rules@25"
                   },
                   "arguments": []
                 },
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@43"
+                    "$ref": "#/rules@46"
                   },
                   "arguments": []
                 }
@@ -1666,7 +1837,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@22"
+                "$ref": "#/rules@24"
               },
               "arguments": []
             }
@@ -1700,14 +1871,18 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Ifz",
       "returnType": {
-        "$ref": "#/interfaces@37"
+        "$ref": "#/interfaces@38"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "if("
+            "value": "if"
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
           },
           {
             "$type": "Assignment",
@@ -1773,7 +1948,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Rbreturn",
       "returnType": {
-        "$ref": "#/interfaces@38"
+        "$ref": "#/interfaces@39"
       },
       "definition": {
         "$type": "Group",
@@ -1819,7 +1994,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@48"
+              "$ref": "#/rules@51"
             },
             "arguments": []
           }
@@ -1860,7 +2035,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "MM",
       "returnType": {
-        "$ref": "#/interfaces@39"
+        "$ref": "#/interfaces@40"
       },
       "definition": {
         "$type": "Group",
@@ -1868,7 +2043,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@39"
+              "$ref": "#/interfaces@40"
             }
           },
           {
@@ -1888,7 +2063,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "CM",
       "returnType": {
-        "$ref": "#/interfaces@40"
+        "$ref": "#/interfaces@41"
       },
       "definition": {
         "$type": "Group",
@@ -1896,7 +2071,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@40"
+              "$ref": "#/interfaces@41"
             }
           },
           {
@@ -1916,7 +2091,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "KM",
       "returnType": {
-        "$ref": "#/interfaces@41"
+        "$ref": "#/interfaces@42"
       },
       "definition": {
         "$type": "Group",
@@ -1924,7 +2099,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@41"
+              "$ref": "#/interfaces@42"
             }
           },
           {
@@ -1944,7 +2119,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "FunctionCallParameters",
       "returnType": {
-        "$ref": "#/interfaces@30"
+        "$ref": "#/interfaces@31"
       },
       "definition": {
         "$type": "Group",
@@ -1980,7 +2155,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Number_",
       "returnType": {
-        "$ref": "#/interfaces@42"
+        "$ref": "#/interfaces@43"
       },
       "definition": {
         "$type": "Group",
@@ -1988,7 +2163,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@42"
+              "$ref": "#/interfaces@43"
             }
           },
           {
@@ -2008,7 +2183,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Boolean",
       "returnType": {
-        "$ref": "#/interfaces@43"
+        "$ref": "#/interfaces@44"
       },
       "definition": {
         "$type": "Group",
@@ -2016,7 +2191,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@43"
+              "$ref": "#/interfaces@44"
             }
           },
           {
@@ -2036,7 +2211,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Void",
       "returnType": {
-        "$ref": "#/interfaces@44"
+        "$ref": "#/interfaces@45"
       },
       "definition": {
         "$type": "Group",
@@ -2044,7 +2219,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@44"
+              "$ref": "#/interfaces@45"
             }
           },
           {
@@ -2064,7 +2239,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "String_",
       "returnType": {
-        "$ref": "#/interfaces@45"
+        "$ref": "#/interfaces@46"
       },
       "definition": {
         "$type": "Group",
@@ -2072,7 +2247,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           {
             "$type": "Action",
             "type": {
-              "$ref": "#/interfaces@45"
+              "$ref": "#/interfaces@46"
             }
           },
           {
@@ -2090,9 +2265,57 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
     },
     {
       "$type": "ParserRule",
+      "name": "ListType",
+      "returnType": {
+        "$ref": "#/interfaces@52"
+      },
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Action",
+            "type": {
+              "$ref": "#/interfaces@52"
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "List"
+          },
+          {
+            "$type": "Keyword",
+            "value": "<"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "type",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@1"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": ">"
+          }
+        ]
+      },
+      "definesHiddenTokens": false,
+      "entry": false,
+      "fragment": false,
+      "hiddenTokens": [],
+      "parameters": [],
+      "wildcard": false
+    },
+    {
+      "$type": "ParserRule",
       "name": "Variable",
       "returnType": {
-        "$ref": "#/interfaces@28"
+        "$ref": "#/interfaces@29"
       },
       "definition": {
         "$type": "Assignment",
@@ -2117,14 +2340,18 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Throw",
       "returnType": {
-        "$ref": "#/interfaces@46"
+        "$ref": "#/interfaces@47"
       },
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "Keyword",
-            "value": "Throw<"
+            "value": "Throw"
+          },
+          {
+            "$type": "Keyword",
+            "value": "<"
           },
           {
             "$type": "Assignment",
@@ -2133,7 +2360,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@18"
+                "$ref": "#/rules@19"
               },
               "arguments": []
             }
@@ -2155,7 +2382,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Say",
       "returnType": {
-        "$ref": "#/interfaces@48"
+        "$ref": "#/interfaces@50"
       },
       "definition": {
         "$type": "Group",
@@ -2200,7 +2427,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "$type": "ParserRule",
       "name": "Wait",
       "returnType": {
-        "$ref": "#/interfaces@49"
+        "$ref": "#/interfaces@51"
       },
       "definition": {
         "$type": "Group",
@@ -2827,7 +3054,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@28"
+              "$ref": "#/interfaces@29"
             }
           },
           "isOptional": false
@@ -2954,10 +3181,43 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "Not",
       "superTypes": [
         {
-          "$ref": "#/interfaces@18"
+          "$ref": "#/interfaces@19"
         }
       ],
       "attributes": []
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "variable",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@29"
+            }
+          },
+          "isOptional": false
+        },
+        {
+          "$type": "TypeAttribute",
+          "name": "index",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@8"
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ListAccess",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@8"
+        }
+      ]
     },
     {
       "$type": "Interface",
@@ -2977,7 +3237,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "UnaryRightExpr",
       "superTypes": [
         {
-          "$ref": "#/interfaces@19"
+          "$ref": "#/interfaces@20"
         }
       ]
     },
@@ -3007,7 +3267,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "ConstNumber",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -3037,7 +3297,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "ConstBoolean",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -3046,7 +3306,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "ConstVoid",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
         }
       ],
       "attributes": []
@@ -3080,7 +3340,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "Forward",
       "superTypes": [
         {
-          "$ref": "#/interfaces@25"
+          "$ref": "#/interfaces@26"
         }
       ]
     },
@@ -3112,7 +3372,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "Rotate",
       "superTypes": [
         {
-          "$ref": "#/interfaces@25"
+          "$ref": "#/interfaces@26"
         }
       ]
     },
@@ -3134,10 +3394,21 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           "$type": "TypeAttribute",
           "name": "variable",
           "type": {
-            "$type": "SimpleType",
-            "typeRef": {
-              "$ref": "#/interfaces@28"
-            }
+            "$type": "UnionType",
+            "types": [
+              {
+                "$type": "SimpleType",
+                "typeRef": {
+                  "$ref": "#/interfaces@29"
+                }
+              },
+              {
+                "$type": "SimpleType",
+                "typeRef": {
+                  "$ref": "#/interfaces@18"
+                }
+              }
+            ]
           },
           "isOptional": false
         }
@@ -3178,7 +3449,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@30"
+              "$ref": "#/interfaces@31"
             }
           },
           "isOptional": false
@@ -3256,7 +3527,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "RbLoop",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ],
       "attributes": []
@@ -3273,7 +3544,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "SimpleType",
                 "typeRef": {
-                  "$ref": "#/interfaces@27"
+                  "$ref": "#/interfaces@28"
                 }
               },
               {
@@ -3301,7 +3572,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
               {
                 "$type": "SimpleType",
                 "typeRef": {
-                  "$ref": "#/interfaces@28"
+                  "$ref": "#/interfaces@29"
                 }
               }
             ]
@@ -3312,7 +3583,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "For",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ]
     },
@@ -3370,7 +3641,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "Ifz",
       "superTypes": [
         {
-          "$ref": "#/interfaces@36"
+          "$ref": "#/interfaces@37"
         }
       ]
     },
@@ -3475,7 +3746,7 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
           "type": {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/interfaces@47"
+              "$ref": "#/interfaces@48"
             }
           },
           "isOptional": false
@@ -3504,7 +3775,32 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "name": "ConstString",
       "superTypes": [
         {
-          "$ref": "#/interfaces@21"
+          "$ref": "#/interfaces@22"
+        }
+      ]
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "Values",
+          "type": {
+            "$type": "ArrayType",
+            "elementType": {
+              "$type": "SimpleType",
+              "typeRef": {
+                "$ref": "#/interfaces@8"
+              }
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ConstList",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@22"
         }
       ]
     },
@@ -3552,6 +3848,28 @@ export const MyDslGrammar = (): Grammar => loadedMyDslGrammar ?? (loadedMyDslGra
       "superTypes": [
         {
           "$ref": "#/interfaces@3"
+        }
+      ]
+    },
+    {
+      "$type": "Interface",
+      "attributes": [
+        {
+          "$type": "TypeAttribute",
+          "name": "type",
+          "type": {
+            "$type": "SimpleType",
+            "typeRef": {
+              "$ref": "#/interfaces@5"
+            }
+          },
+          "isOptional": false
+        }
+      ],
+      "name": "ListType",
+      "superTypes": [
+        {
+          "$ref": "#/interfaces@5"
         }
       ]
     }

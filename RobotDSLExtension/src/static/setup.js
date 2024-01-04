@@ -25,43 +25,13 @@ var code =
 `Void main() {
     Say "hello world !";
     Wait 1000;
-    for(Number i = 0;(i < 3);i = (i + 1))
-    {
-    Say "step ", i;
-    flocon(5, 1000);
-    Rotate -120;
-    };
-    Say "finish <3";
+    List<Number> list;
+    list = [10,20];
+    Number c = list[0];
+    Say c;
 }
 
-Void flocon(Number max, Number size)
-{
-
-    if((max == 0)){
-
-    Forward (size/3) CM;
-    Rotate 45;
-    Forward (size/3) CM;
-    Rotate -90;
-    Forward (size/3) CM;
-    Rotate 45;
-    Forward (size/3) CM;
-    }
-    else
-    {
-
-        flocon((max - 1), (size/3));
-        Rotate 45;
-        flocon((max - 1), (size/3));
-        Rotate -90;
-        flocon((max - 1), (size/3));
-        Rotate 45;
-        flocon((max - 1), (size/3));
-
-    };
-
-
-}`
+`
 
 let replaceCode = `Void main() {
 }`
@@ -343,8 +313,6 @@ document.addEventListener("DOMContentLoaded", function() {
     collapseButton.addEventListener("click", function() {
         if (editorContent.style.display === "none") {
             editorContent.style.display = "block";
-
-
             collapseButton.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
             window.canvaSizeWidth = windowWidth/2;
             window.canvaSizeHeight = windowHeight;
@@ -352,10 +320,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         } else {
             editorContent.style.display = "none";
-
             collapseButton.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-
-
             window.canvaSizeWidth = windowWidth;
             window.canvaSizeHeight = windowHeight;
             resizeCanvas(windowWidth, windowHeight);

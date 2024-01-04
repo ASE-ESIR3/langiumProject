@@ -7,15 +7,15 @@ entry Program returns Program:
 ;
 
 Type returns Type:
-    Number_ | Boolean | Void 
+    Number_ | Boolean | Void | ListType
 ;
 
 Statment returns Statment:
-    (Wait | ConstString | ConstVoid | Say |And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
+    (ListAccess | ConstList | Wait | ConstString | ConstVoid | Say |And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | StatementBlock | Forward | Rotate | Break |Affectation | VariableDefinition | FunctionCall | LessThan | Equals | MoreThan | RbLoop | Ifz | For | Rbreturn | Variable | Throw )';'
 ;
 
 Expr returns Expr:
-   ConstVoid | ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
+   ListAccess | ConstList | ConstVoid | ConstString | And | Or | Multiplication | Addition | Division | Soustraction | Not | ConstNumber | ConstBoolean | FunctionCall | LessThan | Equals | MoreThan | Variable
 ;
 
 Break returns Break:
@@ -59,6 +59,9 @@ Division returns Division:
     '(' Left=Expr '/' Right=Expr ')'
 ;
 
+ListAccess returns ListAccess:
+    variable=Variable '[' index=Expr ']' 
+;
 
 Soustraction returns Soustraction:
     '(' Left=Expr '-' Right=Expr ')'
@@ -84,6 +87,11 @@ ConstVoid returns ConstVoid:
     {ConstVoid} 'null'
 ;
 
+ConstList returns ConstList:
+    '[' ( Values+=Expr (',' Values+=Expr)* )? ']'
+;
+
+
 Forward returns Forward:
     'Forward' Value=Expr unit=Unit  
 ;
@@ -93,7 +101,7 @@ Rotate returns Rotate:
 ;
 
 Affectation returns Affectation:
-    variable=Variable '=' Right=Expr   
+    variable=( Variable| ListAccess) '=' Right=Expr   
 ;
 
 VariableDefinition returns VariableDefinition:
@@ -121,16 +129,16 @@ MoreThan returns MoreThan:
 ;
 
 RbLoop returns RbLoop:
-    'while(' Condition=Expr ')' Body=StatementBlock  
+    'while' '(' Condition=Expr ')' Body=StatementBlock  
 ;
 
 For returns For:
-    'for(' Initialization=(VariableDefinition | Variable ) ';' Condition=Expr ';' Increment=Affectation ')' Body=StatementBlock
+    'for' '(' Initialization=(VariableDefinition | Variable ) ';' Condition=Expr ';' Increment=Affectation ')' Body=StatementBlock
 ;
 
 
 Ifz returns Ifz:
-    'if(' Condition=Expr ')' Body=StatementBlock ('else' ( Elsez+=StatementBlock  )* )?
+    'if' '(' Condition=Expr ')' Body=StatementBlock ('else' ( Elsez+=StatementBlock  )* )?
 ;
 
 Rbreturn returns Rbreturn:
@@ -177,12 +185,16 @@ String_ returns String_:
     {String_} 'String'
 ;
 
+ListType returns ListType:
+    {ListType} 'List' '<' type=Type '>'
+;
+
 Variable returns Variable:
     Name=EString
 ;
 
 Throw returns Throw:
-    'Throw<' err=ConstString '>' 
+    'Throw' '<' err=ConstString '>' 
 ;
 
 Say returns Say:
@@ -193,3 +205,4 @@ Say returns Say:
 Wait returns Wait:
     'Wait' time=Expr
 ;
+

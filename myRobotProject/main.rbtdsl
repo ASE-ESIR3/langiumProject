@@ -1,4 +1,15 @@
 Void main() {
-    Say "hello world !", 25;
 
+    List<Number> list;
+    list = [10,20,25,65];
+    list[1] = 90;
+    Number c = list[1];
+
+    for(Number d = 0;(d < 3); d = (d+1)){
+        Number c = list[d];
+        Forward c CM;
+
+        Wait 1000;
+    };
+    
 }

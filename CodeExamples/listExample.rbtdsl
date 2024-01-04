@@ -1,0 +1,22 @@
+/*this code will pass through the values inside of the list*/
+Void main() {
+
+    List<Number> list;
+    list = [getAValue(),20,25,65];
+    list[1] = 90;
+    Number c = list[1];
+
+    for(Number d = 0;(d < 3); d = (d+1)){
+        Number c = list[d];
+        Say c, " is the index ", d, "of the table" ;
+
+        Wait 1000;
+    };
+    
+}
+
+Number getAValue(){
+
+    return 10000000;
+
+}

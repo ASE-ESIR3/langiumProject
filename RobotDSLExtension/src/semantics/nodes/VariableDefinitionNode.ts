@@ -4,6 +4,7 @@ import { MyDslVisitor } from '../visitor.js';
 import { ExprNode } from './ExprNode.js';
 import { NumberNode } from './NumberNode.js';
 import { BooleanNode } from './BooleanNode.js';
+import { ListTypeNode } from './ListTypeNode.js';
 
 export class VariableDefinitionNode implements ASTInterfaces.VariableDefinition {
     constructor(public $type: 'VariableDefinition'
@@ -11,7 +12,7 @@ export class VariableDefinitionNode implements ASTInterfaces.VariableDefinition 
     ){}
     $container!: ASTInterfaces.FunctionDefinitionParameters;
     left?: ExprNode | undefined;
-    type!: NumberNode | BooleanNode ;
+    type!: NumberNode | BooleanNode | ListTypeNode ;
     variable!: ASTInterfaces.Variable;
     $containerProperty?: string | undefined;
     $containerIndex?: number | undefined;

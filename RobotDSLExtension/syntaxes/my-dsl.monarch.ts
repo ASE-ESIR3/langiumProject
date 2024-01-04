@@ -1,12 +1,12 @@
 // Monarch syntax highlighting for the my-dsl language.
 export default {
     keywords: [
-        'Boolean','CM','Forward','KM','MM','Number','Rotate','Say','Throw<','Void','Wait','and','break','else','false','for(','if(','not','null','or','return','true','while('
+        'Boolean','CM','Forward','KM','List','MM','Number','Rotate','Say','Throw','Void','Wait','and','break','else','false','for','if','not','null','or','return','true','while'
     ],
     operators: [
         '*','+',',','-','/',';','<','=','==','>'
     ],
-    symbols: /\(|\)|\*|\+|,|-|\/|;|<|=|==|>|\{|\}/,
+    symbols: /\(|\)|\*|\+|,|-|\/|;|<|=|==|>|\[|\]|\{|\}/,
 
     tokenizer: {
         initial: [

@@ -4,7 +4,7 @@ import { StatementNode } from "./nodes/statementNode.js";
 import { StatementBlockNode} from "./nodes/statementBlockNode.js";
 import { MyDslVisitor } from "./visitor.js";
 import { ExprNode } from "./nodes/ExprNode.js";
-import { isBoolean, isCM, isKM, isMM, isNumber_, isStatementBlock, isVoid } from "../language/generated/ast.js";
+import { isBoolean, isCM, isKM, isMM, isNumber_, isStatementBlock, isVariable, isVoid } from "../language/generated/ast.js";
 import { VariableDefinitionNode } from "./nodes/VariableDefinitionNode.js";
 import { ConstNumberNode } from "./nodes/constNumberNode.js";
 import { AdditionNode } from "./nodes/AdditionNode.js";
@@ -36,6 +36,9 @@ import { ConstStringNode } from "./nodes/ConstStringNode.js";
 import { BreakNode } from "./nodes/BreakNode.js";
 import { SayNode } from "./nodes/SayNode.js";
 import { WaitNode } from "./nodes/WaitNode.js";
+import { ConstListNode } from "./nodes/ConstListNode.js";
+import { ListAccessNode } from "./nodes/ListAccessNode.js";
+import { ListTypeNode } from "./nodes/ListTypeNode.js";
 
 
 export class CompilerVisitor implements MyDslVisitor {
@@ -175,7 +178,10 @@ export class CompilerVisitor implements MyDslVisitor {
     }
 
     visitAffectation(node: AffectationNode) {
-        return node.variable.Name + " = " + node.Right.accept(this);
+        if(isVariable(node.variable)){
+            return node.variable.Name + " = " + node.Right.accept(this);
+        }
+        return "";
     }
 
     visitAnd(node: AndNode) {
@@ -320,6 +326,20 @@ export class CompilerVisitor implements MyDslVisitor {
     visitWait(node: WaitNode) {
         return "delay(" + node.time.accept(this) + ")";
     }
+
+    visitConstList(node: ConstListNode) {
+        
+    }
+
+    visitListAccess(node: ListAccessNode) {
+        
+    }
+
+    visitListType(node: ListTypeNode) {
+        
+    }
+
+    
 
 }
 
