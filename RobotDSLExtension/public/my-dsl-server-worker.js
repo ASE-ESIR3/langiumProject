@@ -36006,7 +36006,7 @@ var InterpretorVisitor = class {
     var typeOfExp = convertExprStringToNode(value);
     if (type != typeOfExp) {
       var line = ((_a = node.$cstNode) === null || _a === void 0 ? void 0 : _a.range.start.line) + 1;
-      this.typeErrors.push(new MyError(line, "Type error: expect type " + type + " bug got " + typeOfExp, "Type error"));
+      this.typeErrors.push(new MyError(line, "Type error: expect type " + type + " but got " + typeOfExp, "Type error"));
       console.error("Type error: expect type " + type + " bug got " + typeOfExp + "at line " + line);
     }
   }
@@ -36020,6 +36020,32 @@ var InterpretorVisitor = class {
   }
   getCurrentContext() {
     return this.ctx[this.ctx.length - 1];
+  }
+  getVariable(name) {
+    for (let i = this.ctx.length - 1; i >= 0; i--) {
+      if (this.ctx[i].variables.has(name)) {
+        return this.ctx[i].variables.get(name);
+      }
+    }
+    throw new Error(`Variable ${name} not found`);
+  }
+  setVariable(name, value) {
+    for (let i = this.ctx.length - 1; i >= 0; i--) {
+      if (this.ctx[i].variables.has(name)) {
+        this.ctx[i].variables.get(name).value = value;
+        return;
+      }
+    }
+    throw new Error(`Variable ${name} not found`);
+  }
+  setListValue(name, value, index) {
+    for (let i = this.ctx.length - 1; i >= 0; i--) {
+      if (this.ctx[i].variables.has(name)) {
+        this.ctx[i].variables.get(name).value[index] = value;
+        return;
+      }
+    }
+    throw new Error(`Variable ${name} not found`);
   }
   printContext() {
     console.log("Current context: " + this.getCurrentContext().variables.values());
@@ -36160,15 +36186,15 @@ var InterpretorVisitor = class {
   visitAffectation(node) {
     const value = node.Right.accept(this);
     if (isVariable(node.variable)) {
-      var type = this.getCurrentContext().variables.get(node.variable.Name).type;
+      var type = this.getVariable(node.variable.Name).type;
       this.ensureType(node, type, value);
-      this.getCurrentContext().variables.get(node.variable.Name).value = value;
+      this.setVariable(node.variable.Name, value);
     }
     if (isListAccess(node.variable)) {
-      var type = this.getCurrentContext().variables.get(node.variable.variable.Name).type;
+      var type = this.getVariable(node.variable.variable.Name).type;
       var index = node.variable.index.accept(this);
-      this.ensureLength(node, this.getCurrentContext().variables.get(node.variable.variable.Name).value.length, index);
-      this.getCurrentContext().variables.get(node.variable.variable.Name).value[index] = value;
+      this.ensureLength(node, this.getVariable(node.variable.variable.Name).value.length, index);
+      this.setListValue(node.variable.variable.Name, value, index);
     }
   }
   visitAnd(node) {

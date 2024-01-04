@@ -28,9 +28,9 @@ var code =
     List<Number> indexes = [10, 20, 30];
     for(Number i = 0;(i < 3);i = (i + 1))
     {
-    Say "step ", indexes[i];
-    flocon(5, 1000);
-    Rotate -120;
+        Say "step ", indexes[i];
+        flocon(5, 1000);
+        Rotate -120;
     };
     Say "finish <3";
 }

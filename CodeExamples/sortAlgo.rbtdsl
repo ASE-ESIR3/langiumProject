@@ -26,5 +26,4 @@ Void main() {
     };
 
     Say "Sorted List: ", numbers;
-    Say "Finish <3";
 }
