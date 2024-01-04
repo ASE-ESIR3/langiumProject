@@ -36183,13 +36183,9 @@ startLanguageServer(shared);
 connection.onNotification("browser/execute", async (params) => {
   var _a;
   try {
-    console.log("execute 2");
     const doc = await extractAstNodeFromString(params.content, MyDsl);
-    console.log("execute 3");
     var parsevalue = (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value;
-    console.log("execute 4");
     var errors = validate(doc);
-    console.log("execute 5");
     if (errors.length > 0) {
       connection.sendNotification("browser/sendValidationResults", { errorCount: errors.length, errors });
       return;

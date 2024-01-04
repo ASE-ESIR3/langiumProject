@@ -53,6 +53,7 @@ class Robot {
         this.scale = 1;
         this.particleCreationRate = 10;
         this.curentText = "";
+
         
     }
   
@@ -61,6 +62,7 @@ class Robot {
         this.y = window.height/2;
         this.angle = 0;
         this.trails = [];
+        this.curentText = "";
     }
 
     show() {
@@ -78,7 +80,8 @@ class Robot {
         const canvasX = this.x ;
         const canvasY = this.y ;
         translate((canvasX - window.cam.x)* window.cam.zx, (canvasY-window.cam.y)* window.cam.zy);
-                
+        fill(255);
+        stroke(1);
         textSize(20);
         text(this.curentText, -this.width/2 * window.cam.zx, -this.height/2 * window.cam.zy - 10);
 
