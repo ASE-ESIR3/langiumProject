@@ -36135,9 +36135,13 @@ var CompilerVisitor = class {
   visitSay(node) {
     var val = "";
     for (var i = 0; i < node.msg.length; i++) {
-      val = val.concat(node.msg[i].accept(this));
+      if (i < node.msg.length - 1) {
+        val = val.concat("String(" + node.msg[i].accept(this) + ")+");
+      } else {
+        val = val.concat("String(" + node.msg[i].accept(this) + ")");
+      }
     }
-    return 'printf("%d",' + val + ")";
+    return "Serial.print(" + val + ")";
   }
 };
 

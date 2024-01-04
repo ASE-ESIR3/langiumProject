@@ -303,9 +303,17 @@ export class CompilerVisitor implements MyDslVisitor {
     visitSay(node: SayNode) {
         var val = "";
         for (var i = 0; i < node.msg.length; i++){
-            val = val.concat(node.msg[i].accept(this) as string);
+            if( i < node.msg.length-1){
+                val = val.concat("String(" + (node.msg[i].accept(this) as string) + ")+");
+            }
+            else{
+
+                val = val.concat("String(" + (node.msg[i].accept(this) as string) + ")");
+            
+            }
+
         }
-        return 'printf("%d",' + val + ")";
+        return "Serial.print(" + val + ")";
     }
 
 }

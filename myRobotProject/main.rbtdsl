@@ -1,14 +1,4 @@
 Void main() {
-    Number i = 0 ;
-    while((true == true)){
-        
-        
-        if((i == 3)){
-        break;
-        };
-        Forward 50 CM;
-        i = (i+1);
-        Say i;
+    Say "hello world !", 25;
 
-    };
 }
