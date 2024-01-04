@@ -25,13 +25,44 @@ var code =
 `Void main() {
     Say "hello world !";
     Wait 1000;
-    List<Number> list;
-    list = [10,20];
-    Number c = list[0];
-    Say c;
+    List<Number> indexes = [10, 20, 30];
+    for(Number i = 0;(i < 3);i = (i + 1))
+    {
+    Say "step ", indexes[i];
+    flocon(5, 1000);
+    Rotate -120;
+    };
+    Say "finish <3";
 }
 
-`
+Void flocon(Number max, Number size)
+{
+
+    if((max == 0)){
+
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    Rotate -90;
+    Forward (size/3) CM;
+    Rotate 45;
+    Forward (size/3) CM;
+    }
+    else
+    {
+
+        flocon((max - 1), (size/3));
+        Rotate 45;
+        flocon((max - 1), (size/3));
+        Rotate -90;
+        flocon((max - 1), (size/3));
+        Rotate 45;
+        flocon((max - 1), (size/3));
+
+    };
+
+
+}`
 
 let replaceCode = `Void main() {
 }`
