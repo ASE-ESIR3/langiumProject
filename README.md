@@ -210,6 +210,8 @@ Most of the important features are located in the menu bar on the top of the app
 
 # problems encountered during developpement
 
+> Here are the issues of the project, some closed, some known but not fixed yet : https://github.com/ASE-ESIR3/langiumProject/issues
+
 ### Ecore modeling
 
 We used eclipse as our modeling tool. The problem we encountered in this part was to deal with eclipse crash and bugs. As we were modeling our language, we had some wiered disapearing of some class in the ecore model.
