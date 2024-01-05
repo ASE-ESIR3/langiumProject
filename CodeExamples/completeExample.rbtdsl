@@ -1,5 +1,7 @@
 Void main() {
     Number i = 0 ;
+    List<Number> loopsizes = [20,15,10,7];
+    
     while(getTheMainCondition()){
         Say "line ", i;
         if((i == 3)){
@@ -11,7 +13,7 @@ Void main() {
 
     for(Number i = 0; (i<4); i = (i+1)){
     Say "spiral ", i;
-        spiraleRoutine();
+        spiraleRoutine(loopsizes[i]);
         Rotate 90;
     };
     Say "finish ", " :D";
@@ -22,10 +24,10 @@ Number increment( Number i ){
     return (i+1);
 }
 
-Void spiraleRoutine(){
+Void spiraleRoutine(Number loopsize){
         for(Number i = 0; (i<100); i = (i+1)){
         Forward i MM;
-        Rotate 10;
+        Rotate loopsize;
     };
 }
 
