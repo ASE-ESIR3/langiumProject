@@ -149,6 +149,10 @@ The sources are located in this repository, under `./langiumProject/RobotDSLExte
     - `main.ts` file: Entrypoint for the cli. It calls the compiler and the interpretor based on commands it recieve.
 
 
+# Compiler
+
+You can see in the following video the robot running with one of our programs created with the compiler: https://drive.google.com/file/d/1rjeJ94BAZSossC74EwuXz54jaloSnQFn/view?usp=drive_link.
+
 
 # How to use
 
