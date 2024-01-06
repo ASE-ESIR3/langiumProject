@@ -153,6 +153,14 @@ The sources are located in this repository, under `./langiumProject/RobotDSLExte
 
 You can see in the following video the robot running with one of our programs created with the compiler: https://drive.google.com/file/d/1rjeJ94BAZSossC74EwuXz54jaloSnQFn/view?usp=drive_link.
 
+The compiler built from the same principle as the interpreter, but instead of generating statments, the compiler will output a translation of the code, from our DSL to Arduino.
+
+It can be launched from the workspace with the `npm run compile:ino` npm command, and will output the result in a ArduinoOut.ino file in the workspace. I can also be launched from the simulator, and will let you copy the output compiled code. You will then need to run it in an arduino compatible workspace. 
+
+When a node is visited, it is translated to arduino language, and so one for the rest of the ast. Thanks to the visitor pattern, this operation takes a single call to the accept methode of the higher node of the ast.
+
+The final goal of the compilation : If the program is validated in the DSL space, the program should allways compile in the arrival space. Here, if a rbtdsl program validate, the arduino code should allways compile.
+
 
 # How to use
 
