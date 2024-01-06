@@ -21,6 +21,11 @@ This readme will explain how to use, and how has been developed the different pa
 
 As asked during practical session, at the end will be found a section about the problems encountered during development.
 
+## How to clone
+```bash
+git clone --recurse-submodules https://github.com/ASE-ESIR3/langiumProject
+```
+
 ## Code examples
 
 You will find in the [`CodeExamples`](https://github.com/ASE-ESIR3/CodeExamples) folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
