@@ -23,7 +23,7 @@ As asked during practical session, at the end will be found a section about the 
 
 ## Code examples
 
-You will find in the [`CodeExamples`](https://github.com/ASE-ESIR3/langiumProject/tree/main/CodeExamples) folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
+You will find in the [`CodeExamples`](https://github.com/ASE-ESIR3/CodeExamples) folder at the root of this repository, some code example that can be ran in the simulator to desmonstrate some aspects of the language validation.
 
 # Development
 
