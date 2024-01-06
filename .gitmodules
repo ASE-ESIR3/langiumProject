@@ -1,0 +1,3 @@
+[submodule "CodeExamples"]
+	path = CodeExamples
+	url = https://github.com/ASE-ESIR3/CodeExamples

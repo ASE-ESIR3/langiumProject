@@ -1,5 +1,0 @@
-/* will throw two type error */
-Void main() {
-Boolean i = 0;
-Number a = true;
-}
