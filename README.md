@@ -2,6 +2,12 @@
 
 Try out the simulator : https://robot.ronantremoureux.fr !
 
+## Notation preferences
+
+We have been told to choose a part of the project that will be more representated in the notation than the other.
+
+>  We choosed the **webSimulator** (interpretor+simulation) to be more representated during the evaluation.
+
 ## Description
 
 > based on the subject proposed at https://github.com/selabs-ur1/dsl
