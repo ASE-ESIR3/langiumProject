@@ -153,7 +153,8 @@ const clearData = (async () => {
 });
 
 const execute = (async () => {
-
+    pausing = false;
+    document.getElementById("pauseSimu").innerHTML = '<i class="fa-solid fa-pause"></i>';
     if(!running){
         client.getLanguageClient().sendNotification('browser/execute', {
             content: client.getEditor().getModel().getValue(),
